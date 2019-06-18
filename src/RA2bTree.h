@@ -1,8 +1,8 @@
 //////////////////////////////////////////////////////////
 // This class has been automatically generated on
-// Mon Apr  8 16:41:35 2019 by ROOT version 6.17/01
+// Fri May 24 10:19:16 2019 by ROOT version 6.17/01
 // from TTree tree/all observables, signal
-// found on file: /home/whitbeck/raid/temp/SusyRA2Analysis2015/Skims/Run2ProductionV17/tree_signal/tree_ZJetsToNuNu_HT-800to1200_MC2018.root
+// found on file: /home/whitbeck/raid/temp/SusyRA2Analysis2015/Skims/Run2ProductionV17/tree_signal/tree_ZJetsToNuNu_HT-400to600_MC2017.root
 //////////////////////////////////////////////////////////
 
 #ifndef RA2bTree_h
@@ -50,6 +50,7 @@ public :
    Double_t        DeltaPhi1JECup;
    Double_t        DeltaPhi1JERdown;
    Double_t        DeltaPhi1JERup;
+   Double_t        DeltaPhi1Orig;
    Double_t        DeltaPhi2;
    Double_t        DeltaPhi22p4;
    Double_t        DeltaPhi2_AK8;
@@ -57,18 +58,21 @@ public :
    Double_t        DeltaPhi2JECup;
    Double_t        DeltaPhi2JERdown;
    Double_t        DeltaPhi2JERup;
+   Double_t        DeltaPhi2Orig;
    Double_t        DeltaPhi3;
    Double_t        DeltaPhi32p4;
    Double_t        DeltaPhi3JECdown;
    Double_t        DeltaPhi3JECup;
    Double_t        DeltaPhi3JERdown;
    Double_t        DeltaPhi3JERup;
+   Double_t        DeltaPhi3Orig;
    Double_t        DeltaPhi4;
    Double_t        DeltaPhi42p4;
    Double_t        DeltaPhi4JECdown;
    Double_t        DeltaPhi4JECup;
    Double_t        DeltaPhi4JERdown;
    Double_t        DeltaPhi4JERup;
+   Double_t        DeltaPhi4Orig;
    Double_t        DeltaPhiMin_AK8;
    Int_t           ecalBadCalibFilter;
    Bool_t          ecalBadCalibReducedExtraFilter;
@@ -192,6 +196,7 @@ public :
    vector<bool>    *Jets_LeptonMask;
    vector<bool>    *Jets_MHT2p4Mask;
    vector<bool>    *Jets_MHTMask;
+   vector<bool>    *Jets_MHTOrigMask;
    vector<int>     *Jets_multiplicity;
    vector<double>  *Jets_muonEnergyFraction;
    vector<int>     *Jets_muonMultiplicity;
@@ -282,8 +287,14 @@ public :
    Double_t        madMinPhotonDeltaR;
    Double_t        MET;
    vector<double>  *METDown;
+   Double_t        METOrig;
+   vector<double>  *METOrigDown;
+   vector<double>  *METOrigUp;
    Double_t        METPhi;
    vector<double>  *METPhiDown;
+   Double_t        METPhiOrig;
+   vector<double>  *METPhiOrigDown;
+   vector<double>  *METPhiOrigUp;
    vector<double>  *METPhiUp;
    Double_t        METSignificance;
    vector<double>  *METUp;
@@ -293,12 +304,14 @@ public :
    Double_t        MHTJECup;
    Double_t        MHTJERdown;
    Double_t        MHTJERup;
+   Double_t        MHTOrig;
    Double_t        MHTPhi;
    Double_t        MHTPhi2p4;
    Double_t        MHTPhiJECdown;
    Double_t        MHTPhiJECup;
    Double_t        MHTPhiJERdown;
    Double_t        MHTPhiJERup;
+   Double_t        MHTPhiOrig;
    Double_t        MJJ_AK8;
    Double_t        Mmc_AK8;
    Double_t        MT2;
@@ -324,6 +337,9 @@ public :
    Int_t           NJetsJERdown;
    Int_t           NJetsJERup;
    Int_t           NMuons;
+   Double_t        NonPrefiringProb;
+   Double_t        NonPrefiringProbDown;
+   Double_t        NonPrefiringProbUp;
    Double_t        NumEvents;
    Int_t           NumInteractions;
    Int_t           NVtx;
@@ -418,6 +434,7 @@ public :
    TBranch        *b_DeltaPhi1JECup;   //!
    TBranch        *b_DeltaPhi1JERdown;   //!
    TBranch        *b_DeltaPhi1JERup;   //!
+   TBranch        *b_DeltaPhi1Orig;   //!
    TBranch        *b_DeltaPhi2;   //!
    TBranch        *b_DeltaPhi22p4;   //!
    TBranch        *b_DeltaPhi2_AK8;   //!
@@ -425,18 +442,21 @@ public :
    TBranch        *b_DeltaPhi2JECup;   //!
    TBranch        *b_DeltaPhi2JERdown;   //!
    TBranch        *b_DeltaPhi2JERup;   //!
+   TBranch        *b_DeltaPhi2Orig;   //!
    TBranch        *b_DeltaPhi3;   //!
    TBranch        *b_DeltaPhi32p4;   //!
    TBranch        *b_DeltaPhi3JECdown;   //!
    TBranch        *b_DeltaPhi3JECup;   //!
    TBranch        *b_DeltaPhi3JERdown;   //!
    TBranch        *b_DeltaPhi3JERup;   //!
+   TBranch        *b_DeltaPhi3Orig;   //!
    TBranch        *b_DeltaPhi4;   //!
    TBranch        *b_DeltaPhi42p4;   //!
    TBranch        *b_DeltaPhi4JECdown;   //!
    TBranch        *b_DeltaPhi4JECup;   //!
    TBranch        *b_DeltaPhi4JERdown;   //!
    TBranch        *b_DeltaPhi4JERup;   //!
+   TBranch        *b_DeltaPhi4Orig;   //!
    TBranch        *b_DeltaPhiMin_AK8;   //!
    TBranch        *b_ecalBadCalibFilter;   //!
    TBranch        *b_ecalBadCalibReducedExtraFilter;   //!
@@ -560,6 +580,7 @@ public :
    TBranch        *b_Jets_LeptonMask;   //!
    TBranch        *b_Jets_MHT2p4Mask;   //!
    TBranch        *b_Jets_MHTMask;   //!
+   TBranch        *b_Jets_MHTOrigMask;   //!
    TBranch        *b_Jets_multiplicity;   //!
    TBranch        *b_Jets_muonEnergyFraction;   //!
    TBranch        *b_Jets_muonMultiplicity;   //!
@@ -650,8 +671,14 @@ public :
    TBranch        *b_madMinPhotonDeltaR;   //!
    TBranch        *b_MET;   //!
    TBranch        *b_METDown;   //!
+   TBranch        *b_METOrig;   //!
+   TBranch        *b_METOrigDown;   //!
+   TBranch        *b_METOrigUp;   //!
    TBranch        *b_METPhi;   //!
    TBranch        *b_METPhiDown;   //!
+   TBranch        *b_METPhiOrig;   //!
+   TBranch        *b_METPhiOrigDown;   //!
+   TBranch        *b_METPhiOrigUp;   //!
    TBranch        *b_METPhiUp;   //!
    TBranch        *b_METSignificance;   //!
    TBranch        *b_METUp;   //!
@@ -661,12 +688,14 @@ public :
    TBranch        *b_MHTJECup;   //!
    TBranch        *b_MHTJERdown;   //!
    TBranch        *b_MHTJERup;   //!
+   TBranch        *b_MHTOrig;   //!
    TBranch        *b_MHTPhi;   //!
    TBranch        *b_MHTPhi2p4;   //!
    TBranch        *b_MHTPhiJECdown;   //!
    TBranch        *b_MHTPhiJECup;   //!
    TBranch        *b_MHTPhiJERdown;   //!
    TBranch        *b_MHTPhiJERup;   //!
+   TBranch        *b_MHTPhiOrig;   //!
    TBranch        *b_MJJ_AK8;   //!
    TBranch        *b_Mmc_AK8;   //!
    TBranch        *b_MT2;   //!
@@ -692,6 +721,9 @@ public :
    TBranch        *b_NJetsJERdown;   //!
    TBranch        *b_NJetsJERup;   //!
    TBranch        *b_NMuons;   //!
+   TBranch        *b_NonPrefiringProb;   //!
+   TBranch        *b_NonPrefiringProbDown;   //!
+   TBranch        *b_NonPrefiringProbUp;   //!
    TBranch        *b_NumEvents;   //!
    TBranch        *b_NumInteractions;   //!
    TBranch        *b_NVtx;   //!
@@ -778,9 +810,9 @@ RA2bTree::RA2bTree(TChain *tree) : fChain(0)
 // if parameter tree is not specified (or zero), connect the file
 // used to generate this class and read the Tree.
    if (tree == 0) {
-      TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("/home/whitbeck/raid/temp/SusyRA2Analysis2015/Skims/Run2ProductionV17/tree_signal/tree_ZJetsToNuNu_HT-800to1200_MC2018.root");
+      TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("/home/whitbeck/raid/temp/SusyRA2Analysis2015/Skims/Run2ProductionV17/tree_signal/tree_ZJetsToNuNu_HT-400to600_MC2017.root");
       if (!f || !f->IsOpen()) {
-         f = new TFile("/home/whitbeck/raid/temp/SusyRA2Analysis2015/Skims/Run2ProductionV17/tree_signal/tree_ZJetsToNuNu_HT-800to1200_MC2018.root");
+         f = new TFile("/home/whitbeck/raid/temp/SusyRA2Analysis2015/Skims/Run2ProductionV17/tree_signal/tree_ZJetsToNuNu_HT-400to600_MC2017.root");
       }
       f->GetObject("tree",tree);
 
@@ -906,6 +938,7 @@ void RA2bTree::Init(TChain *tree)
    Jets_LeptonMask = 0;
    Jets_MHT2p4Mask = 0;
    Jets_MHTMask = 0;
+   Jets_MHTOrigMask = 0;
    Jets_multiplicity = 0;
    Jets_muonEnergyFraction = 0;
    Jets_muonMultiplicity = 0;
@@ -992,7 +1025,11 @@ void RA2bTree::Init(TChain *tree)
    JetsJERdown_origIndex = 0;
    JetsJERup_origIndex = 0;
    METDown = 0;
+   METOrigDown = 0;
+   METOrigUp = 0;
    METPhiDown = 0;
+   METPhiOrigDown = 0;
+   METPhiOrigUp = 0;
    METPhiUp = 0;
    METUp = 0;
    Muons = 0;
@@ -1075,6 +1112,7 @@ void RA2bTree::Init(TChain *tree)
    fChain->SetBranchAddress("DeltaPhi1JECup", &DeltaPhi1JECup, &b_DeltaPhi1JECup);
    fChain->SetBranchAddress("DeltaPhi1JERdown", &DeltaPhi1JERdown, &b_DeltaPhi1JERdown);
    fChain->SetBranchAddress("DeltaPhi1JERup", &DeltaPhi1JERup, &b_DeltaPhi1JERup);
+   fChain->SetBranchAddress("DeltaPhi1Orig", &DeltaPhi1Orig, &b_DeltaPhi1Orig);
    fChain->SetBranchAddress("DeltaPhi2", &DeltaPhi2, &b_DeltaPhi2);
    fChain->SetBranchAddress("DeltaPhi22p4", &DeltaPhi22p4, &b_DeltaPhi22p4);
    fChain->SetBranchAddress("DeltaPhi2_AK8", &DeltaPhi2_AK8, &b_DeltaPhi2_AK8);
@@ -1082,18 +1120,21 @@ void RA2bTree::Init(TChain *tree)
    fChain->SetBranchAddress("DeltaPhi2JECup", &DeltaPhi2JECup, &b_DeltaPhi2JECup);
    fChain->SetBranchAddress("DeltaPhi2JERdown", &DeltaPhi2JERdown, &b_DeltaPhi2JERdown);
    fChain->SetBranchAddress("DeltaPhi2JERup", &DeltaPhi2JERup, &b_DeltaPhi2JERup);
+   fChain->SetBranchAddress("DeltaPhi2Orig", &DeltaPhi2Orig, &b_DeltaPhi2Orig);
    fChain->SetBranchAddress("DeltaPhi3", &DeltaPhi3, &b_DeltaPhi3);
    fChain->SetBranchAddress("DeltaPhi32p4", &DeltaPhi32p4, &b_DeltaPhi32p4);
    fChain->SetBranchAddress("DeltaPhi3JECdown", &DeltaPhi3JECdown, &b_DeltaPhi3JECdown);
    fChain->SetBranchAddress("DeltaPhi3JECup", &DeltaPhi3JECup, &b_DeltaPhi3JECup);
    fChain->SetBranchAddress("DeltaPhi3JERdown", &DeltaPhi3JERdown, &b_DeltaPhi3JERdown);
    fChain->SetBranchAddress("DeltaPhi3JERup", &DeltaPhi3JERup, &b_DeltaPhi3JERup);
+   fChain->SetBranchAddress("DeltaPhi3Orig", &DeltaPhi3Orig, &b_DeltaPhi3Orig);
    fChain->SetBranchAddress("DeltaPhi4", &DeltaPhi4, &b_DeltaPhi4);
    fChain->SetBranchAddress("DeltaPhi42p4", &DeltaPhi42p4, &b_DeltaPhi42p4);
    fChain->SetBranchAddress("DeltaPhi4JECdown", &DeltaPhi4JECdown, &b_DeltaPhi4JECdown);
    fChain->SetBranchAddress("DeltaPhi4JECup", &DeltaPhi4JECup, &b_DeltaPhi4JECup);
    fChain->SetBranchAddress("DeltaPhi4JERdown", &DeltaPhi4JERdown, &b_DeltaPhi4JERdown);
    fChain->SetBranchAddress("DeltaPhi4JERup", &DeltaPhi4JERup, &b_DeltaPhi4JERup);
+   fChain->SetBranchAddress("DeltaPhi4Orig", &DeltaPhi4Orig, &b_DeltaPhi4Orig);
    fChain->SetBranchAddress("DeltaPhiMin_AK8", &DeltaPhiMin_AK8, &b_DeltaPhiMin_AK8);
    fChain->SetBranchAddress("ecalBadCalibFilter", &ecalBadCalibFilter, &b_ecalBadCalibFilter);
    fChain->SetBranchAddress("ecalBadCalibReducedExtraFilter", &ecalBadCalibReducedExtraFilter, &b_ecalBadCalibReducedExtraFilter);
@@ -1217,6 +1258,7 @@ void RA2bTree::Init(TChain *tree)
    fChain->SetBranchAddress("Jets_LeptonMask", &Jets_LeptonMask, &b_Jets_LeptonMask);
    fChain->SetBranchAddress("Jets_MHT2p4Mask", &Jets_MHT2p4Mask, &b_Jets_MHT2p4Mask);
    fChain->SetBranchAddress("Jets_MHTMask", &Jets_MHTMask, &b_Jets_MHTMask);
+   fChain->SetBranchAddress("Jets_MHTOrigMask", &Jets_MHTOrigMask, &b_Jets_MHTOrigMask);
    fChain->SetBranchAddress("Jets_multiplicity", &Jets_multiplicity, &b_Jets_multiplicity);
    fChain->SetBranchAddress("Jets_muonEnergyFraction", &Jets_muonEnergyFraction, &b_Jets_muonEnergyFraction);
    fChain->SetBranchAddress("Jets_muonMultiplicity", &Jets_muonMultiplicity, &b_Jets_muonMultiplicity);
@@ -1307,8 +1349,14 @@ void RA2bTree::Init(TChain *tree)
    fChain->SetBranchAddress("madMinPhotonDeltaR", &madMinPhotonDeltaR, &b_madMinPhotonDeltaR);
    fChain->SetBranchAddress("MET", &MET, &b_MET);
    fChain->SetBranchAddress("METDown", &METDown, &b_METDown);
+   fChain->SetBranchAddress("METOrig", &METOrig, &b_METOrig);
+   fChain->SetBranchAddress("METOrigDown", &METOrigDown, &b_METOrigDown);
+   fChain->SetBranchAddress("METOrigUp", &METOrigUp, &b_METOrigUp);
    fChain->SetBranchAddress("METPhi", &METPhi, &b_METPhi);
    fChain->SetBranchAddress("METPhiDown", &METPhiDown, &b_METPhiDown);
+   fChain->SetBranchAddress("METPhiOrig", &METPhiOrig, &b_METPhiOrig);
+   fChain->SetBranchAddress("METPhiOrigDown", &METPhiOrigDown, &b_METPhiOrigDown);
+   fChain->SetBranchAddress("METPhiOrigUp", &METPhiOrigUp, &b_METPhiOrigUp);
    fChain->SetBranchAddress("METPhiUp", &METPhiUp, &b_METPhiUp);
    fChain->SetBranchAddress("METSignificance", &METSignificance, &b_METSignificance);
    fChain->SetBranchAddress("METUp", &METUp, &b_METUp);
@@ -1318,12 +1366,14 @@ void RA2bTree::Init(TChain *tree)
    fChain->SetBranchAddress("MHTJECup", &MHTJECup, &b_MHTJECup);
    fChain->SetBranchAddress("MHTJERdown", &MHTJERdown, &b_MHTJERdown);
    fChain->SetBranchAddress("MHTJERup", &MHTJERup, &b_MHTJERup);
+   fChain->SetBranchAddress("MHTOrig", &MHTOrig, &b_MHTOrig);
    fChain->SetBranchAddress("MHTPhi", &MHTPhi, &b_MHTPhi);
    fChain->SetBranchAddress("MHTPhi2p4", &MHTPhi2p4, &b_MHTPhi2p4);
    fChain->SetBranchAddress("MHTPhiJECdown", &MHTPhiJECdown, &b_MHTPhiJECdown);
    fChain->SetBranchAddress("MHTPhiJECup", &MHTPhiJECup, &b_MHTPhiJECup);
    fChain->SetBranchAddress("MHTPhiJERdown", &MHTPhiJERdown, &b_MHTPhiJERdown);
    fChain->SetBranchAddress("MHTPhiJERup", &MHTPhiJERup, &b_MHTPhiJERup);
+   fChain->SetBranchAddress("MHTPhiOrig", &MHTPhiOrig, &b_MHTPhiOrig);
    fChain->SetBranchAddress("MJJ_AK8", &MJJ_AK8, &b_MJJ_AK8);
    fChain->SetBranchAddress("Mmc_AK8", &Mmc_AK8, &b_Mmc_AK8);
    fChain->SetBranchAddress("MT2", &MT2, &b_MT2);
@@ -1349,6 +1399,9 @@ void RA2bTree::Init(TChain *tree)
    fChain->SetBranchAddress("NJetsJERdown", &NJetsJERdown, &b_NJetsJERdown);
    fChain->SetBranchAddress("NJetsJERup", &NJetsJERup, &b_NJetsJERup);
    fChain->SetBranchAddress("NMuons", &NMuons, &b_NMuons);
+   fChain->SetBranchAddress("NonPrefiringProb", &NonPrefiringProb, &b_NonPrefiringProb);
+   fChain->SetBranchAddress("NonPrefiringProbDown", &NonPrefiringProbDown, &b_NonPrefiringProbDown);
+   fChain->SetBranchAddress("NonPrefiringProbUp", &NonPrefiringProbUp, &b_NonPrefiringProbUp);
    fChain->SetBranchAddress("NumEvents", &NumEvents, &b_NumEvents);
    fChain->SetBranchAddress("NumInteractions", &NumInteractions, &b_NumInteractions);
    fChain->SetBranchAddress("NVtx", &NVtx, &b_NVtx);

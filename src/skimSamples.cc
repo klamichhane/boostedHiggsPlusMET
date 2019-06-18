@@ -128,21 +128,13 @@ public :
         fileNames["Other_ZZTo2L2Q"] = "tree_ZZTo2L2Q_MC2018.root";
 
 /*
-        fileNames["Other_WWTo1L1Nu2Q"] = "tree_WWTo1L1Nu2Q_MC2017.root";
-        fileNames["Other_WWTo2L2Nu"] = "tree_WWTo2L2Nu_MC2017.root";
-        fileNames["Other_WWZ"] = "tree_WWZ_MC2017.root";
-        fileNames["Other_WZTo1L1Nu2Q"] = "tree_WZTo1L1Nu2Q_MC2017.root";
-        fileNames["Other_WZTo1L3Nu"] = "tree_WZTo1L3Nu_MC2017.root";
-        fileNames["Other_WZZ"] = "tree_WZZ_MC2017.root";
-        fileNames["Other_ZZTo2L2Q"] = "tree_ZZTo2L2Q_MC2017.root";
-        fileNames["Other_ZZTo2Q2Nu"] = "tree_ZZTo2Q2Nu_MC2017.root";
-        fileNames["Other_ZZZ"] = "tree_ZZZ_MC2017.root";
-        fileNames["Other_TTTT"] = "tree_TTTT_MC2017.root";
-        fileNames["Other_TTWJetsToLNu"] = "tree_TTWJetsToLNu_MC2017.root";
-        fileNames["Other_TTWJetsToQQ"] = "tree_TTWJetsToQQ_MC2017.root";
-        fileNames["Other_TTGJets"] = "tree_TTGJets_MC2017.root";
-        fileNames["Other_TTZToLLNuNu"] = "tree_TTZToLLNuNu_MC2017.root";
-        fileNames["Other_TTZToQQ"] = "tree_TTZToQQ_MC2017.root";
+        fileNames["Other_WWTo2L2Nu"] = "tree_WWTo2L2Nu_MC2017.root"; //n/a for all years
+        fileNames["Other_WWZ"] = "tree_WWZ_MC2017.root"; // for 2016 only
+        fileNames["Other_WZTo1L1Nu2Q"] = "tree_WZTo1L1Nu2Q_MC2017.root"; // for 2016 n 17
+        fileNames["Other_WZZ"] = "tree_WZZ_MC2017.root"; // for 2016 n 17
+        fileNames["Other_ZZTo2Q2Nu"] = "tree_ZZTo2Q2Nu_MC2017.root"; // for 2016 only
+        fileNames["Other_ZZZ"] = "tree_ZZZ_MC2017.root"; // for 2016 n 17
+        fileNames["Other_TTTT"] = "tree_TTTT_MC2017.root"; // for 2016 n 17
       */ 
  
          // These are already in singleTop section!!!
@@ -168,6 +160,7 @@ public :
         fileNames["MET_2018D"] = "tree_MET_2018D.root";
 
         fileNames["VBFG_1000"] = "tree_VBF_ZZ_mG1000.root";
+        fileNames["VBFG_1200"] = "tree_VBFG_mG1200_MC2018.root";
 
         fileNames["SingleElectron_2016C"] = "tree_SingleElectron_2016C.root";
         fileNames["SingleElectron_2016D"] = "tree_SingleElectron_2016D.root";
@@ -218,11 +211,10 @@ public :
 	for( auto name : signals ){
 
 	  if( fileNames.find(name) != fileNames.end() ){
-	    //TChain* temp = new TChain("tree");
-	    TChain* temp = new TChain("TreeMaker2/PreSelection");
-        //VBFG1000 = new TChain("TreeMaker2/PreSelection");
-	    temp->Add(BASE_DIR_SIG+"/"+fileNames[name]);	  
-	    //temp->Add(BASE_DIR+skimType+"/"+fileNames[name]);	  
+	    TChain* temp = new TChain("tree");
+	    //TChain* temp = new TChain("TreeMaker2/PreSelection");
+	    //temp->Add(BASE_DIR_SIG+"/"+fileNames[name]);	  
+	    temp->Add(BASE_DIR_DATA+skimType+"/"+fileNames[name]);	  
 	    signalNtuples.push_back(new RA2bTree(temp));
 	    signalSampleName.push_back(name);
 	  }

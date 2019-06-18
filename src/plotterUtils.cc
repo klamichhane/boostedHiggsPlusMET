@@ -14,7 +14,9 @@
 
 using namespace std;
 
-double lumi=35862.824;
+//double lumi=59546.381; // 2018
+//double lumi=41486.136;   // 2017
+double lumi=35815.165; // 2016
 
 template <typename ntupleType> class plot{
 
@@ -25,6 +27,7 @@ public:
     fillerFunc = fillerFunc_;
     label = label_;
     xlabel = "" ; 
+    //ylabel = "" ; //KL
     nbinsx = 40; lowerx = 200.; upperx = 1200.;
     binEdges = NULL;
     stack=new THStack(label+"_stack",label+"_stack");
@@ -33,10 +36,12 @@ public:
 
   plot( double (*fillerFunc_)(ntupleType*) , 
 	TString label_="var",TString xlabel_="var",
+    //TString ylabel_="var", //KL
 	int nbinsx_=20 , double lowerx_=200. , double upperx_=2200.){
     fillerFunc = fillerFunc_;
     label = label_;
     xlabel =xlabel_ ; 
+    //ylabel =ylabel_ ; //KL
     nbinsx = nbinsx_; lowerx = lowerx_; upperx = upperx_;
     binEdges=NULL;
     stack=new THStack(label+"_stack",label+"_stack");
@@ -44,10 +49,12 @@ public:
 
   plot( double (*fillerFunc_)(ntupleType*) , 
 	TString label_,TString xlabel_,
+	//TString ylabel_, //KL
 	int nbinsx_ , double* bins_){
     fillerFunc = fillerFunc_;
     label = label_;
     xlabel =xlabel_ ; 
+    //ylabel =ylabel_ ; //KL
     binEdges = bins_;
     nbinsx = nbinsx_; lowerx = binEdges[0]; upperx = binEdges[nbinsx];
     stack=new THStack(label+"_stack",label+"_stack");
@@ -78,13 +85,15 @@ public:
     //cout << "tag: " << tag << endl;
     tagMap[ntuple_] = tag;
     if( is2Dhist ){
-      histo2dMap[ntuple_] = new TH2F(label+"_"+tag,label+"_"+tag,nbinsx,lowerx,upperx,nbinsy,lowery,uppery);
+      histo2dMap[ntuple_] = new TH2F(label+"_"+tag,label+"_"+tag+";"+xlabel+";"+ylabel,nbinsx,lowerx,upperx,nbinsy,lowery,uppery);
       histo2dMap[ntuple_]->Sumw2();
     }else if( binEdges ){
-      histoMap[ntuple_] = new TH1F(label+"_"+tag,label+"_"+tag,nbinsx,binEdges);
+      histoMap[ntuple_] = new TH1F(label+"_"+tag,label+"_"+tag+";"+xlabel+";Events",nbinsx,binEdges);
+      //histoMap[ntuple_] = new TH1F(label+"_"+tag,label+"_"+tag+";"+xlabel+";"+ylabel,nbinsx,binEdges);
       histoMap[ntuple_]->Sumw2();
     }else{
-      histoMap[ntuple_] = new TH1F(label+"_"+tag,label+"_"+tag,nbinsx,lowerx,upperx);
+      histoMap[ntuple_] = new TH1F(label+"_"+tag,label+"_"+tag+";"+xlabel+";Events",nbinsx,lowerx,upperx);
+      //histoMap[ntuple_] = new TH1F(label+"_"+tag,label+"_"+tag+";"+xlabel+";"+ylabel,nbinsx,lowerx,upperx);
       histoMap[ntuple_]->Sumw2();
     }
 
@@ -94,13 +103,15 @@ public:
     //cout << "nbinsx: " << nbinsx << " lowerx: " << lowerx << " upperx: " << upperx << endl;
     tagMap[ntuple_] = tag;
     if( is2Dhist ){
-      signalHisto2dMap[ntuple_] = new TH2F(label+"_"+tag,label+"_"+tag,nbinsx,lowerx,upperx,nbinsy,lowery,uppery);
+      signalHisto2dMap[ntuple_] = new TH2F(label+"_"+tag,label+"_"+tag+";"+xlabel+";"+ylabel,nbinsx,lowerx,upperx,nbinsy,lowery,uppery);
       signalHisto2dMap[ntuple_]->Sumw2();
     }else if( binEdges ){
-      signalHistoMap[ntuple_] = new TH1F(label+"_"+tag,label+"_"+tag,nbinsx,binEdges);   
+      signalHistoMap[ntuple_] = new TH1F(label+"_"+tag,label+"_"+tag+";"+xlabel+";Events",nbinsx,binEdges);
+      //signalHistoMap[ntuple_] = new TH1F(label+"_"+tag,label+"_"+tag+";"+xlabel+";"+ylabel,nbinsx,binEdges);
       signalHistoMap[ntuple_]->Sumw2();
     }else{
-      signalHistoMap[ntuple_] = new TH1F(label+"_"+tag,label+"_"+tag,nbinsx,lowerx,upperx);
+      signalHistoMap[ntuple_] = new TH1F(label+"_"+tag,label+"_"+tag+";"+xlabel+";Events",nbinsx,lowerx,upperx);
+      //signalHistoMap[ntuple_] = new TH1F(label+"_"+tag,label+"_"+tag+";"+xlabel+";"+ylabel,nbinsx,lowerx,upperx);
       signalHistoMap[ntuple_]->Sumw2();
     }
 
@@ -110,12 +121,14 @@ public:
     //cout << "nbinsx: " << nbinsx << " lowerx: " << lowerx << " upperx: " << upperx << endl;
     tagMap[ntuple_] = tag ;
     if( is2Dhist ){
-      dataHist2d = new TH2F(label+"_"+tag,label+"_"+tag,nbinsx,lowerx,upperx,nbinsy,lowery,uppery);
+      dataHist2d = new TH2F(label+"_"+tag,label+"_"+tag+";"+xlabel+";"+ylabel,nbinsx,lowerx,upperx,nbinsy,lowery,uppery);
     }else if( binEdges ){
-      dataHist = new TH1F(label+"_"+tag,label+"_"+tag,nbinsx,binEdges);
+      dataHist = new TH1F(label+"_"+tag,label+"_"+tag+";"+xlabel+";Events",nbinsx,binEdges);
+      //dataHist = new TH1F(label+"_"+tag,label+"_"+tag+";"+xlabel+";"+ylabel,nbinsx,binEdges);
       dataHist->SetMarkerStyle(8);
     }else{
-      dataHist = new TH1F(label+"_"+tag,label+"_"+tag,nbinsx,lowerx,upperx);
+      dataHist = new TH1F(label+"_"+tag,label+"_"+tag+";"+xlabel+";Events",nbinsx,lowerx,upperx);
+      //dataHist = new TH1F(label+"_"+tag,label+"_"+tag+";"+xlabel+";"+ylabel,nbinsx,lowerx,upperx);
       dataHist->SetMarkerStyle(8);
     }
 

@@ -7,11 +7,11 @@ r.gROOT.ProcessLine(".L tdrstyle.C")
 r.gROOT.ProcessLine("setTDRStyle()")
 
 #plot_dir="ZSBHPVBF_2017_BeforeEcalCut_plots"
-plot_dir="ZSBNoVBF_2018_BeforeHEMCut_plots"
+plot_dir="ZNoVBF_2018_BeforeHEMCut_plots"
 #input_file_name = "File_2018_postHEM_v0/Ecal_afterCut_250GeV_ZNoSelection_2018AD_MC.root"
 #input_file_name = "File_2018_postHEM_v0/Ecal_afterCutnHEMveto_ZNoSelection_2018AD_allbkg2018.root"
-input_file_name = "ZSBNoVBF_2018_BeforeHEMCut_2p6To3p0.root"
-output_file_name = "ZSBNoVBF_2018_BeforeHEMCut_2p6To3p0_Output.root"
+input_file_name = "File_2018_All/BeforeHEMFilter_2018ADbkg.root"
+output_file_name = "ZNoVBF_2018A_BeforeHEMCut_2p6To3p0_Output.root"
 
 input_file = r.TFile(input_file_name,"READ")    
 
