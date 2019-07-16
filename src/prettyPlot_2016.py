@@ -7,17 +7,14 @@ r.gROOT.ProcessLine(".L tdrstyle.C")
 r.gROOT.ProcessLine("setTDRStyle()")
 
 #plot_dir="ZSB_All_May15/2016/ZSBNoVBF"
-plot_dir="ZSR_All_May15/2016/ZSBHPVBF_pt30GeV"
-#plot_dir="ZSB_All_May30/2016/ZSBHPNoVBF"
-#plot_dir="Alpha_Closure/2016"
-#input_file_name = "ZSBNoVBF_515_v4_2016.root"
-input_file_name = "ZSBHPVBF_515_v4_2016_pt30GeV_v2.root"
+#plot_dir="ZSBHPNoVBF/2016"
+#plot_dir="ZBaseline/2016"
+plot_dir="ZSBHPVBF/2016"
+#plot_dir="ZSB_All_May15/2016/ZSBHPNoVBF_pt30GeV"
+#input_file_name = "ZBaseline_NewSkim_v1_2016.root"
+input_file_name = "VBF_SBHP_NewSkim_v1_2016.root"
 #input_file_name = "ZSBNoVBF_AfterPrefiring_2017.root"
-#input_file_name = "Alpha_SBHP_VBF_515_v4_2016.root"
-#output_file_name = "Alpha_Closure_Files/2016/Alpha_SBHP_VBF_515_v4_2016_Output.root"
-output_file_name = "ZSBHPVBF_515_v4_2016_pt30GeV_v2_Output.root"
-#output_file_name = "ZSBNoVBF_515_v4_2016_Output.root"
-#output_file_name = "ZSBNoVBF_AfterPrefiring_2017_Output.root"
+output_file_name = "VBF_SBHP_NewSkim_v1_2016_Output.root"
 
 input_file = r.TFile(input_file_name,"READ")    
 
@@ -66,7 +63,8 @@ def plot(plot_var = "photonIsoChrgLowSieie_EB_photonLoose" ):
               "ZJets_2500toInf"]
              ]
 
-    signal_samples=["VBFG_1000"]
+    signal_samples=["VBFG_1000",
+                    "ggFG_1000"]
     #signal_samples=["VBFG_1200"]
 
     data_samples=["MET_2016H",#]
@@ -80,6 +78,8 @@ def plot(plot_var = "photonIsoChrgLowSieie_EB_photonLoose" ):
     samples_labels = ["Single top","TT","Other","WJets","ZJets"]
     samples_fill_color = [r.kOrange,r.kCyan,r.kOrange+3,r.kBlue,r.kGreen+1]
     samples_line_color = [1,1,1,1,1]
+    signal_labels = ["VBFG 1TeV","ggFG 1TeV"]
+    signal_line_color = [r.kRed, r.kBlack]
     
     samples_histo=[]
     
@@ -107,6 +107,7 @@ def plot(plot_var = "photonIsoChrgLowSieie_EB_photonLoose" ):
     for i,signal_sample_names in enumerate(signal_samples) :
         if i==0:
             signal_histo.append(input_file.Get(plot_var+"_"+signal_sample_names))
+            #signal_histo[-1].SetLineColor(signal_line_color[i])
             signal_histo[-1].SetLineColor(r.kRed)
             signal_histo[-1].SetLineWidth(2)
             #signal_histo[-1].SetName(plot_var+"_"+signal_samples_labels[i])
@@ -114,7 +115,7 @@ def plot(plot_var = "photonIsoChrgLowSieie_EB_photonLoose" ):
                 print "looking for:",plot_var+"_"+sample_name
                 assert(signal_histo[-1]!=None)
         else :
-            signal_histo[-1].Add(input_file.Get(plot_var+"_"+signal_sample_name))
+            signal_histo[-1].Add(input_file.Get(plot_var+"_"+signal_sample_names))
  ## end of signal sample
 
     data_histo=[]
@@ -160,8 +161,8 @@ def plot(plot_var = "photonIsoChrgLowSieie_EB_photonLoose" ):
     for i in range(len(samples_histo)):
         leg.AddEntry(samples_histo[i],samples_labels[i],"f")
     for i in range(len(signal_histo)):
-        leg.AddEntry(signal_histo[i],"VBFG 1200","f")
-        #leg.AddEntry(signal_histo[i],signal_samples_labels[i],"f")
+        #leg.AddEntry(signal_histo[i],"VBFG 1200","f")
+        leg.AddEntry(signal_histo[i],signal_labels[i],"f")
 
 
     can = r.TCanvas("can","can",500,500)
@@ -176,8 +177,8 @@ def plot(plot_var = "photonIsoChrgLowSieie_EB_photonLoose" ):
     topPad.cd();
     
     stack.Draw("histo")    
-    #for j in signal_histo :
-    signal_histo[0].Draw("histo SAME")
+    for i in range(len(signal_histo)): 
+        signal_histo[i].Draw("histo SAME")
     data_histo[0].Draw("SAME,e1p") 
     leg.Draw()
 
@@ -249,7 +250,8 @@ def plot(plot_var = "photonIsoChrgLowSieie_EB_photonLoose" ):
     l.Draw("same"); 
     
 
-    can.SaveAs("../plots/"+plot_dir+"/"+plot_var+".png")
+    #can.SaveAs("../plots/"+plot_dir+"/"+plot_var+".png")
+    can.SaveAs("../plots_NewSkim_v1/"+plot_dir+"/"+plot_var+".png")
     # for space between legend and plot 
     topPad.SetLogy()
     if total!=None:
@@ -257,7 +259,8 @@ def plot(plot_var = "photonIsoChrgLowSieie_EB_photonLoose" ):
     else :
         stack.SetMaximum(20.0*data_histo[0].GetMaximum())
     stack.SetMinimum(0.1)
-    can.SaveAs("../plots/"+plot_dir+"/"+plot_var+"_LogY.png")
+    #can.SaveAs("../plots/"+plot_dir+"/"+plot_var+"_LogY.png")
+    can.SaveAs("../plots_NewSkim_v1/"+plot_dir+"/"+plot_var+"_LogY.png")
 
     output_file.cd()
     for h in samples_histo :

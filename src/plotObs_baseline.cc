@@ -115,9 +115,9 @@ void process(string selection_label,
   //plot CaloMETplot(*fillCaloMET<RA2bTree>,"CaloMET_"+selection_label,"Calo MET [GeV]",25,200.,1200.);//40 GeV bin
   //plot EScaleplot(*fillEnergyScale<RA2bTree>,"EScale_"+selection_label,"E Scale",40,0.,2.);
   plot HTplot(*fillHT<RA2bTree>,"HT_"+selection_label,"H_{T} [GeV]",75,300,3300.); // 100 GeV bin
-  plot NJetsplot(*fillNJets<RA2bTree>,"NJets_"+selection_label,"n_{jets}",9,1.5,10.5);
-  plot NAK8Jetsplot(*fillNAK8Jets<RA2bTree>,"NAK8Jets_"+selection_label,"nAK8_{jets}",9,1.5,10.5);
-  plot NAK8Jets1plot(*fillNAK8Jets<RA2bTree>,"NAK8Jets1_"+selection_label,"nAK8_{jets}",3,1.5,4.5);
+  plot NJetsplot(*fillNJets<RA2bTree>,"NJets_"+selection_label,"n_{jets}",10,0.5,10.5);
+  plot NAK8Jetsplot(*fillNAK8Jets<RA2bTree>,"NAK8Jets_"+selection_label,"nAK8_{jets}",10,0.5,10.5);
+  plot NAK8Jets1plot(*fillNAK8Jets<RA2bTree>,"NAK8Jets1_"+selection_label,"nAK8_{jets}",4,0.5,4.5);
   plot madHT(*fillMadHT<RA2bTree>,"madHT_"+selection_label,"Madgraph HT",19,100,2000);  
   plot MHTdPhivsHTRatioplot(*fillDeltaPhiMHT<RA2bTree>,*fillHTRatio<RA2bTree>,"HTRatiovsMHTdPhi_"+selection_label,"#Delta #phi(j1, MHT)","HT5/HT",35,0.,3.5,20,1.,3.);//0.1 bin
   plot MHTdPhi2vsHTRatioplot(*fillDeltaPhi2MHT<RA2bTree>,*fillHTRatio<RA2bTree>,"HTRatiovsMHTdPhi2_"+selection_label,"#Delta #phi(j2, MHT)","HT5/HT",35,0.,3.5,20,1.,3.);//0.1 bin
@@ -232,6 +232,7 @@ void process(string selection_label,
   // Turn on the line below for SR only
   plot J1pt_Mass1plot(*fillLeadingJetMass<RA2bTree>,"J1pt_Mass1_"+selection_label,"m_{J} [GeV]",14,50.,120.);//5 Gev bin
   plot J1pt_Tau21plot(*fillLeadingTau21<RA2bTree>,"J1pt_Tau21_"+selection_label,"AK8 J1 #tau_{21}",25,0.,1.); //0.04
+  plot J1pt_Tau212plot(*fillLeadingTau21<RA2bTree>,"J1pt_Tau212_"+selection_label,"AK8 J1 #tau_{21}",1000,0.,1.); //0.04
   plot DDT_Tau21plot(*fillDDT<RA2bTree>,"DDT_Tau21_"+selection_label,"AK8 J1 DDT #tau_{21}",30,0.,1.2); //0.04
   plot Tau21vsJMassplot(*fillLeadingJetSDMass<RA2bTree>,*fillLeadingTau21<RA2bTree>,"Tau21vsJMass_"+selection_label,"AK8 J1 SoftDrop Mass [GeV]","AK8 J1 #tau_{21}",34,30.,200.,25,0.,1.);
 
@@ -243,7 +244,10 @@ void process(string selection_label,
   plot ZMT1plot(*fillZMT<RA2bTree>,"ZMT1_"+selection_label,"MT_{G} [GeV]",32,400.,2000.); //50 GeV bin
   plot ZMT2plot(*fillZMT<RA2bTree>,"ZMT2_"+selection_label,"MT_{G} [GeV]",44,400.,1500.); // 25 GeV bin
   plot ZMT3plot(*fillZMT<RA2bTree>,"ZMT3_"+selection_label,"MT_{G} [GeV]",52,400.,3000.); // 50 GeV bin
-  plot ZMT31plot(*fillZMT<RA2bTree>,"ZMT31_"+selection_label,"MT_{G} [GeV]",25,500.,3000.); // 100 GeV bin
+  plot ZMT31plot(*fillZMT<RA2bTree>,"ZMT31_"+selection_label,"MT_{G} [GeV]",22,500.,2700.); // 100 GeV bin
+  plot ZMT311plot(*fillZMT<RA2bTree>,"ZMT311_"+selection_label,"MT_{G} [GeV]",44,500.,2700.); // 50 GeV bin
+  plot ZMT312plot(*fillZMT<RA2bTree>,"ZMT312_"+selection_label,"MT_{G} [GeV]",88,500.,2700.); //25 GeV bin
+  plot ZMT313plot(*fillZMT<RA2bTree>,"ZMT313_"+selection_label,"MT_{G} [GeV]",42,500.,4700.); // 100 GeV bin
   plot ZMT4plot(*fillZMT<RA2bTree>,"ZMT4_"+selection_label,"MT_{G} [GeV]",24,400.,1000.); // 25 GeV bin
   plot ZMT5plot(*fillZMT<RA2bTree>,"ZMT5_"+selection_label,"MT_{G} [GeV]",40,0.,1000.); // 25 GeV bin
   plot ZMT6plot(*fillZMT<RA2bTree>,"ZMT6_"+selection_label,"MT_{G} [GeV]",30,0.,1500.); // 50 GeV bin
@@ -255,6 +259,17 @@ void process(string selection_label,
   plot J1pt_Etaplot(*fillLeadingJetEta<RA2bTree>,"J1pt_Eta_"+selection_label,"AK8 J1 #eta",100,-5.,5.); //0.1 bin;
   plot J1pt_Phiplot(*fillLeadingJetPhi<RA2bTree>,"J1pt_Phi_"+selection_label,"AK8 J1 #Phi",40,-3.1415,3.1415); //0.1 bin;
   plot J1pt_Eta1plot(*fillLeadingJetEta<RA2bTree>,"J1pt_Eta1_"+selection_label,"AK8J1 #eta",60,-3.,3.); //0.1 bin;
+  
+  // for Boosted Deep AK8   
+  plot DeepAK8_Wplot(*fillDeepAK8W<RA2bTree>,"DeepAK8_Wplot_"+selection_label,"Deep AK8 W",20,0.,1.); //0.05
+  plot DeepAK8_W1plot(*fillDeepAK8W<RA2bTree>,"DeepAK8_W1plot_"+selection_label,"Deep AK8 W",200,0.,1.); //0.005
+  plot DeepAK8_W2plot(*fillDeepAK8W<RA2bTree>,"DeepAK8_W2plot_"+selection_label,"Deep AK8 W",1000,0.,1.); //0.001
+  plot DeepAK8_WDecorrelplot(*fillDeepAK8WDecorrel<RA2bTree>,"DeepAK8_WDecorrelplot_"+selection_label,"Deep AK8 W Decorrel",20,0.,1.); //0.04
+  plot DeepAK8_Zplot(*fillDeepAK8Z<RA2bTree>,"DeepAK8_Zplot_"+selection_label,"Deep AK8 Z",20,0.,1.); //0.05
+  plot DeepAK8_Z1plot(*fillDeepAK8Z<RA2bTree>,"DeepAK8_Z1plot_"+selection_label,"Deep AK8 Z",200,0.,1.); //0.005
+  plot DeepAK8_Z2plot(*fillDeepAK8Z<RA2bTree>,"DeepAK8_Z2plot_"+selection_label,"Deep AK8 Z",1000,0.,1.); //0.001
+  plot DeepAK8_ZhDecorrelplot(*fillDeepAK8ZDecorrel<RA2bTree>,"DeepAK8_ZhDecorrelplot_"+selection_label,"Deep AK8 Zh Decorrel",20,0.,1.); //0.04
+    
 
   plot VBFmjj_plot(*fillVBF_Mjj<RA2bTree>,"VBFmjj_"+selection_label,"m_{jj}^{VBF} [GeV]",40,0,4000);//100 GeV
   plot VBFmjj1_plot(*fillVBF_Mjj<RA2bTree>,"VBFmjj1_"+selection_label,"m_{jj}^{VBF} [GeV]",50,0,2500);//50 GeV
@@ -403,8 +418,17 @@ void process(string selection_label,
   plots.push_back(J1_SDMass2plot);
   plots.push_back(J1pt_Mass1plot);
   plots.push_back(J1pt_Tau21plot);
+  plots.push_back(J1pt_Tau212plot);
   plots.push_back(DDT_Tau21plot);
   plots.push_back(Tau21vsJMassplot);
+  plots.push_back(DeepAK8_Wplot);
+  plots.push_back(DeepAK8_W1plot);
+  plots.push_back(DeepAK8_W2plot);
+  plots.push_back(DeepAK8_WDecorrelplot);
+  plots.push_back(DeepAK8_Zplot);
+  plots.push_back(DeepAK8_Z1plot);
+  plots.push_back(DeepAK8_Z2plot);
+  plots.push_back(DeepAK8_ZhDecorrelplot);
 
   plots.push_back(GMassvsZMTplot);  
   plots.push_back(GMassplot);
@@ -415,6 +439,9 @@ void process(string selection_label,
   plots.push_back(ZMT2plot);
   plots.push_back(ZMT3plot);
   plots.push_back(ZMT31plot);
+  plots.push_back(ZMT311plot);
+  plots.push_back(ZMT312plot);
+  plots.push_back(ZMT313plot);
   plots.push_back(ZMT4plot); 
   plots.push_back(ZMT5plot); 
   plots.push_back(ZMT6plot); 
@@ -426,7 +453,7 @@ void process(string selection_label,
   plots.push_back(J1pt_Phiplot);
   plots.push_back(J1pt_Eta1plot);
 
-/*
+
   plots.push_back(VBFmjj_plot);
   plots.push_back(VBFmjj1_plot);
   plots.push_back(VBFmjj2_plot);
@@ -448,7 +475,7 @@ void process(string selection_label,
   plots.push_back(VBFj1Phi_plot);
   plots.push_back(VBFj2Phi_plot);
   plots.push_back(VBFj1j2Eta_plot);
-*/
+
 
 
   // background MC samples
@@ -519,29 +546,30 @@ void process(string selection_label,
       //if ( (ntuple->EvtNum % 1000) < (1000*21.0/59.6)) continue;
 
       for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
-	    if (skims.signalSampleName[iSample]=="VBFG_1200") 
-	    plots[iPlot].fillSignal(ntuple,(ntuple->Weight)*lumi*0.0002); // wt stored in current ntuple is 1 but it was 2e-5 before for privately produced sample
-	    //plots[iPlot].fillSignal(ntuple,(ntuple->Weight)*lumi*10);
 	    if (skims.signalSampleName[iSample]=="VBFG_1000") 
-	    plots[iPlot].fillSignal(ntuple,(ntuple->Weight)*lumi*10);
+	        plots[iPlot].fillSignal(ntuple,(ntuple->Weight)*lumi*1*0.0000207); // wt for 48300 evts: 1pb/#evts
+	    if (skims.signalSampleName[iSample]=="ggFG_1000") 
+	        plots[iPlot].fillSignal(ntuple,(ntuple->Weight)*lumi*1*0.00002); 
+	    if (skims.signalSampleName[iSample]=="VBFG_1200") 
+	        plots[iPlot].fillSignal(ntuple,(ntuple->Weight)*lumi*1*0.00002); 
 	    if (skims.signalSampleName[iSample]=="VBFG_1400") 
-	    plots[iPlot].fillSignal(ntuple,(ntuple->Weight)*lumi*10);
+	        plots[iPlot].fillSignal(ntuple,(ntuple->Weight)*lumi*1*0.00002); 
 	    if (skims.signalSampleName[iSample]=="VBFG_1600") 
-	    plots[iPlot].fillSignal(ntuple,(ntuple->Weight)*lumi*10);
+	        plots[iPlot].fillSignal(ntuple,(ntuple->Weight)*lumi*1*0.00002); 
 	    if (skims.signalSampleName[iSample]=="VBFG_1800") 
-	    plots[iPlot].fillSignal(ntuple,(ntuple->Weight)*lumi*10);
+	        plots[iPlot].fillSignal(ntuple,(ntuple->Weight)*lumi*1*0.00002); 
 	    if (skims.signalSampleName[iSample]=="VBFG_2000") 
-	    plots[iPlot].fillSignal(ntuple,(ntuple->Weight)*lumi*10);
+	        plots[iPlot].fillSignal(ntuple,(ntuple->Weight)*lumi*1*0.00002); 
 	    if (skims.signalSampleName[iSample]=="VBFG_2500") 
-	    plots[iPlot].fillSignal(ntuple,(ntuple->Weight)*lumi*10);
+	        plots[iPlot].fillSignal(ntuple,(ntuple->Weight)*lumi*1*0.00002); 
 	    if (skims.signalSampleName[iSample]=="VBFG_3000") 
-	    plots[iPlot].fillSignal(ntuple,(ntuple->Weight)*lumi*10);
+	        plots[iPlot].fillSignal(ntuple,(ntuple->Weight)*lumi*1*0.00002); 
 	    if (skims.signalSampleName[iSample]=="VBFG_3500") 
-	    plots[iPlot].fillSignal(ntuple,(ntuple->Weight)*lumi*10);
+	        plots[iPlot].fillSignal(ntuple,(ntuple->Weight)*lumi*1*0.00002); 
 	    if (skims.signalSampleName[iSample]=="VBFG_4000") 
-	    plots[iPlot].fillSignal(ntuple,(ntuple->Weight)*lumi*10);
+	        plots[iPlot].fillSignal(ntuple,(ntuple->Weight)*lumi*1*0.00002); 
 	    if (skims.signalSampleName[iSample]=="VBFG_4500") 
-	    plots[iPlot].fillSignal(ntuple,(ntuple->Weight)*lumi*10);
+	        plots[iPlot].fillSignal(ntuple,(ntuple->Weight)*lumi*1*0.00002); 
         }
     }
 
