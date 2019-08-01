@@ -12,8 +12,8 @@
 #include <cassert>
 #include "plotterUtils.cc"
 //#include "skimSamples_2016.cc"
-//#include "skimSamples_2017.cc"
-#include "skimSamples.cc"
+#include "skimSamples_2017.cc"
+//#include "skimSamples.cc"
 #include "definitions.h"
 #include "RA2bTree.cc"
 #include "TriggerEfficiencySextet.cc"
@@ -103,18 +103,21 @@ void process(string selection_label,
   
   typedef plot<RA2bTree> plot;
 
-  //plot HEMFracplot(*fillHEMTest1<RA2bTree>,"HEMFrac_"+selection_label,"HEM Frac",50,-0.5,999.5);//1 bin
+  plot HEMFracplot(*fillHEMTest1<RA2bTree>,"HEMFrac_"+selection_label,"HEM Frac",50,-0.5,999.5);//1 bin
   plot NVtxplot(*fillNVtx<RA2bTree>,"NVtx_"+selection_label,"NVtx",80,0.5,80.5);//1 bin
   plot NVtx1plot(*fillNVtx<RA2bTree>,"NVtx1_"+selection_label,"NVtx",50,0.5,50.5);//1 bin
   plot METplot(*fillMET<RA2bTree>,"MET_"+selection_label,"MET [GeV]",56,200.,3000.);//50 GeV bin
   plot MET1plot(*fillMET<RA2bTree>,"MET1_"+selection_label,"MET [GeV]",20,200.,1200.);//50 GeV bin
   plot MET2plot(*fillMET<RA2bTree>,"MET2_"+selection_label,"MET [GeV]",24,200.,800.);//25 GeV bin
+  //plot t1muMETplot(*fillt1muMET<RA2bTree>,"t1muMET_"+selection_label,"t1muMET [GeV]",25,200.,1200.);//40 GeV bin
+  //plot Zmassplot(*fillZmass<RA2bTree>,"Zmass_"+selection_label,"Z(#mu#mu) mass[GeV]",40,0.,200.);//5 GeV bin
+  //plot Zptplot(*fillZpt<RA2bTree>,"Zpt_"+selection_label,"Z(#mu#mu) p_{T}[GeV]",25,0.,1000.);//40 GeV bin
+  //plot CaloMETplot(*fillCaloMET<RA2bTree>,"CaloMET_"+selection_label,"Calo MET [GeV]",25,200.,1200.);//40 GeV bin
+  //plot EScaleplot(*fillEnergyScale<RA2bTree>,"EScale_"+selection_label,"E Scale",40,0.,2.);
   plot HTplot(*fillHT<RA2bTree>,"HT_"+selection_label,"H_{T} [GeV]",75,300,3300.); // 100 GeV bin
   plot NJetsplot(*fillNJets<RA2bTree>,"NJets_"+selection_label,"n_{jets}",10,0.5,10.5);
-  plot NJets1plot(*fillCentralNJets<RA2bTree>,"NJetsCent_"+selection_label,"n_{jets}",10,0.5,10.5);
   plot NAK8Jetsplot(*fillNAK8Jets<RA2bTree>,"NAK8Jets_"+selection_label,"nAK8_{jets}",10,0.5,10.5);
   plot NAK8Jets1plot(*fillNAK8Jets<RA2bTree>,"NAK8Jets1_"+selection_label,"nAK8_{jets}",4,0.5,4.5);
-  plot NAK8Jets2plot(*fillCentralNAK8Jets<RA2bTree>,"NAK8JetsCent_"+selection_label,"nAK8_{jets}",4,0.5,4.5);
   plot madHT(*fillMadHT<RA2bTree>,"madHT_"+selection_label,"Madgraph HT",19,100,2000);  
   plot MHTRatio(*fillMHTRatio<RA2bTree>,"MHT_HTRatio_"+selection_label,"MHT/HT",40,0,2);  
   plot MHTdPhivsHTRatioplot(*fillDeltaPhiMHT<RA2bTree>,*fillHTRatio<RA2bTree>,"HTRatiovsMHTdPhi_"+selection_label,"#Delta #phi(j1, MHT)","HT5/HT",35,0.,3.5,20,1.,3.);//0.1 bin
@@ -126,6 +129,7 @@ void process(string selection_label,
   plot METvsAK4j2Ptplot(*fillJetPt2<RA2bTree>,*fillMET<RA2bTree>,"METvsAK4j2Pt_"+selection_label,"pt_{j2}^{AK4} [GeV]","MET [GeV]",25,0.,1000.,25,0.,1000.);
   plot METvsAK4j3Ptplot(*fillJetPt3<RA2bTree>,*fillMET<RA2bTree>,"METvsAK4j3Pt_"+selection_label,"pt_{j3}^{AK4} [GeV]","MET [GeV]",25,0.,1000.,25,0.,1000.);
   plot METvsAK4j4Ptplot(*fillJetPt4<RA2bTree>,*fillMET<RA2bTree>,"METvsAK4j4Pt_"+selection_label,"pt_{j4}^{AK4} [GeV]","MET [GeV]",25,0.,1000.,25,0.,1000.);
+  //plot CaloMETvsZptplot(*fillZpt<RA2bTree>,*fillCaloMET<RA2bTree>,"CaloMETvsZpt_"+selection_label,"Z(#mu#mu) pt [GeV]","Calo MET [GeV]",25,0.,1000.,25,0.,1000.);
  
      // AK4 Jets plots: pt, eta, phi, Nemf
   plot AK4j1pt_plot(*fillJetPt1<RA2bTree>,"AK4j1pt_"+selection_label,"pt_{j1}^{AK4} [GeV]",40,0,1000);//25 GeV bin
@@ -227,7 +231,6 @@ void process(string selection_label,
   plot J1_SDMass1plot(*fillLeadingJetSDMass<RA2bTree>,"J1_SDMass1_"+selection_label,"AK8 J1 SoftDrop Mass [GeV]",34,30.,200.);//5 Gev bin
   plot J1_SDMass2plot(*fillLeadingJetSDMass<RA2bTree>,"J1_SDMass2_"+selection_label,"AK8 J1 SoftDrop Mass [GeV]",8,65.,105.);//5 Gev bin
   // Turn on the line below for SR only
-  plot BTagDeepCSVplot(*fillBTagsCSV<RA2bTree>,"BTagDeepCSV_"+selection_label,"BTag Deep CSV",20,0.,1.);//5 Gev bin
   plot J1pt_Mass1plot(*fillLeadingJetMass<RA2bTree>,"J1pt_Mass1_"+selection_label,"m_{J} [GeV]",14,50.,120.);//5 Gev bin
   plot J1pt_Tau21plot(*fillLeadingTau21<RA2bTree>,"J1pt_Tau21_"+selection_label,"AK8 J1 #tau_{21}",20,0.,1.); //0.05
   plot J1pt_Tau212plot(*fillLeadingTau21<RA2bTree>,"J1pt_Tau212_"+selection_label,"AK8 J1 #tau_{21}",1000,0.,1.); //0.04
@@ -302,18 +305,21 @@ void process(string selection_label,
  
 
   vector<plot> plots;
-  //plots.push_back(HEMFracplot);
+  plots.push_back(HEMFracplot);
   plots.push_back(NVtxplot);
   plots.push_back(NVtx1plot);
   plots.push_back(METplot);
   plots.push_back(MET1plot);
   plots.push_back(MET2plot);
+  //plots.push_back(t1muMETplot);
+  //plots.push_back(Zmassplot);
+  //plots.push_back(Zptplot);
+  //plots.push_back(CaloMETplot);
+  //plots.push_back(EScaleplot);
   plots.push_back(HTplot);
   plots.push_back(NJetsplot);
-  plots.push_back(NJets1plot);
   plots.push_back(NAK8Jetsplot); 
   plots.push_back(NAK8Jets1plot); 
-  plots.push_back(NAK8Jets2plot); 
   plots.push_back(madHT);
   plots.push_back(MHTRatio);
   plots.push_back(MHTdPhivsHTRatioplot);
@@ -325,6 +331,7 @@ void process(string selection_label,
   plots.push_back(METvsAK4j2Ptplot);
   plots.push_back(METvsAK4j3Ptplot);
   plots.push_back(METvsAK4j4Ptplot);
+  //plots.push_back(CaloMETvsZptplot);
 
   plots.push_back(AK4j1pt_plot);
   plots.push_back(AK4j1pt1_plot);
@@ -458,10 +465,10 @@ void process(string selection_label,
 
   plots.push_back(J1pt_Ptplot);
   plots.push_back(J1pt_Pt1plot);
-  plots.push_back(J1pt_Pt2plot);
   plots.push_back(J1pt_Etaplot);
   plots.push_back(J1pt_Phiplot);
   plots.push_back(J1pt_Eta1plot);
+
 
   plots.push_back(VBFmjj_plot);
   plots.push_back(VBFmjj1_plot);
@@ -490,9 +497,7 @@ void process(string selection_label,
   // background MC samples
   for( int iSample = 0 ; iSample < skims.ntuples.size() ; iSample++){
     RA2bTree* ntuple = skims.ntuples[iSample];
-    isMC_ = true;
-    //TFile* outputFile = new TFile("plotObs_"+selection_label+"_baseline_"+skims.sampleName[iSample]+".root","RECREATE");
-    TFile* outputFile = new TFile("Test_Files_Jul29/plotObs_"+selection_label+"_baseline_"+skims.sampleName[iSample]+".root","RECREATE");
+    TFile* outputFile = new TFile("plotObs_"+selection_label+"_baseline_"+skims.sampleName[iSample]+".root","RECREATE");
     
     for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
       plots[iPlot].addNtuple(ntuple,skims.sampleName[iSample]);
@@ -510,16 +515,13 @@ void process(string selection_label,
     
         // HEM Veto
         //if(! selectionFunc(ntuple, true) ) continue;
-        if(! selectionFunc(ntuple) ) continue;
-        //isMC_ = true;
-        if ( (ntuple->EvtNum % 1000) < (1000*21.0/59.6)) continue;
-        if(! passHEMjetVeto(ntuple, 30) ) continue;
-        weight = ntuple->Weight*lumi;
-        
+        //if ( (ntuple->EvtNum % 1000) < (1000*21.0/59.6)) continue;
+        //weight = ntuple->Weight*lumi;
 
         // Prefiring wt for 2016 & 2017 only
-        //if(! selectionFunc(ntuple) ) continue;
-        //weight = ntuple->Weight*lumi*ntuple->NonPrefiringProb;
+        if(! selectionFunc(ntuple) ) continue;
+        weight = ntuple->Weight*lumi*ntuple->NonPrefiringProb;
+
         //weight = ntuple->Weight*lumii*customPUweights(ntuple);
         
       // ------------ end weights -------------
@@ -539,9 +541,7 @@ void process(string selection_label,
   vector<RA2bTree*> sigSamples;
   for( int iSample = 0 ; iSample < skims.signalNtuples.size() ; iSample++){
     RA2bTree* ntuple = skims.signalNtuples[iSample];
-    isMC_ = true;
-    //TFile* outputFile = new TFile("plotObs_"+selection_label+"_baseline_"+skims.signalSampleName[iSample]+".root","RECREATE");
-    TFile* outputFile = new TFile("Test_Files_Jul29/plotObs_"+selection_label+"_baseline_"+skims.signalSampleName[iSample]+".root","RECREATE");
+    TFile* outputFile = new TFile("plotObs_"+selection_label+"_baseline_"+skims.signalSampleName[iSample]+".root","RECREATE");
 
     sigSamples.push_back(ntuple);
     for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
@@ -556,13 +556,9 @@ void process(string selection_label,
       if( iEvt % 100000 == 0 ) cout << skims.signalSampleName[iSample] << ": " << iEvt << "/" << numEvents << endl;
 
       if(! selectionFunc(ntuple) ) continue;
-
       // HEM Veto  
       //if(! selectionFunc(ntuple, true) ) continue;
-      //isMC_ = true;
-      if ( (ntuple->EvtNum % 1000) < (1000*21.0/59.6)) continue;
-      if(!passHEMjetVeto(ntuple,30)) continue;  
-        
+      //if ( (ntuple->EvtNum % 1000) < (1000*21.0/59.6)) continue;
 
       for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
 	    if (skims.signalSampleName[iSample]=="VBFG_1000") 
@@ -603,8 +599,7 @@ void process(string selection_label,
   // Data samples
   for( int iSample = 0 ; iSample < skims.dataNtuple.size() ; iSample++){
     RA2bTree* ntuple = skims.dataNtuple[iSample];
-    //TFile* outputFile = new TFile("plotObs_"+selection_label+"_baseline_"+skims.dataSampleName[iSample]+".root","RECREATE");
-    TFile* outputFile = new TFile("Test_Files_Jul29/plotObs_"+selection_label+"_baseline_"+skims.dataSampleName[iSample]+".root","RECREATE");
+    TFile* outputFile = new TFile("plotObs_"+selection_label+"_baseline_"+skims.dataSampleName[iSample]+".root","RECREATE");
 	  
     for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
         plots[iPlot].addDataNtuple(ntuple,skims.dataSampleName[iSample]);
@@ -621,8 +616,6 @@ void process(string selection_label,
 
         if(! selectionFunc(ntuple) ) continue;
         //if(! selectionFunc(ntuple, false) ) continue;
-        //HEM Veto
-        if(!passHEMjetVeto(ntuple,30)) continue;
 
         if( !signalTriggerCut(ntuple) ) continue;
       

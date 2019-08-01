@@ -6,15 +6,18 @@ r.gROOT.SetBatch(True)
 r.gROOT.ProcessLine(".L tdrstyle.C")
 r.gROOT.ProcessLine("setTDRStyle()")
 
+#cat = "SR HP NoVBF"
+
 #plot_dir="ZSR_All_May15/2016/ZSRHPVBF"
 #plot_dir="ZSR_All_May15/2016/ZSRHPVBF_pt30GeV"
-plot_dir="ZSRNoVBF/2016"
+#plot_dir="ZSRHPNoVBF/2016"
+plot_dir="plots/ZSR_HP_VBF/2016_Test"
 #plot_dir="ZSR_All_May15/2016/ZSRHPNoVBF_pt30GeV"
 #input_file_name = "ZSRHPVBF_515_v4_2016.root"
 #output_file_name = "ZSRHPVBF_515_v4_2016_Output.root"
 #input_file_name = "ZSRHPVBF_515_v4_2016_pt30GeV.root"
-input_file_name = "ggF_SR_NewSkim_v1_2016_I.root" 
-output_file_name = "ggF_SR_NewSkim_v1_2016_I_Output.root"
+input_file_name = "Test_Files_Jul29/ZSRHPVBF_NewSkim_v1_2016_Test.root" 
+output_file_name= "Test_Files_Jul29/ZSRHPVBF_NewSkim_v1_2016_Test_Output.root"
 #output_file_name = "ZSRHPVBF_515_v4_2016_pt30GeV_Output.root"
 
 input_file = r.TFile(input_file_name,"READ")    
@@ -64,8 +67,8 @@ def plot(plot_var = "photonIsoChrgLowSieie_EB_photonLoose" ):
               "ZJets_2500toInf"]
              ]
 
-    signal_samples=["VBFG_1000", 
-                    "ggFG_1000"]
+    signal_samples=["VBFG_1000"]#, 
+                    #"ggFG_1000"]
 
     data_samples=["MET_2016H",#]
                 "MET_2016G",
@@ -75,10 +78,11 @@ def plot(plot_var = "photonIsoChrgLowSieie_EB_photonLoose" ):
                 "MET_2016C",
                 "MET_2016B"]
 
-    samples_labels = ["Single top","TT","Other","WJets","ZJets"]
-    signal_labels = ["VBFG_1000","ggFG_1000"]
-    signal_line_color = [2,46]
-    #signal_line_color = [r.kRed,r.kRed-7]
+    samples_labels = ["SnglT","TT","Other","WJets","ZJets"]
+    signal_labels = ["VBFG_1000"]
+    #signal_labels = ["VBFG_1000","ggFG_1000"]
+    signal_line_color = [2]
+    #signal_line_color = [2,46]
     samples_fill_color = [r.kOrange,r.kCyan,r.kOrange+3,r.kBlue,r.kGreen+1]
     samples_line_color = [1,1,1,1,1]
     
@@ -190,6 +194,14 @@ def plot(plot_var = "photonIsoChrgLowSieie_EB_photonLoose" ):
     stack.GetXaxis().SetTitleOffset(1.1);
     stack.GetXaxis().SetNdivisions(505);
 
+    #Catext = r.TText(.17,.8,cat)
+    #Catext.SetNDC()
+    #Catext.SetTextFont(51)
+    #Catext.SetTextSize(0.04)
+    #Catext.Draw()
+    
+
+
     CMStext = r.TText(.17,.95,"CMS")
     CMStext.SetNDC()
     CMStext.SetTextFont(61)
@@ -212,7 +224,8 @@ def plot(plot_var = "photonIsoChrgLowSieie_EB_photonLoose" ):
     LUMItext.SetTextSize(0.04) # was 0.08
     LUMItext.Draw()
 
-    can.SaveAs("../plots_NewSkim_v1/"+plot_dir+"/"+plot_var+".png")
+    #can.SaveAs("../plots_NewSkim_v1/"+plot_dir+"/"+plot_var+".png")
+    can.SaveAs("Test_Files_Jul29/"+plot_dir+"/"+plot_var+".png")
     # for space between legend and plot 
     can.SetLogy()
     if total!=None:
@@ -220,7 +233,7 @@ def plot(plot_var = "photonIsoChrgLowSieie_EB_photonLoose" ):
     else :
         stack.SetMaximum(20.0*samples_histo[0].GetMaximum())
     stack.SetMinimum(0.1)
-    can.SaveAs("../plots_NewSkim_v1/"+plot_dir+"/"+plot_var+"_LogY.png")
+    can.SaveAs("Test_Files_Jul29/"+plot_dir+"/"+plot_var+"_LogY.png")
 
     output_file.cd()
     for h in samples_histo :

@@ -6,9 +6,10 @@ r.gROOT.SetBatch(True)
 r.gROOT.ProcessLine(".L tdrstyle.C")
 r.gROOT.ProcessLine("setTDRStyle()")
 
-plot_dir="ZSR_All_May15/2018/ZSRHPNoVBF"
-input_file_name = "ZSRHPNoVBF_515_v4_2018.root"
-output_file_name = "ZSRHPNoVBF_515_v4_2018_Output.root"
+#plot_dir="ZSR_All_May15/2018/ZSRHPNoVBF"
+plot_dir="plots/ZSR_HP_VBF/2018_Test"
+input_file_name = "Test_Files_Jul29/ZSRHPVBF_NewSkim_v1_2018_Test.root"
+output_file_name = "Test_Files_Jul29/ZSRHPVBF_NewSkim_v1_2018_Test_Output.root"
 
 input_file = r.TFile(input_file_name,"READ")    
 
@@ -49,14 +50,14 @@ def plot(plot_var = "photonIsoChrgLowSieie_EB_photonLoose" ):
               "ZJets_2500toInf"]
              ]
 
-    signal_samples=["VBFG_1200"]
+    signal_samples=["VBFG_1000"]
 
     data_samples=["MET_2018D",#]
                 "MET_2018C",
                 "MET_2018B",
                 "MET_2018A"]
 
-    samples_labels = ["Single top","TT","Other","WJets","ZJets"]
+    samples_labels = ["SnglT","TT","Other","WJets","ZJets"]
     samples_fill_color = [r.kOrange,r.kCyan,r.kOrange+3,r.kBlue,r.kGreen+1]
     samples_line_color = [1,1,1,1,1]
     
@@ -185,7 +186,8 @@ def plot(plot_var = "photonIsoChrgLowSieie_EB_photonLoose" ):
     LUMItext.SetTextSize(0.04) # was 0.08
     LUMItext.Draw()
 
-    can.SaveAs("../plots/"+plot_dir+"/"+plot_var+".png")
+    #can.SaveAs("../plots/"+plot_dir+"/"+plot_var+".png")
+    can.SaveAs("Test_Files_Jul29/"+plot_dir+"/"+plot_var+".png")
     # for space between legend and plot 
     can.SetLogy()
     if total!=None:
@@ -193,7 +195,7 @@ def plot(plot_var = "photonIsoChrgLowSieie_EB_photonLoose" ):
     else :
         stack.SetMaximum(20.0*samples_histo[0].GetMaximum())
     stack.SetMinimum(0.1)
-    can.SaveAs("../plots/"+plot_dir+"/"+plot_var+"_LogY.png")
+    can.SaveAs("Test_Files_Jul29/"+plot_dir+"/"+plot_var+"_LogY.png")
 
     output_file.cd()
     for h in samples_histo :

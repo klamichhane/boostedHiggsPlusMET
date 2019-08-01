@@ -6,15 +6,17 @@ r.gROOT.SetBatch(True)
 r.gROOT.ProcessLine(".L tdrstyle.C")
 r.gROOT.ProcessLine("setTDRStyle()")
 
+#cat = "SB HP VBF"
+
+
 #plot_dir="ZSB_All_May15/2016/ZSBNoVBF"
 #plot_dir="ZSBHPNoVBF/2016"
-#plot_dir="ZBaseline/2016"
-plot_dir="ZSBHPVBF/2016"
+#plot_dir="ZBaseline/2016_Test"
+plot_dir="plots/Z_Baseline/2016_Test"
+#plot_dir="ZSBHPVBF/2016_Test"
 #plot_dir="ZSB_All_May15/2016/ZSBHPNoVBF_pt30GeV"
-#input_file_name = "ZBaseline_NewSkim_v1_2016.root"
-input_file_name = "VBF_SBHP_NewSkim_v1_2016.root"
-#input_file_name = "ZSBNoVBF_AfterPrefiring_2017.root"
-output_file_name = "VBF_SBHP_NewSkim_v1_2016_Output.root"
+input_file_name = "Test_Files_Jul29/ZBaseline_NewSkim_v1_2016_Test.root" 
+output_file_name= "Test_Files_Jul29/ZBaseline_NewSkim_v1_2016_Test_Output.root"
 
 input_file = r.TFile(input_file_name,"READ")    
 
@@ -63,9 +65,9 @@ def plot(plot_var = "photonIsoChrgLowSieie_EB_photonLoose" ):
               "ZJets_2500toInf"]
              ]
 
-    signal_samples=["VBFG_1000",
-                    "ggFG_1000"]
-    #signal_samples=["VBFG_1200"]
+    #signal_samples=["VBFG_1000",
+    #                "ggFG_1000"]
+    signal_samples=["VBFG_1000"]
 
     data_samples=["MET_2016H",#]
                 "MET_2016G",
@@ -75,11 +77,11 @@ def plot(plot_var = "photonIsoChrgLowSieie_EB_photonLoose" ):
                 "MET_2016C",
                 "MET_2016B"]
 
-    samples_labels = ["Single top","TT","Other","WJets","ZJets"]
+    samples_labels = ["SnglT","TT","Other","WJets","ZJets"]
+    #signal_labels = ["VBFG_1000"]
+    #signal_line_color = [2,46]
     samples_fill_color = [r.kOrange,r.kCyan,r.kOrange+3,r.kBlue,r.kGreen+1]
     samples_line_color = [1,1,1,1,1]
-    signal_labels = ["VBFG 1TeV","ggFG 1TeV"]
-    signal_line_color = [r.kRed, r.kBlack]
     
     samples_histo=[]
     
@@ -105,6 +107,7 @@ def plot(plot_var = "photonIsoChrgLowSieie_EB_photonLoose" ):
  ## for signal sample
     signal_histo=[]
     for i,signal_sample_names in enumerate(signal_samples) :
+        #if i<len(signal_samples):
         if i==0:
             signal_histo.append(input_file.Get(plot_var+"_"+signal_sample_names))
             #signal_histo[-1].SetLineColor(signal_line_color[i])
@@ -142,12 +145,14 @@ def plot(plot_var = "photonIsoChrgLowSieie_EB_photonLoose" ):
     for i,h in enumerate(samples_histo) : 
         #print h.GetTitle(),"before",h.Integral()
         if h.Integral()>0 and total!=None:
-            h.Scale(data_histo[0].Integral()/total.Integral())
+            h.Scale(data_histo[0].Integral(0,(data_histo[0].GetNbinsX()+1))/total.Integral(0,(total.GetNbinsX()+1)))
+            #h.Scale(data_histo[0].Integral()/total.Integral())
         #print h.GetTitle(),"after",h.Integral()
         stack.Add(h)
     if total!=None and total.Integral()>0: 
     #if total!=None: 
-        total.Scale(data_histo[0].Integral()/total.Integral())
+        #total.Scale(data_histo[0].Integral()/total.Integral())
+        total.Scale(data_histo[0].Integral(0,(data_histo[0].GetNbinsX()+1))/total.Integral(0,(total.GetNbinsX()+1)))
 
     # For legend
     leg = r.TLegend(0.45,.77,.9,.92) 
@@ -157,12 +162,12 @@ def plot(plot_var = "photonIsoChrgLowSieie_EB_photonLoose" ):
 
     if data_histo:
        #leg.AddEntry(data_histo[-1],"data","p") 
-       leg.AddEntry(data_histo[-1],"MET 2018","p") 
+       leg.AddEntry(data_histo[-1],"MET 2016","p") 
     for i in range(len(samples_histo)):
         leg.AddEntry(samples_histo[i],samples_labels[i],"f")
     for i in range(len(signal_histo)):
-        #leg.AddEntry(signal_histo[i],"VBFG 1200","f")
-        leg.AddEntry(signal_histo[i],signal_labels[i],"f")
+        leg.AddEntry(signal_histo[i],"VBFG 1000","f")
+        #leg.AddEntry(signal_histo[i],signal_labels[i],"f")
 
 
     can = r.TCanvas("can","can",500,500)
@@ -200,6 +205,12 @@ def plot(plot_var = "photonIsoChrgLowSieie_EB_photonLoose" ):
     stack.GetXaxis().SetTitleFont(43);
     stack.GetXaxis().SetTitleSize(24);
     stack.GetXaxis().SetTitleOffset(1.7);
+
+    #Catext = r.TText(.17,.8,cat)
+    #Catext.SetNDC()
+    #Catext.SetTextFont(51)
+    #Catext.SetTextSize(0.08)
+    #Catext.Draw()
 
     CMStext = r.TText(.17,.95,"CMS")
     CMStext.SetNDC()
@@ -251,7 +262,8 @@ def plot(plot_var = "photonIsoChrgLowSieie_EB_photonLoose" ):
     
 
     #can.SaveAs("../plots/"+plot_dir+"/"+plot_var+".png")
-    can.SaveAs("../plots_NewSkim_v1/"+plot_dir+"/"+plot_var+".png")
+    #can.SaveAs("../plots_NewSkim_v1/"+plot_dir+"/"+plot_var+".png")
+    can.SaveAs("Test_Files_Jul29/"+plot_dir+"/"+plot_var+".png")
     # for space between legend and plot 
     topPad.SetLogy()
     if total!=None:
@@ -260,7 +272,7 @@ def plot(plot_var = "photonIsoChrgLowSieie_EB_photonLoose" ):
         stack.SetMaximum(20.0*data_histo[0].GetMaximum())
     stack.SetMinimum(0.1)
     #can.SaveAs("../plots/"+plot_dir+"/"+plot_var+"_LogY.png")
-    can.SaveAs("../plots_NewSkim_v1/"+plot_dir+"/"+plot_var+"_LogY.png")
+    can.SaveAs("Test_Files_Jul29/"+plot_dir+"/"+plot_var+"_LogY.png")
 
     output_file.cd()
     for h in samples_histo :

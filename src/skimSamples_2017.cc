@@ -7,8 +7,9 @@
 #include <map>
 
 static const TString BASE_DIR_DATA = "/home/whitbeck/raid/temp/SusyRA2Analysis2015/Skims/Run2ProductionV17/";
-static const TString BASE_DIR = "/home/whitbeck/raid/temp/SusyRA2Analysis2015/Skims/Run2ProductionV16/";
-static const TString BASE_DIR_SIG = "/home/whitbeck/raid/temp/SusyRA2Analysis2015/Skims/Run2ProductionV16/VBF_G_V2/";
+static const TString BASE_DIR = "/home/whitbeck/raid/temp/SusyRA2Analysis2015/Skims_TTU_Jul19/Run2ProductionV17/";
+static const TString BASE_DIR_SIG = "/home/whitbeck/raid/temp/SusyRA2Analysis2015/Skims_TTU_Jul19/Run2ProductionV17/Sig_Samples/";
+//static const TString BASE_DIR_SIG = "/home/whitbeck/raid/temp/SusyRA2Analysis2015/Skims/Run2ProductionV16/VBF_G_V2/";
 static const bool RE_MINIAOD = false;
 
 class skimSamples{
@@ -191,8 +192,30 @@ public :
 	    fileNames["MET_2018C"] = "tree_MET_2018C.root";
         fileNames["MET_2018D"] = "tree_MET_2018D.root";
 
-        fileNames["VBFG_1000"] = "tree_VBF_ZZ_mG1000.root";
-        fileNames["VBFG_1200"] = "tree_VBFG_mG1200_MC2018.root";
+        //fileNames["VBFG_1000"] = "tree_VBF_ZZ_mG1000.root";
+        fileNames["VBFG_1000"] = "tree_VBFG_mG1000_v3_MC2016.root";
+        fileNames["VBFG_1200"] = "tree_VBFG_mG1200_v15_MC2018.root";
+        fileNames["VBFG_1400"] = "tree_VBFG_mG1400_v15_MC2018.root";
+        fileNames["VBFG_1600"] = "tree_VBFG_mG1600_v15_MC2018.root";
+        fileNames["VBFG_1800"] = "tree_VBFG_mG1800_v15_MC2018.root";
+        fileNames["VBFG_2000"] = "tree_VBFG_mG2000_v15_MC2018.root";
+        fileNames["VBFG_2500"] = "tree_VBFG_mG2500_v15_MC2018.root";
+        fileNames["VBFG_3000"] = "tree_VBFG_mG3000_v15_MC2018.root";
+        fileNames["VBFG_3500"] = "tree_VBFG_mG3500_v15_MC2018.root";
+        fileNames["VBFG_4000"] = "tree_VBFG_mG4000_v15_MC2018.root";
+        fileNames["VBFG_4500"] = "tree_VBFG_mG4500_v15_MC2018.root";
+
+        fileNames["ggFG_1000"] = "tree_ggFG_mG1000_v14_MC2017.root";
+        fileNames["ggFG_1200"] = "tree_ggFG_mG1200_v14_MC2017.root";
+        fileNames["ggFG_1400"] = "tree_ggFG_mG1400_v14_MC2017.root";
+        fileNames["ggFG_1600"] = "tree_ggFG_mG1600_v14_MC2017.root";
+        fileNames["ggFG_1800"] = "tree_ggFG_mG1800_v14_MC2017.root";
+        fileNames["ggFG_2000"] = "tree_ggFG_mG2000_v14_MC2017.root";
+        fileNames["ggFG_2500"] = "tree_ggFG_mG2500_v14_MC2017.root";
+        //fileNames["ggFG_3000"] = "tree_ggFG_mG3000_v14_MC2017.root";
+        fileNames["ggFG_3500"] = "tree_ggFG_mG3500_v14_MC2017.root";
+        fileNames["ggFG_4000"] = "tree_ggFG_mG4000_v14_MC2017.root";
+        fileNames["ggFG_4500"] = "tree_ggFG_mG4500_v14_MC2017.root";
 
         fileNames["SingleElectron_2016C"] = "tree_SingleElectron_2016C.root";
         fileNames["SingleElectron_2016D"] = "tree_SingleElectron_2016D.root";
@@ -233,7 +256,8 @@ public :
 	  if( fileNames.find(name) != fileNames.end() ){
 	    TChain* temp = new TChain("tree");
 	    //temp->Add(BASE_DIR+skimType+"/"+fileNames[name]);	  
-	    temp->Add(BASE_DIR_DATA+skimType+"/"+fileNames[name]);	  
+	    //temp->Add(BASE_DIR_DATA+skimType+"/"+fileNames[name]);	  
+	    temp->Add(BASE_DIR+skimType+"/"+fileNames[name]);	  
 	    ntuples.push_back(new RA2bTree(temp));
 	    sampleName.push_back(name);
 	  }
@@ -246,8 +270,8 @@ public :
 	    TChain* temp = new TChain("tree");
 	    //TChain* temp = new TChain("TreeMaker2/PreSelection");
         //VBFG1000 = new TChain("TreeMaker2/PreSelection");
-	    //temp->Add(BASE_DIR_SIG+"/"+fileNames[name]);	  
-	    temp->Add(BASE_DIR_DATA+skimType+"/"+fileNames[name]);	  
+	    temp->Add(BASE_DIR_SIG+"/"+fileNames[name]);	  
+	    //temp->Add(BASE_DIR_DATA+skimType+"/"+fileNames[name]);	  
 	    signalNtuples.push_back(new RA2bTree(temp));
 	    signalSampleName.push_back(name);
 	  }
@@ -258,8 +282,8 @@ public :
 
 	  if( fileNames.find(name) != fileNames.end() ){
 	    TChain* temp = new TChain("tree");
-	    //temp->Add(BASE_DIR+skimType+"/"+fileNames[name]);	  
-	    temp->Add(BASE_DIR_DATA+skimType+"/"+fileNames[name]);	  
+	    temp->Add(BASE_DIR+skimType+"/"+fileNames[name]);	  
+	    //temp->Add(BASE_DIR_DATA+skimType+"/"+fileNames[name]);	  
 	    dataNtuple.push_back(new RA2bTree(temp));
 	    dataSampleName.push_back(name);
 	  }

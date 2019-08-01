@@ -1,5 +1,6 @@
 #include "TLorentzVector.h"
 #include "TRandom3.h"
+#include "TVector2.h"
 #include <iostream>
 
 std::vector<TLorentzVector> dummy;
@@ -62,11 +63,9 @@ template<typename ntupleType>void ntupleBranchStatus(ntupleType* ntuple){
   ntuple->fChain->SetBranchStatus("Photons_hasPixelSeed",1);
   ntuple->fChain->SetBranchStatus("Photons_fullID",1);
   ntuple->fChain->SetBranchStatus("NElectrons",1);
+  ntuple->fChain->SetBranchStatus("iso*clean",1);
   ntuple->fChain->SetBranchStatus("iso*Tracks",1);
-  ntuple->fChain->SetBranchStatus("DeltaPhi1",1);
-  ntuple->fChain->SetBranchStatus("DeltaPhi2",1);
-  ntuple->fChain->SetBranchStatus("DeltaPhi3",1);
-  ntuple->fChain->SetBranchStatus("DeltaPhi4",1);
+  ntuple->fChain->SetBranchStatus("DeltaPhi*",1);
   ntuple->fChain->SetBranchStatus("TriggerNames",1);
   ntuple->fChain->SetBranchStatus("TriggerPass",1);
   ntuple->fChain->SetBranchStatus("MHT",1);
@@ -83,7 +82,8 @@ template<typename ntupleType>void ntupleBranchStatus(ntupleType* ntuple){
   ntuple->fChain->SetBranchStatus("METclean",1);
   ntuple->fChain->SetBranchStatus("METPhiclean",1);
   ntuple->fChain->SetBranchStatus("JetsAK8*",1);
-  ntuple->fChain->SetBranchStatus("Jets",1);
+  ntuple->fChain->SetBranchStatus("Jets*",1);
+  ntuple->fChain->SetBranchStatus("puWeightNew",1);
   ntuple->fChain->SetBranchStatus("Jets_neutralEmEnergyFraction",1);
   ntuple->fChain->SetBranchStatus("Jets_neutralHadronEnergyFraction",1);
   ntuple->fChain->SetBranchStatus("Jets_chargedHadronEnergyFraction",1);
@@ -97,15 +97,14 @@ template<typename ntupleType>void ntupleBranchStatus(ntupleType* ntuple){
   ntuple->fChain->SetBranchStatus("CaloMET",1);
   ntuple->fChain->SetBranchStatus("PFCaloMETRatio",1);
   ntuple->fChain->SetBranchStatus("NVtx",1);
-  ntuple->fChain->SetBranchStatus("NumInteractions",1);
+  ntuple->fChain->SetBranchStatus("*NumInteractions",1);
   ntuple->fChain->SetBranchStatus("nAllVertices",1);
   ntuple->fChain->SetBranchStatus("JetID*",1);
-  ntuple->fChain->SetBranchStatus("madHT",1);
   ntuple->fChain->SetBranchStatus("NJetsISR",1);
   ntuple->fChain->SetBranchStatus("madMinDeltaRStatus",1);
   ntuple->fChain->SetBranchStatus("madMinPhotonDeltaR",1);
   ntuple->fChain->SetBranchStatus("ZCandidates",1);
-  ntuple->fChain->SetBranchStatus("GenParticles",1);
+  ntuple->fChain->SetBranchStatus("GenParticles*",1);
   ntuple->fChain->SetBranchStatus("NonPrefiringProb",1);
   ntuple->fChain->SetBranchStatus("NonPrefiringProbUp",1);
   ntuple->fChain->SetBranchStatus("NonPrefiringProbDn",1);
@@ -885,7 +884,7 @@ template<typename ntupleType> double fillDeltaPhi1(ntupleType* ntuple){
 
 template<typename ntupleType> double fillDeltaPhi2(ntupleType* ntuple){
   //return ntuple->DeltaPhi2;
-  if( ntuple->Jets->size() <2 || ntuple->Jets->at(1).Pt()<30 ) return 999.;  
+  if( ntuple->Jets->size() <2 || ntuple->Jets->at(1).Pt()<30) return 999.;  
   double phi1 = ntuple->Jets->at(1).Phi();  
   double phi2 = ntuple->METPhi;  
   double Dphi2 = CalcdPhi(phi1, phi2);  
@@ -983,32 +982,6 @@ template<typename ntupleType> double fillBTags(ntupleType* ntuple){
   return ntuple->BTags;
 }
 
-
-template<typename ntupleType> double fillCentralNJets(ntupleType* ntuple){
-    if( ntuple->Jets->size() == 0 ) return -999.;
-    else{
-        int nj = 0;
-        for( int i = 0 ; i < ntuple->Jets->size() ; i++ ){
-            if(abs(ntuple->Jets->at(i).Eta())<=2.4){
-                nj = i;
-            }
-        }
-        return nj;
-    }
-}
-
-template<typename ntupleType> double fillCentralNAK8Jets(ntupleType* ntuple){
-    if( (ntuple->JetsAK8->size() == 0) && (ntuple->Jets->size() == 0)) return -999.;
-    else{
-        int nj = 0;
-        for( int i = 0 ; i < ntuple->Jets->size() ; i++ ){
-            if(abs(ntuple->Jets->at(i).Eta())<=2.4){
-                nj = ntuple->JetsAK8->size();
-            }
-        }
-        return nj;
-    }
-}
 ////////////////////////////////
 // HIGHEST PT JET PROPERTIES  //
 ////////////////////////////////
@@ -1094,9 +1067,23 @@ template<typename ntupleType> double fillGMass(ntupleType* ntuple){
      return Gmass(AK8Pt, AK8Eta, AK8Phi, AK8Mass, MET, METEta, METPhi, ZMass);
 }
 
+
 /////////////////////////////////////////////
 // SECOND HIGHEST BBtag AK8 JET PROPERTIES //
 /////////////////////////////////////////////
+
+
+/////////////////////////////////////////////
+// SECOND HIGHEST Mass AK8 JET PROPERTIES //
+/////////////////////////////////////////////
+
+/////////////////////////////////////////////
+// SECOND HIGHEST Mass AK8 JET PROPERTIES //
+/////////////////////////////////////////////
+
+  /////////////////
+ // OTHER STUFF //
+/////////////////
 
 template<typename ntupleType> bool FiltersCut(ntupleType* ntuple){
     return (ntuple->HBHENoiseFilter==1 && 
@@ -1118,25 +1105,12 @@ template<typename ntupleType> bool BTagsCut(ntupleType* ntuple){
   return ntuple->BTags>0 ; 
 }
 
-template<typename ntupleType> double fillBTagsCSV(ntupleType* ntuple){
-  return ntuple->BTagsDeepCSV>0; 
-}
-
-template<typename ntupleType> bool NJetsCut(ntupleType* ntuple){
-  return ntuple->NJets >= 1 ; 
-}
-
-
 template<typename ntupleType> bool PhotonCut(ntupleType* ntuple){
     int NumPhotons=0;
     for(unsigned p=0; p < ntuple->Photons->size(); ++p){
         if ((ntuple->Photons_hasPixelSeed->at(p)==0.) && (ntuple->Photons_fullID->at(p)) && (ntuple->Photons->at(p).Pt()>100)) ++NumPhotons;
     }
     return NumPhotons == 0;
-}
-
-template<typename ntupleType> bool MHTHTRatioCut(ntupleType* ntuple){
-  return (ntuple->MHT/ntuple->HT)<=1.0 ; 
 }
 
 // to get event factor for MC samples to reduce HEM issue events.
@@ -1174,30 +1148,36 @@ template<typename ntupleType> bool HEMRunFilterCut(ntupleType* ntuple, bool MC_H
     return ((ntuple->RunNum < 319077) || (ntuple->HEMDPhiVetoFilter==1));   
 }
 
-/***********************************HEM veto  **********************************************/
+
+ /***********************************HEM veto  **********************************************/
 //////***************************************************************************************/
  int StartHEM = 319077;
  bool isMC_, Run_number;
+ //double MHTPhi,JetPhi,DeltaPhi;
  double METPhi,JetPhi,DeltaPhi;
  //double deltaPhi(double JetPhi,double MHTPhi) {return TVector2::Phi_mpi_pi(MHTPhi - JetPhi);}
+ //CalcdPhi
 
  bool passHEMjetVeto(RA2bTree* ntuple, double ptThresh = 30) {
-    if (!isMC_ && ntuple->RunNum < StartHEM) return true;
-    METPhi = ntuple->METPhi;
+    if (!isMC_ && ntuple->RunNum < StartHEM) return true; 
+    //MHTPhi = ntuple->MHTPhi;     
+    METPhi = ntuple->METPhi;     
 
    for (int p = 0; p < ntuple->Jets->size(); p++){
        JetPhi = ntuple->Jets->at(p).Phi();
        //DeltaPhi = deltaPhi(JetPhi,MHTPhi);
        DeltaPhi = CalcdPhi(JetPhi,METPhi);
-   if (-3.2 <= ntuple->Jets->at(p).Eta() && ntuple->Jets->at(p).Eta() <= -1.2 &&
+   if (-3.2 <= ntuple->Jets->at(p).Eta() && ntuple->Jets->at(p).Eta() <= -1.2 && 
       -1.77 <= ntuple->Jets->at(p).Phi() && ntuple->Jets->at(p).Phi() <= -0.67 &&
        ntuple->Jets->at(p).Pt() > ptThresh && abs(DeltaPhi) < 0.5)
         return false;
-    }
+    } 
     return true;
 };
 
 // End of HEM from Aditee/TMishra
+
+
 
 template<typename ntupleType> bool DeltaPhi1Cut(ntupleType* ntuple){
   //return ntuple->DeltaPhi1>0.5;
@@ -1205,14 +1185,19 @@ template<typename ntupleType> bool DeltaPhi1Cut(ntupleType* ntuple){
 }
 
 template<typename ntupleType> bool DeltaPhi2Cut(ntupleType* ntuple){
+  //return ntuple->DeltaPhi2>0.5;
   return fillDeltaPhi2(ntuple)>0.5;
 }
 
 template<typename ntupleType> bool DeltaPhi3Cut(ntupleType* ntuple){
+  //return ntuple->DeltaPhi3>0.3;
+  //return ntuple->DeltaPhi3>0.5;
   return fillDeltaPhi3(ntuple)>0.5;
 }
 
 template<typename ntupleType> bool DeltaPhi4Cut(ntupleType* ntuple){
+  //return ntuple->DeltaPhi4>0.3;
+  //return ntuple->DeltaPhi4>0.5;
   return fillDeltaPhi4(ntuple)>0.5;
 }
 
@@ -1232,6 +1217,8 @@ template<typename ntupleType> bool AK8JetPtCut(ntupleType* ntuple){
     return ( ntuple->JetsAK8->at(0).Pt() > 200.
             //&& ntuple->JetIDAK8 == 1
            //&& fabs(ntuple->JetsAK8->at(0).Eta())<2.4
+           //&& ntuple->JetsAK8_chargedHadronEnergyFraction->at(0) > 0.2
+           //&& ntuple->JetsAK8_neutralHadronEnergyFraction->at(0) < 0.8
          );
 }
 
@@ -1308,7 +1295,6 @@ template<typename ntupleType> double fillMZ2530MT(ntupleType* ntuple){
 }
 */
 
-
 // DDT Calculation: HP: <0.55, LP: <0.95
 // DDT = tau21 + 0.082*log(m*m/pt)
 template<typename ntupleType> double fillDDT(ntupleType* ntuple){
@@ -1350,6 +1336,11 @@ template<typename ntupleType> double fillDeepAK8ZDecorrel(ntupleType* ntuple){
 // For ECAL Eta
 ////////////////
 /*
+template<typename ntupleType> bool EcalEta1Cut(ntupleType* ntuple){
+    return (fabs(fillJetEta1(ntuple)) > 2.6 && fabs(fillJetEta1(ntuple)) < 3.2);
+}
+*/
+/*
 template<typename ntupleType> bool EcalEtaCut(ntupleType* ntuple){
      if(ntuple->Jets->size()==0) return false;
      for (unsigned int ij =0; ij<ntuple->Jets->size(); ij++){
@@ -1376,6 +1367,22 @@ template<typename ntupleType> bool EcalNEMFCut(ntupleType* ntuple){
      return true;
  }
 
+template<typename ntupleType> bool EcalJ1Cut(ntupleType* ntuple){
+     if(ntuple->Jets->size()==0) return false;
+     double eta = ntuple->Jets->at(0).Eta();
+     double pt = ntuple->Jets->at(0).Pt();
+     double nemf = ntuple->Jets_neutralEmEnergyFraction->at(0);
+     if ((pt>30.0) && ((fabs(eta)>=2.6) && fabs(eta)<=3.2)) {
+        return ( (pt<200) || (nemf <= (0.9-(0.0015*pt))));
+        }
+}
+
+template<typename ntupleType> bool EcalJCuts(ntupleType* ntuple){
+    return ( EcalJ1Cut(ntuple) &&
+             EcalJ2Cut(ntuple) &&
+             EcalJ3Cut(ntuple) &&
+             EcalJ4Cut(ntuple) ) ;
+}             
 
 
 ////////////////////////////////////////
@@ -1385,10 +1392,10 @@ template<typename ntupleType> bool EcalNEMFCut(ntupleType* ntuple){
 // skip Z jets function
 template<typename ntupleType> vector<TLorentzVector>  skipZjets(ntupleType* ntuple, int iJ=0){
     vector<TLorentzVector> skipZ_jets;
-    if (ntuple->JetsAK8->size()<1 && ntuple->Jets->size()<2) return skipZ_jets; 
+    if (ntuple->JetsAK8->size()<1 && ntuple->Jets->size()<2) return skipZ_jets;
     for( unsigned int iak4 = 0 ; iak4 < ntuple->Jets->size() ; iak4++ ){
         if(!((ntuple->JetsAK8->at(iJ).DeltaR(ntuple->Jets->at(iak4)) < 0.8 ) && 
-            (ntuple->JetsAK8->at(iJ).Pt()>200 && (ntuple->JetsAK8_NsubjettinessTau2->at(iJ)/ntuple->JetsAK8_NsubjettinessTau1->at(iJ)<0.75) &&
+            (ntuple->JetsAK8->at(0).Pt()>200 && (ntuple->JetsAK8_NsubjettinessTau2->at(iJ)/ntuple->JetsAK8_NsubjettinessTau1->at(iJ)<0.75) &&
             ntuple->JetsAK8_softDropMass->at(iJ)<300 &&
             ntuple->JetsAK8_softDropMass->at(iJ)>30))){
             skipZ_jets.push_back(TLorentzVector(ntuple->Jets->at(iak4)));
@@ -1407,8 +1414,7 @@ template<typename ntupleType> vector<TLorentzVector>  cleanedVBFjets(ntupleType*
     int nj = cleaned_jets.size() ;
     if (nj<2) return vj;
     double MassMax = 0.0;
-    //for( unsigned int iak4 = 0 ; iak4 < (nj-1); iak4++ ){
-    for( unsigned int iak4 = 0 ; iak4 < nj; iak4++ ){
+    for( unsigned int iak4 = 0 ; iak4 < (nj-1); iak4++ ){
         if (cleaned_jets[iak4].Pt()<30) continue;
         for( unsigned int jak4 = iak4+1; jak4 < nj; jak4++ ){        
             if (cleaned_jets[jak4].Pt()<30) continue;
@@ -1430,11 +1436,9 @@ template<typename ntupleType> vector<TLorentzVector>  cleanedVBFjets(ntupleType*
 
 template<typename ntupleType> double fillVBF_Mjj(ntupleType* ntuple){
     vector<TLorentzVector> vbf_jets = cleanedVBFjets(ntuple,0);
-    //if( vbf_jets.size() < 2 ) return -9999.;
+    if( vbf_jets.size() < 2 ) return -9999.;
         TLorentzVector temp(vbf_jets[0]);
         temp+=vbf_jets[1];
-    //return (temp.M()); 
-    
     if (vbf_jets[0].Pt()>30.0 && vbf_jets[1].Pt()>30.0) 
         return temp.M();
     else
@@ -1457,6 +1461,7 @@ template<typename ntupleType> double fillVBF_dEta(ntupleType* ntuple){
     vector<TLorentzVector> vbf_jets = cleanedVBFjets(ntuple,0);
     //return  fabs(vbf_jets[0].Eta()-vbf_jets[1].Eta());
 
+    if( vbf_jets.size() < 2 ) return -9999.;
     if (vbf_jets[0].Pt()>30.0 && vbf_jets[1].Pt()>30.0) 
         return  fabs(vbf_jets[0].Eta()-vbf_jets[1].Eta());
     else
@@ -1466,6 +1471,7 @@ template<typename ntupleType> double fillVBF_dEta(ntupleType* ntuple){
 template<typename ntupleType> double fillVBF_dPhi(ntupleType* ntuple){
     vector<TLorentzVector> vbf_jets = cleanedVBFjets(ntuple,0);
     //return CalcdPhi(vbf_jets[0].Phi(), vbf_jets[1].Phi());
+    if( vbf_jets.size() < 2 ) return -9999.;
 
     if (vbf_jets[0].Pt()>30.0 && vbf_jets[1].Pt()>30.0) 
         return CalcdPhi(vbf_jets[0].Phi(), vbf_jets[1].Phi());
@@ -1476,6 +1482,7 @@ template<typename ntupleType> double fillVBF_dPhi(ntupleType* ntuple){
 template<typename ntupleType> double fillVBF_j1Eta(ntupleType* ntuple){
     vector<TLorentzVector> vbf_jets = cleanedVBFjets(ntuple,0);
     //return  vbf_jets[0].Eta();
+    if( vbf_jets.size() < 2 ) return -9999.;
     if (vbf_jets[0].Pt()>30.0) 
         return  vbf_jets[0].Eta();
     else
@@ -1485,6 +1492,7 @@ template<typename ntupleType> double fillVBF_j1Eta(ntupleType* ntuple){
 template<typename ntupleType> double fillVBF_j2Eta(ntupleType* ntuple){
     vector<TLorentzVector> vbf_jets = cleanedVBFjets(ntuple,0);
     //return  vbf_jets[1].Eta();
+    if( vbf_jets.size() < 2 ) return -9999.;
     if (vbf_jets[1].Pt()>30.0) 
         return  vbf_jets[1].Eta();
     else
@@ -1494,6 +1502,7 @@ template<typename ntupleType> double fillVBF_j2Eta(ntupleType* ntuple){
 template<typename ntupleType> double fillVBF_j1Phi(ntupleType* ntuple){
     vector<TLorentzVector> vbf_jets = cleanedVBFjets(ntuple,0);
     //return  vbf_jets[0].Phi();
+    if( vbf_jets.size() < 2 ) return -9999.;
     if (vbf_jets[0].Pt()>30.0) 
         return  vbf_jets[0].Phi();
     else
@@ -1503,6 +1512,7 @@ template<typename ntupleType> double fillVBF_j1Phi(ntupleType* ntuple){
 template<typename ntupleType> double fillVBF_j2Phi(ntupleType* ntuple){
     vector<TLorentzVector> vbf_jets = cleanedVBFjets(ntuple,0);
     //return  vbf_jets[1].Phi();
+    if( vbf_jets.size() < 2 ) return -9999.;
     if (vbf_jets[1].Pt()>30.0) 
         return  vbf_jets[1].Phi();
     else
@@ -1511,6 +1521,7 @@ template<typename ntupleType> double fillVBF_j2Phi(ntupleType* ntuple){
 template<typename ntupleType> double fillVBF_j1j2Eta(ntupleType* ntuple){
     vector<TLorentzVector> vbf_jets = cleanedVBFjets(ntuple,0);
     //return  (vbf_jets[0].Eta()*vbf_jets[1].Eta());
+    if( vbf_jets.size() < 2 ) return -9999.;
     if (vbf_jets[0].Pt()>30.0 && vbf_jets[1].Pt()>30.0) 
         return (vbf_jets[0].Eta()*vbf_jets[1].Eta());
     else
@@ -1520,6 +1531,7 @@ template<typename ntupleType> double fillVBF_j1j2Eta(ntupleType* ntuple){
 template<typename ntupleType> double fillVBF_j1Pt(ntupleType* ntuple){
     vector<TLorentzVector> vbf_jets = cleanedVBFjets(ntuple,0);
     //return  vbf_jets[0].Pt();
+    if( vbf_jets.size() < 2 ) return -9999.;
     if (vbf_jets[0].Pt()>30.0) 
         return  vbf_jets[0].Pt();
     else
@@ -1529,6 +1541,7 @@ template<typename ntupleType> double fillVBF_j1Pt(ntupleType* ntuple){
 template<typename ntupleType> double fillVBF_j2Pt(ntupleType* ntuple){
     vector<TLorentzVector> vbf_jets = cleanedVBFjets(ntuple,0);
     //return  vbf_jets[1].Pt();
+    if( vbf_jets.size() < 2 ) return -9999.;
     if (vbf_jets[1].Pt()>30.0) 
         return  vbf_jets[1].Pt();
     else
@@ -1586,16 +1599,20 @@ template<typename ntupleType> bool LowPurityCut(ntupleType* ntuple){
 
 // 1) Baseline selection without VBF cut
 template<typename ntupleType> bool baselineCutNoVBF(ntupleType* ntuple){
+//template<typename ntupleType> bool baselineCutNoVBF(ntupleType* ntuple, bool MC_HEM = false){
   return (  METCut(ntuple) 
-	        && AK8JetPtCut(ntuple) 
+	        &&  AK8JetPtCut(ntuple) 
             &&  DeltaPhiCuts(ntuple) 
-	        ////&&  ntuple->Photons->size()==0 
-            &&  PhotonCut(ntuple) // photon veto
+	        //&&  ntuple->Photons->size()==0 
+	        &&  PhotonCut(ntuple) //Phototn veto
+            //&&  ntuple->Muons->size()==0 
             &&  ntuple->NMuons==0 
             &&  ntuple->NElectrons==0 
-            ////&&  ntuple->BTags == 0  
+            //&&  ntuple->Electrons->size()==0 
             &&  ntuple->BTagsDeepCSV==0 
             &&  ntuple->isoElectronTracks==0 && ntuple->isoMuonTracks==0 && ntuple->isoPionTracks==0 
+            //&&  HEMRunFilterCut(ntuple,MC_HEM) // run check & HEMdPhiVeto Filter
+            //&& ntuple->ecalBadCalibFilter==1  //New 
             &&  HTRatioCut(ntuple)
 	        &&  FiltersCut(ntuple)
          );
@@ -1607,7 +1624,7 @@ template<typename ntupleType> bool baselineCut(ntupleType* ntuple){
            VBFCuts(ntuple));
 }
 
-// 3) Baseline + Z Signal region i.e. Pruned Mass [65,105] GeV without VBF cut 
+// 3) Baseline + Z Signal region i.e. SoftDrop Mass [65,105] GeV without VBF cut 
 template<typename ntupleType> bool ZSignalRegionCutNoVBF(ntupleType* ntuple ){
   return (baselineCutNoVBF(ntuple) && 
           AK8JetSRCut(ntuple)); 
@@ -1648,19 +1665,19 @@ template<typename ntupleType> bool ZSignalRegionLPCut(ntupleType* ntuple){
            VBFCuts(ntuple));
 }
 
-// 9) Z side band w/o vbf cut selection ([30,65][>135])
+// 9) Z side band w/o vbf cut selection ([30,65][>145])
 template<typename ntupleType> bool ZSidebandnoVBFCut(ntupleType* ntuple){
   return ( baselineCutNoVBF(ntuple) &&
            AK8JetSideBandCut(ntuple) ); 
 }
 
-// 10) Z side band selection ([30,65][>135]) + vbf cut
+// 10) Z side band selection ([30,65][>145]) + vbf cut
 template<typename ntupleType> bool ZSidebandCut(ntupleType* ntuple){
   return ( ZSidebandnoVBFCut(ntuple) &&
            VBFCuts(ntuple));
 }
 
-// Z side band HP(tau21<0.35) selection
+// Z side band HP(tau21<0.45) selection
 // https://twiki.cern.ch/twiki/bin/view/CMS/JetWtagging#2016_scale_factors_and_correctio
 
 // 11) Z sideband high purity but without VBF cut

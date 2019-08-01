@@ -6,9 +6,10 @@ r.gROOT.SetBatch(True)
 r.gROOT.ProcessLine(".L tdrstyle.C")
 r.gROOT.ProcessLine("setTDRStyle()")
 
-plot_dir="ZSR_All_May30/2017/ZSRHPVBF"
-input_file_name = "ZSRHPVBF_515_v5_2017.root"
-output_file_name = "ZSRHPVBF_515_v5_2017_Output.root"
+#plot_dir="ZSR_All_May30/2017/ZSRHPVBF"
+plot_dir="plots/ZSR_HP_VBF/2017_Test"
+input_file_name = "Test_Files_Jul29/ZSRHPVBF_NewSkim_v1_2017_Test.root"
+output_file_name = "Test_Files_Jul29/ZSRHPVBF_NewSkim_v1_2017_Test_Output.root"
 
 input_file = r.TFile(input_file_name,"READ")    
 
@@ -55,7 +56,7 @@ def plot(plot_var = "photonIsoChrgLowSieie_EB_photonLoose" ):
               "ZJets_2500toInf"]
              ]
 
-    signal_samples=["VBFG_1200"]
+    signal_samples=["VBFG_1000"]
 
     data_samples=["MET_2017F",#]
                 "MET_2017E",
@@ -137,7 +138,7 @@ def plot(plot_var = "photonIsoChrgLowSieie_EB_photonLoose" ):
     for i in range(len(samples_histo)):
         leg.AddEntry(samples_histo[i],samples_labels[i],"f")
     for i in range(len(signal_histo)):
-        leg.AddEntry(signal_histo[i],"VBFG 1200","f")
+        leg.AddEntry(signal_histo[i],"VBFG 1000","f")
 
 
     can = r.TCanvas("can","can",500,500)
@@ -192,7 +193,8 @@ def plot(plot_var = "photonIsoChrgLowSieie_EB_photonLoose" ):
     LUMItext.SetTextSize(0.04) # was 0.08
     LUMItext.Draw()
 
-    can.SaveAs("../plots/"+plot_dir+"/"+plot_var+".png")
+    #can.SaveAs("../plots_NewSkim_v1/"+plot_dir+"/"+plot_var+".png")
+    can.SaveAs("Test_Files_Jul29/"+plot_dir+"/"+plot_var+".png")
     # for space between legend and plot 
     can.SetLogy()
     if total!=None:
@@ -200,7 +202,7 @@ def plot(plot_var = "photonIsoChrgLowSieie_EB_photonLoose" ):
     else :
         stack.SetMaximum(20.0*samples_histo[0].GetMaximum())
     stack.SetMinimum(0.1)
-    can.SaveAs("../plots/"+plot_dir+"/"+plot_var+"_LogY.png")
+    can.SaveAs("Test_Files_Jul29/"+plot_dir+"/"+plot_var+"_LogY.png")
 
     output_file.cd()
     for h in samples_histo :

@@ -6,16 +6,17 @@ r.gROOT.SetBatch(True)
 r.gROOT.ProcessLine(".L tdrstyle.C")
 r.gROOT.ProcessLine("setTDRStyle()")
 
-#plot_dir="ZSB_All_May15/2017/ZSBNoVBF_AfterPrefiring"
-plot_dir="ZSB_All_May30/2017/ZSBHPVBF"
+#plot_dir="ZSB_All_May30/2017/ZSBHPVBF"
+#plot_dir="ZSBHPNoVBF/2017"
+#plot_dir="ZBaseline/2017_Test"
+plot_dir="plots/ZSB_HP_VBF/2017_Test"
 #plot_dir="Alpha_Closure/2017"
-input_file_name = "ZSBHPVBF_515_v5_2017.root"
-#input_file_name = "ZSBNoVBF_AfterPrefiring_2017.root"
-#input_file_name = "Alpha_SBHP_VBF_515_v4_2017.root"
-
+#input_file_name = "ggF_SBHP_NewSkim_v1_2017.root"
+#input_file_name = "Baseline_NewSkim_v1_2017_Test.root"
+#output_file_name = "Baseline_NewSkim_v1_2017_Test_Output.root"
 #output_file_name = "Alpha_Closure_Files/2017/Alpha_SBHP_VBF_515_v4_2017_Output.root"
-output_file_name = "ZSBHPVBF_515_v5_2017_Output.root"
-#output_file_name = "ZSBNoVBF_AfterPrefiring_2017_Output.root"
+input_file_name = "Test_Files_Jul29/ZSBHPVBF_NewSkim_v1_2017_Test.root" 
+output_file_name = "Test_Files_Jul29/ZSBHPVBF_NewSkim_v1_2017_Test_Output.root"
 
 input_file = r.TFile(input_file_name,"READ")    
 
@@ -62,7 +63,7 @@ def plot(plot_var = "photonIsoChrgLowSieie_EB_photonLoose" ):
               "ZJets_2500toInf"]
              ]
 
-    signal_samples=["VBFG_1200"]
+    signal_samples=["VBFG_1000"]
 
     data_samples=["MET_2017F",#]
                 "MET_2017E",
@@ -134,12 +135,12 @@ def plot(plot_var = "photonIsoChrgLowSieie_EB_photonLoose" ):
     for i,h in enumerate(samples_histo) : 
         #print h.GetTitle(),"before",h.Integral()
         if h.Integral()>0 and total!=None:
-            h.Scale(data_histo[0].Integral()/total.Integral())
+            h.Scale(data_histo[0].Integral(0,(data_histo[0].GetNbinsX()+1))/total.Integral(0,(total.GetNbinsX()+1)))
         #print h.GetTitle(),"after",h.Integral()
         stack.Add(h)
     if total!=None and total.Integral()>0: 
     #if total!=None: 
-        total.Scale(data_histo[0].Integral()/total.Integral())
+        total.Scale(data_histo[0].Integral(0,(data_histo[0].GetNbinsX()+1))/total.Integral(0,(total.GetNbinsX()+1)))
 
     # For legend
     leg = r.TLegend(0.45,.77,.9,.92) 
@@ -153,7 +154,7 @@ def plot(plot_var = "photonIsoChrgLowSieie_EB_photonLoose" ):
     for i in range(len(samples_histo)):
         leg.AddEntry(samples_histo[i],samples_labels[i],"f")
     for i in range(len(signal_histo)):
-        leg.AddEntry(signal_histo[i],"VBFG 1200","f")
+        leg.AddEntry(signal_histo[i],"VBFG 1000","f")
         #leg.AddEntry(signal_histo[i],signal_samples_labels[i],"f")
 
 
@@ -242,7 +243,9 @@ def plot(plot_var = "photonIsoChrgLowSieie_EB_photonLoose" ):
     l.Draw("same"); 
     
 
-    can.SaveAs("../plots/"+plot_dir+"/"+plot_var+".png")
+    #can.SaveAs("../plots/"+plot_dir+"/"+plot_var+".png")
+    #can.SaveAs("../plots_NewSkim_v1/"+plot_dir+"/"+plot_var+".png")
+    can.SaveAs("Test_Files_Jul29/"+plot_dir+"/"+plot_var+".png")
     # for space between legend and plot 
     topPad.SetLogy()
     if total!=None:
@@ -250,7 +253,8 @@ def plot(plot_var = "photonIsoChrgLowSieie_EB_photonLoose" ):
     else :
         stack.SetMaximum(20.0*data_histo[0].GetMaximum())
     stack.SetMinimum(0.1)
-    can.SaveAs("../plots/"+plot_dir+"/"+plot_var+"_LogY.png")
+    #can.SaveAs("../plots/"+plot_dir+"/"+plot_var+"_LogY.png")
+    can.SaveAs("Test_Files_Jul29/"+plot_dir+"/"+plot_var+"_LogY.png")
 
     output_file.cd()
     for h in samples_histo :

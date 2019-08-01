@@ -30,15 +30,11 @@ backgroundSamples=[#"QCD_200to300",
                    "ST_t-channel_top", # remove for 2018
                    "ST_tW_antitop",
                    "ST_tW_top",
-
                    "Other_WWTo1L1Nu2Q",
-                   #"Other_WWTo2L2Nu", #remove for 2017 n 18
-                   #"Other_WWZ", #remove for 2017 n 18
                    "Other_WZTo1L1Nu2Q", #remove for 2018
                    "Other_WZTo1L3Nu",
                    "Other_WZZ", #remove for 2018
                    "Other_ZZTo2L2Q",
-                   #"Other_ZZTo2Q2Nu", #remove for 2017 n 18
                    "Other_ZZZ", #remove for 2018
                    "Other_TTTT", #remove for 2018
                    "Other_TTWJetsToLNu",
@@ -46,16 +42,30 @@ backgroundSamples=[#"QCD_200to300",
                    "Other_TTGJets",
                    "Other_TTZToLLNuNu",
                    "Other_TTZToQQ",
+
+                   #"Other_WWTo2L2Nu", #remove for 2017 n 18
+                   #"Other_WWZ", #remove for 2017 n 18
+                   #"Other_ZZTo2Q2Nu", #remove for 2017 n 18
 ]
 
-signalSamples=["VBFG_1200",
+signalSamples=["VBFG_1000",
+               #"VBFG_1200",
+               #"VBFG_1400",
+               #"VBFG_1600",
+               #"VBFG_1800",
+               #"VBFG_2000",
+               #"VBFG_2500",
+               #"VBFG_3000",
+               #"VBFG_3500",
+               #"VBFG_4000",
+               #"VBFG_4500",
               ]
 
-dataSamples=["MET_2017B",
-             "MET_2017C",
-             "MET_2017D",
-             "MET_2017E",
-             "MET_2017F",
+dataSamples=[#"MET_2017B",
+             #"MET_2017C",
+             #"MET_2017D",
+             #"MET_2017E",
+             #"MET_2017F",
              ]
 
 def runPlotObsBaseline(sel,bkg,sig,data):
@@ -64,8 +74,8 @@ def runPlotObsBaseline(sel,bkg,sig,data):
 
 processes=[]
 for sample in backgroundSamples : 
-    #p = Process(target=runPlotObsBaseline, args=("ZSBNoVBF",sample,"","") )
     #p = Process(target=runPlotObsBaseline, args=("ZNoSelection",sample,"","") )
+    #p = Process(target=runPlotObsBaseline, args=("ZSBNoVBF",sample,"","") )
     #p = Process(target=runPlotObsBaseline, args=("ZSBHPVBF",sample,"","") )
     p = Process(target=runPlotObsBaseline, args=("ZSRHPVBF",sample,"","") )
     #p = Process(target=runPlotObsBaseline, args=("AlphaSRHPVBF",sample,"","") )
@@ -73,6 +83,7 @@ for sample in backgroundSamples :
     processes.append(p)
 
 for sample in signalSamples : 
+    #p = Process(target=runPlotObsBaseline, args=("ZNoSelection","",sample,"") )
     #p = Process(target=runPlotObsBaseline, args=("ZSBNoVBF","",sample,"") )
     #p = Process(target=runPlotObsBaseline, args=("ZSBHPVBF","",sample, "") )
     p = Process(target=runPlotObsBaseline, args=("ZSRHPVBF","",sample, "") )
@@ -81,6 +92,7 @@ for sample in signalSamples :
     processes.append(p)
 
 for sample in dataSamples : 
+    #p = Process(target=runPlotObsBaseline, args=("ZNoSelection","","",sample) )
     #p = Process(target=runPlotObsBaseline, args=("ZSBNoVBF","","",sample) )
     #p = Process(target=runPlotObsBaseline, args=("ZSBHPVBF","","", sample) )
     p = Process(target=runPlotObsBaseline, args=("ZSRHPVBF","","",sample) )
@@ -95,5 +107,5 @@ for p in processes :
 #os.system("rm plotObs_photon_baseline_*.root")
 2    
     
-
+print "If running 2016 & 2018: set tau21 HP value to: 0.35"
 
