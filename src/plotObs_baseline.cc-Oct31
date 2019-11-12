@@ -11,8 +11,8 @@
 #include <time.h>       /* clock_t, clock, CLOCKS_PER_SEC */
 #include <cassert>
 #include "plotterUtils.cc"
-//#include "skimSamples_2016.cc"
-#include "skimSamples_2017.cc"
+#include "skimSamples_2016.cc"
+//#include "skimSamples_2017.cc"
 //#include "skimSamples_2018.cc"
 #include "definitions.h"
 #include "RA2bTree.cc"
@@ -274,14 +274,14 @@ void process(string selection_label,
   plot ZMT10plot(*fillZMT<RA2bTree>,"ZMT10_"+selection_label,"MT [GeV]",90,0.,9000.); // 100 GeV bin
   plot MTpTRatioplot(*fillMTpTRatio<RA2bTree>,"MTpTRatio_"+selection_label,"MT/pT",100,0.,3.); //0.04
   plot pTMTRatioplot(*fillpTMTRatio<RA2bTree>,"pTMTRatio_"+selection_label,"pT/MT",100,0.,1.); //0.04
-*/
-  double edges_ggf1[22]={500,600,700,800,900,1000,1100,1200,1300,1400,1500,1600,1700,1800,1900,2000,2100,2250,2400,2550,2700,2900};  
-  double edges_vbf1[16]={400,500,600,700,800,900,1000,1100,1200,1300,1400,1500,1600,1700,1850,2100};
-  //double edges_ggf50[39]={500,550,600,650,700,750,800,850,900,950,1000,1050,1100,1150,1200,1250,1300,1350,1400,1450,1500,1550,1600,1650,1700,1750,1800,1850,1900,1950,2000,2050,2100,2150,2250,2400,2550,2700,2900};  
-  //double edges_vbf50[29]={400,450,500,550,600,650,700,750,800,850,900,950,1000,1050,1100,1150,1200,1250,1300,1350,1400,1450,1500,1550,1600,1650,1700,1850,2100};
-  plot ZMT_ggFplot(*fillZMT<RA2bTree>,"ZMT_ggF_"+selection_label,"MT [GeV]",21,edges_ggf1); 
-  plot ZMT_vbFplot(*fillZMT<RA2bTree>,"ZMT_VBF_"+selection_label,"MT [GeV]",15,edges_vbf1); 
-  /*plot ZMT_ggF50plot(*fillZMT<RA2bTree>,"ZMT_ggF50_"+selection_label,"MT [GeV]",38,edges_ggf50); 
+
+  double edges_ggf[22]={500,600,700,800,900,1000,1100,1200,1300,1400,1500,1600,1700,1800,1900,2000,2100,2250,2400,2550,2700,2900};  
+  double edges_vbf[16]={400,500,600,700,800,900,1000,1100,1200,1300,1400,1500,1600,1700,1850,2100};
+  double edges_ggf50[39]={500,550,600,650,700,750,800,850,900,950,1000,1050,1100,1150,1200,1250,1300,1350,1400,1450,1500,1550,1600,1650,1700,1750,1800,1850,1900,1950,2000,2050,2100,2150,2250,2400,2550,2700,2900};  
+  double edges_vbf50[29]={400,450,500,550,600,650,700,750,800,850,900,950,1000,1050,1100,1150,1200,1250,1300,1350,1400,1450,1500,1550,1600,1650,1700,1850,2100};
+  plot ZMT_ggFplot(*fillZMT<RA2bTree>,"ZMT_ggF_"+selection_label,"MT [GeV]",21,edges_ggf); 
+  plot ZMT_vbFplot(*fillZMT<RA2bTree>,"ZMT_VBF_"+selection_label,"MT [GeV]",15,edges_vbf); 
+  plot ZMT_ggF50plot(*fillZMT<RA2bTree>,"ZMT_ggF50_"+selection_label,"MT [GeV]",38,edges_ggf50); 
   plot ZMT_vbF50plot(*fillZMT<RA2bTree>,"ZMT_VBF50_"+selection_label,"MT [GeV]",28,edges_vbf50); 
 
   plot J1pt_Ptplot(*fillLeadingJetPt<RA2bTree>,"AK8L1J_Pt_"+selection_label,"AK8 J1 p_{T} [GeV]",56,200.,3000.); //50 GeV bi n;
@@ -328,8 +328,20 @@ void process(string selection_label,
 */
 // For PDF and Scale wt:
 
+  double edges_ggf[22]={500,600,700,800,900,1000,1100,1200,1300,1400,1500,1600,1700,1800,1900,2000,2100,2250,2400,2550,2700,2900};  
+  double edges_vbf[16]={400,500,600,700,800,900,1000,1100,1200,1300,1400,1500,1600,1700,1850,2100};
+  plot PDF_ggFplot(*fillZMT<RA2bTree>,*fillPDF<RA2bTree>,"PDF_ggF_"+selection_label,"MT [GeV]","PDF",21,edges_ggf,99,1,100); 
+  plot PDF_vbFplot(*fillZMT<RA2bTree>,*fillPDF<RA2bTree>,"PDF_VBF_"+selection_label,"MT [GeV]","PDF",15,edges_vbf,99,1,100); 
+  plot Scale_ggFplot(*fillZMT<RA2bTree>,*fillScale<RA2bTree>,"Scale_ggF_"+selection_label,"MT [GeV]","Scale",21,edges_ggf,7,1,8); 
+  plot Scale_vbFplot(*fillZMT<RA2bTree>,*fillScale<RA2bTree>,"Scale_VBF_"+selection_label,"MT [GeV]","Scale",15,edges_vbf,7,1,8); 
+
   vector<plot> plots;
   //plots.push_back(HEMFracplot);
+
+  plots.push_back(PDF_ggFplot);
+  plots.push_back(PDF_vbFplot);
+  plots.push_back(Scale_ggFplot);
+  plots.push_back(Scale_vbFplot);
 
 /*  plots.push_back(NVtxplot);
   plots.push_back(NVtx1plot);
@@ -502,10 +514,10 @@ void process(string selection_label,
   plots.push_back(ZMT10plot); 
   plots.push_back(MTpTRatioplot); 
   plots.push_back(pTMTRatioplot); 
-  */  
+    
   plots.push_back(ZMT_ggFplot);  
   plots.push_back(ZMT_vbFplot);  
-/*  plots.push_back(ZMT_ggF50plot);  
+  plots.push_back(ZMT_ggF50plot);  
   plots.push_back(ZMT_vbF50plot);  
 
   plots.push_back(J1pt_Ptplot);
@@ -557,15 +569,6 @@ void process(string selection_label,
     TString filename;
     //double weight = 0.;
     double weight = 0., pdfwt=0., scalewt=0.;
-    
-    double edges_ggf[22]={500,600,700,800,900,1000,1100,1200,1300,1400,1500,1600,1700,1800,1900,2000,2100,2250,2400,2550,2700,2900};  
-    double edges_vbf[16]={400,500,600,700,800,900,1000,1100,1200,1300,1400,1500,1600,1700,1850,2100};
-    TH2* h_PDF_ggf = new TH2F("h_PDF_ggf","PDF",21,edges_ggf,101,0,101); 
-    TH2* h_PDF_vbf = new TH2F("h_PDF_vbf","PDF",15,edges_vbf,101,0,101); 
-    //TH2* h_Scale_ggf = new TH2F("h_Scale","Scale",25,500,3000,9,0,9); 
-    TH2* h_Scale_ggf = new TH2F("h_Scale_ggf","Scale",21,edges_ggf,9,0,9); 
-    TH2* h_Scale_vbf = new TH2F("h_Scale_vbf","Scale",15,edges_vbf,9,0,9); 
-
     for( int iEvt = 0 ; iEvt < min(MAX_EVENTS,numEvents) ; iEvt++ ){
     //for( int iEvt = 0 ; iEvt < min(0,numEvents) ; iEvt++ ){
         ntuple->GetEntry(iEvt);
@@ -585,45 +588,30 @@ void process(string selection_label,
         // Prefiring wt for 2016 & 2017 only
         if(! selectionFunc(ntuple) ) continue;
         weight = ntuple->Weight*lumi*ntuple->NonPrefiringProb;   //weight = ntuple->Weight*lumii*customPUweights(ntuple);
-
-        // PDF and Scale Weights
-        double MT = 0.0;
-        if(ntuple->JetsAK8->size()==0) MT=-99999.;
-        else{
-            double AK8Pt = ntuple->JetsAK8->at(0).Pt();
-            double AK8Phi = ntuple->JetsAK8->at(0).Phi();
-            double MET = ntuple->MET;
-            double METPhi = ntuple->METPhi;
-            MT = ZMT(AK8Pt, AK8Phi, MET, METPhi);
-        }
-
+        
         //------ PDF Weights ----------//
         for(int i=0; i<ntuple->PDFweights->size(); i++){
-            pdfwt = weight*ntuple->PDFweights->at(i);
-            h_PDF_ggf->Fill(MT,i,pdfwt);
-            h_PDF_vbf->Fill(MT,i,pdfwt);
+            pdfwt = weight*PDFweights[i];
+            plot PDF_ggFplot(*fillZMT<RA2bTree>,*fillPDF<RA2bTree>,"PDF_ggF_"+selection_label,"MT [GeV]","PDF",21,edges_ggf,99,1,100); 
         }
         //------ Scale Weights ----------//
         for(int j=0; j<ntuple->ScaleWeights->size(); j++){
-            scalewt = weight*ntuple->ScaleWeights->at(j);
-            h_Scale_ggf->Fill(MT,j,scalewt);
-            h_Scale_vbf->Fill(MT,j,scalewt);
+            scalewt = weight*ScaleWeights[j];
         }
+
 
       // ------------ end weights -------------
       //cout << "event passed all selections" << endl;
         for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++ ){
-	        plots[iPlot].fill(ntuple,weight);
+	        //plots[iPlot].fill(ntuple,weight);
+	        plots[iPlot].fill(ntuple,scalewt);
+	        //plots[iPlot].fill(ntuple,pdfwt);
         }
     }
 
     for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
         plots[iPlot].Write(ntuple);
     }
-    h_PDF_ggf->Write();
-    h_PDF_vbf->Write();
-    h_Scale_ggf->Write();
-    h_Scale_vbf->Write();
     outputFile->Close();
  }// end loop over samples
     
@@ -643,17 +631,6 @@ void process(string selection_label,
 
     int numEvents = ntuple->fChain->GetEntries();
     ntupleBranchStatus<RA2bTree>(ntuple);
-
-    double weight = 0., pdfwt=0., scalewt=0.;
-
-    double edges_ggf[22]={500,600,700,800,900,1000,1100,1200,1300,1400,1500,1600,1700,1800,1900,2000,2100,2250,2400,2550,2700,2900};  
-    double edges_vbf[16]={400,500,600,700,800,900,1000,1100,1200,1300,1400,1500,1600,1700,1850,2100};
-    TH2* h_PDF_ggf = new TH2F("h_PDF_ggf","PDF",21,edges_ggf,101,0,101); 
-    TH2* h_PDF_vbf = new TH2F("h_PDF_vbf","PDF",15,edges_vbf,101,0,101); 
-    //TH2* h_Scale_ggf = new TH2F("h_Scale","Scale",25,500,3000,9,0,9); 
-    TH2* h_Scale_ggf = new TH2F("h_Scale_ggf","Scale",21,edges_ggf,9,0,9); 
-    TH2* h_Scale_vbf = new TH2F("h_Scale_vbf","Scale",15,edges_vbf,9,0,9); 
-
     for( int iEvt = 0 ; iEvt < min(MAX_EVENTS,numEvents) ; iEvt++ ){
     //for( int iEvt = 0 ; iEvt < min(0,numEvents) ; iEvt++ ){
       ntuple->GetEntry(iEvt);
@@ -666,32 +643,6 @@ void process(string selection_label,
       //if ( (ntuple->EvtNum % 1000) < (1000*21.0/59.6)) continue;
       //if(!passHEMjetVeto(ntuple,30)) continue;  
         
-         // PDF and Scale Weights
-        double MT = 0.0;
-        if(ntuple->JetsAK8->size()==0) MT=-99999.;
-        else{
-            double AK8Pt = ntuple->JetsAK8->at(0).Pt();
-            double AK8Phi = ntuple->JetsAK8->at(0).Phi();
-            double MET = ntuple->MET;
-            double METPhi = ntuple->METPhi;
-            MT = ZMT(AK8Pt, AK8Phi, MET, METPhi);
-        }
-
-        //------ PDF Weights ----------//
-        weight = lumi*1*2e-05;
-        for(int i=0; i<ntuple->PDFweights->size(); i++){
-            pdfwt = weight*ntuple->PDFweights->at(i);
-            h_PDF_ggf->Fill(MT,i,pdfwt);
-            h_PDF_vbf->Fill(MT,i,pdfwt);
-        }
-        //------ Scale Weights ----------//
-        for(int j=0; j<ntuple->ScaleWeights->size(); j++){
-            scalewt = weight*ntuple->ScaleWeights->at(j);
-            h_Scale_ggf->Fill(MT,j,scalewt);
-            h_Scale_vbf->Fill(MT,j,scalewt);
-        }
-// end of pdf and scale wt for signal
-
       for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
         TString sig_sample = skims.signalSampleName[iSample];    
 	    //if (skims.signalSampleName[iSample]=="VBFG_1400") 
@@ -791,14 +742,11 @@ void process(string selection_label,
         }
     }
 
+
     for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
         plots[iPlot].Write(ntuple);
     }
     
-    h_PDF_ggf->Write();
-    h_PDF_vbf->Write();
-    h_Scale_ggf->Write();
-    h_Scale_vbf->Write();
     outputFile->Close();
   }// end loop over samples
 

@@ -6,10 +6,9 @@ r.gROOT.SetBatch(True)
 r.gROOT.ProcessLine(".L tdrstyle.C")
 r.gROOT.ProcessLine("setTDRStyle()")
 
-#plot_dir="ZSR_All_May30/2017/ZSRHPVBF"
-plot_dir="plots/ZSR_HP_VBF/2017_Test"
-input_file_name = "Test_Files_Jul29/ZSRHPVBF_NewSkim_v1_2017_Test.root"
-output_file_name = "Test_Files_Jul29/ZSRHPVBF_NewSkim_v1_2017_Test_Output.root"
+plot_dir="plots/ZSR_HP_VBF/2017"
+input_file_name = "AN_v0_Sep08/ZSR_HP_VBF_AN_v0_2017.root"
+output_file_name = "AN_v0_Sep08/ZSR_HP_VBF_AN_v0_2017_Output.root"
 
 input_file = r.TFile(input_file_name,"READ")    
 
@@ -64,7 +63,7 @@ def plot(plot_var = "photonIsoChrgLowSieie_EB_photonLoose" ):
                 "MET_2017C",
                 "MET_2017B"]
 
-    samples_labels = ["Single top","TT","Other","WJets","ZJets"]
+    samples_labels = ["SnglT","TT","Other","WJets","ZJets"]
     samples_fill_color = [r.kOrange,r.kCyan,r.kOrange+3,r.kBlue,r.kGreen+1]
     samples_line_color = [1,1,1,1,1]
     
@@ -150,9 +149,11 @@ def plot(plot_var = "photonIsoChrgLowSieie_EB_photonLoose" ):
     leg.Draw()
 
     if total!=None:
-        stack.SetMaximum(1.5*max(total.GetMaximum(),samples_histo[0].GetMaximum()))
+        #stack.SetMaximum(1.5*max(total.GetMaximum(),samples_histo[0].GetMaximum()))
+        stack.SetMaximum(1.5*max(total.GetMaximum(),signal_histo[0].GetMaximum()))
     else :
-        stack.SetMaximum(1.5*samples_histo[0].GetMaximum())
+        stack.SetMaximum(1.5*signal_histo[0].GetMaximum())
+        #stack.SetMaximum(1.5*samples_histo[0].GetMaximum())
     stack.SetMinimum(0.1)
 
     stack.GetYaxis().SetTitle("Events")
@@ -194,15 +195,16 @@ def plot(plot_var = "photonIsoChrgLowSieie_EB_photonLoose" ):
     LUMItext.Draw()
 
     #can.SaveAs("../plots_NewSkim_v1/"+plot_dir+"/"+plot_var+".png")
-    can.SaveAs("Test_Files_Jul29/"+plot_dir+"/"+plot_var+".png")
+    can.SaveAs("AN_v0_Sep08/"+plot_dir+"/"+plot_var+".pdf")
     # for space between legend and plot 
     can.SetLogy()
     if total!=None:
-        stack.SetMaximum(20.0*max(total.GetMaximum(),samples_histo[0].GetMaximum()))
+        stack.SetMaximum(20.0*max(total.GetMaximum(),signal_histo[0].GetMaximum()))
+        #stack.SetMaximum(20.0*max(total.GetMaximum(),samples_histo[0].GetMaximum()))
     else :
         stack.SetMaximum(20.0*samples_histo[0].GetMaximum())
     stack.SetMinimum(0.1)
-    can.SaveAs("Test_Files_Jul29/"+plot_dir+"/"+plot_var+"_LogY.png")
+    can.SaveAs("AN_v0_Sep08/"+plot_dir+"/"+plot_var+"_LogY.pdf")
 
     output_file.cd()
     for h in samples_histo :

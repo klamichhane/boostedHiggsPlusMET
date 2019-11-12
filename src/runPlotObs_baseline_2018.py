@@ -38,7 +38,31 @@ backgroundSamples=[#"QCD_200to300",
                    "Other_TTZToQQ",
 ]
 
-signalSamples=["VBFG_1000",
+signalSamples=[#"VBFRad_800", 
+               #"VBFRad_1000",
+               #"VBFRad_1200",
+               #"VBFRad_1400",
+               #"VBFRad_1600",
+               #"VBFRad_1800",
+               #"VBFRad_2000",
+               #"VBFRad_2500",
+               #"VBFRad_3000",
+               #"VBFRad_3500",
+               #"VBFRad_4000",
+               #"VBFRad_4500",
+               #"VBFRad_5000",
+               #"VBFRad_5500",
+               #"VBFRad_6000",
+               #"VBFRad_6500",
+               #"VBFRad_7000",
+               #"VBFRad_7500",
+               #"VBFRad_8000",
+               #"VBFWp_1000",
+               #"VBFRad_1000",
+               #"ggFRad_1000",
+               #"ggFRad_4500",
+               #"ggFG_1000",
+               #"ggFG_4500",
               ]
 
 dataSamples=["MET_2018A",
@@ -54,31 +78,34 @@ def runPlotObsBaseline(sel,bkg,sig,data):
 processes=[]
 for sample in backgroundSamples : 
     #p = Process(target=runPlotObsBaseline, args=("ZSRNoVBF",sample,"","") )
-    p = Process(target=runPlotObsBaseline, args=("ZNoSelection",sample,"","") )
-    #p = Process(target=runPlotObsBaseline, args=("ZSBHPVBF",sample,"","") )
+    #p = Process(target=runPlotObsBaseline, args=("ZNoSelection",sample,"","") )
+    #p = Process(target=runPlotObsBaseline, args=("ZSBHPNoVBF",sample,"","") )
     #p = Process(target=runPlotObsBaseline, args=("ZSRHPVBF",sample,"","") )
-    #p = Process(target=runPlotObsBaseline, args=("AlphaSBHPVBF",sample,"","") )
-    #p = Process(target=runPlotObsBaseline, args=("AlphaSRHPVBF",sample,"","") )
+    #p = Process(target=runPlotObsBaseline, args=("ZSRVBF",sample,"","") )
+    p = Process(target=runPlotObsBaseline, args=("AlphaSRHPVBF",sample,"","") )
+    #p = Process(target=runPlotObsBaseline, args=("AlphaSRHPNoVBF",sample,"","") )
     p.start()
     processes.append(p)
 
 for sample in signalSamples : 
     #p = Process(target=runPlotObsBaseline, args=("ZSRNoVBF","",sample,"") )
-    p = Process(target=runPlotObsBaseline, args=("ZNoSelection","",sample,"") )
-    #p = Process(target=runPlotObsBaseline, args=("ZSBHPVBF","",sample, "") )
-    #p = Process(target=runPlotObsBaseline, args=("ZSRHPVBF","",sample, "") )
-    #p = Process(target=runPlotObsBaseline, args=("AlphaSBHPVBF","",sample, "") )
-    #p = Process(target=runPlotObsBaseline, args=("AlphaSRHPVBF","",sample, "") )
+    #p = Process(target=runPlotObsBaseline, args=("ZNoSelection","",sample,"") )
+    #p = Process(target=runPlotObsBaseline, args=("ZSBHPNoVBF","",sample, "") )
+    #p = Process(target=runPlotObsBaseline, args=("ZSRHPNoVBF","",sample, "") )
+    #p = Process(target=runPlotObsBaseline, args=("ZSRVBF","",sample, "") )
+    p = Process(target=runPlotObsBaseline, args=("AlphaSRHPVBF","",sample, "") )
+    #p = Process(target=runPlotObsBaseline, args=("AlphaSRHPNoVBF","",sample, "") )
     p.start()
     processes.append(p)
 
 for sample in dataSamples : 
     #p = Process(target=runPlotObsBaseline, args=("ZSRNoVBF","","",sample) )
-    p = Process(target=runPlotObsBaseline, args=("ZNoSelection","","",sample) )
-    #p = Process(target=runPlotObsBaseline, args=("ZSBHPVBF","","", sample) )
+    #p = Process(target=runPlotObsBaseline, args=("ZNoSelection","","",sample) )
+    #p = Process(target=runPlotObsBaseline, args=("ZSBHPNoVBF","","", sample) )
     #p = Process(target=runPlotObsBaseline, args=("ZSRHPVBF","","", sample) )
-    #p = Process(target=runPlotObsBaseline, args=("AlphaSBHPVBF","","", sample) )
-    #p = Process(target=runPlotObsBaseline, args=("AlphaSRHPVBF","","", sample) )
+    #p = Process(target=runPlotObsBaseline, args=("ZSRVBF","","", sample) )
+    #p = Process(target=runPlotObsBaseline, args=("AlphaSRHPNoVBF","","", sample) )
+    p = Process(target=runPlotObsBaseline, args=("AlphaSRHPVBF","","", sample) )
     p.start()
     processes.append(p)
 

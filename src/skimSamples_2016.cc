@@ -64,24 +64,6 @@ public :
         fileNames["ZJets_1200to2500"] = "tree_ZJetsToNuNu_HT-1200to2500_MC2016.root";
         fileNames["ZJets_2500toInf"]  = "tree_ZJetsToNuNu_HT-2500toInf_MC2016.root";
 
-/*        
-        fileNames["ZJets_100to200"]   = "tree_ZJetsToNuNu_HT-100to200_MC2018.root";
-        fileNames["ZJets_200to400"]   = "tree_ZJetsToNuNu_HT-200to400_MC2018.root";
-        fileNames["ZJets_400to600"]   = "tree_ZJetsToNuNu_HT-400to600_MC2018.root";
-        fileNames["ZJets_600to800"]   = "tree_ZJetsToNuNu_HT-600to800_MC2018.root";
-        fileNames["ZJets_800to1200"]  = "tree_ZJetsToNuNu_HT-800to1200_MC2018.root";
-        fileNames["ZJets_1200to2500"] = "tree_ZJetsToNuNu_HT-1200to2500_MC2018.root";
-        fileNames["ZJets_2500toInf"]  = "tree_ZJetsToNuNu_HT-2500toInf_MC2018.root";
-*/
- /*       fileNames["QCD_200to300"]    = "tree_QCD_HT-200to300_MC2016.root";
-        fileNames["QCD_300to500"]    = "tree_QCD_HT-300to500_MC2016.root";
-        fileNames["QCD_500to700"]    = "tree_QCD_HT-500to700_MC2016.root";
-        fileNames["QCD_700to1000"]   = "tree_QCD_HT-700to1000_MC2016.root";
-        fileNames["QCD_1000to1500"]  = "tree_QCD_HT-1000to1500_MC2016.root";
-        fileNames["QCD_1500to2000"]  = "tree_QCD_HT-1500to2000_MC2016.root";
-        fileNames["QCD_2000toInf"]   = "tree_QCD_HT-2000toInf_MC2016.root";
-*/
-
         fileNames["WJets_100to200"]   = "tree_WJetsToLNu_HT-100to200_MC2016.root";
         fileNames["WJets_200to400"]   = "tree_WJetsToLNu_HT-200to400_MC2016.root";
         fileNames["WJets_400to600"]   = "tree_WJetsToLNu_HT-400to600_MC2016.root";
@@ -90,24 +72,6 @@ public :
         fileNames["WJets_1200to2500"] = "tree_WJetsToLNu_HT-1200to2500_MC2016.root";
         fileNames["WJets_2500toInf"]  = "tree_WJetsToLNu_HT-2500toInf_MC2016.root";
 
-/*
-        fileNames["WJets_100to200"]   = "tree_WJetsToLNu_HT-100to200_MC2018.root";
-        fileNames["WJets_200to400"]   = "tree_WJetsToLNu_HT-200to400_MC2018.root";
-        fileNames["WJets_400to600"]   = "tree_WJetsToLNu_HT-400to600_MC2018.root";
-        fileNames["WJets_600to800"]   = "tree_WJetsToLNu_HT-600to800_MC2018.root";
-        fileNames["WJets_800to1200"]  = "tree_WJetsToLNu_HT-800to1200_MC2018.root";
-        fileNames["WJets_1200to2500"] = "tree_WJetsToLNu_HT-1200to2500_MC2018.root";
-        fileNames["WJets_2500toInf"]  = "tree_WJetsToLNu_HT-2500toInf_MC2018.root";
-
-
-        fileNames["TT_600to800"] = "tree_TTJets_HT-600to800_MC2018.root";
-        fileNames["TT_800to1200"] = "tree_TTJets_HT-800to1200_MC2018.root";
-        fileNames["TT_1200to2500"] = "tree_TTJets_HT-1200to2500_MC2018.root";
-        fileNames["TT_2500toInf"] = "tree_TTJets_HT-2500toInf_MC2018.root";
-        fileNames["TT_1LFromT"] = "tree_TTJets_SingleLeptFromT_MC2018.root";
-        fileNames["TT_1LFromTbar"] = "tree_TTJets_SingleLeptFromTbar_MC2018.root";
-        fileNames["TT_2L"] = "tree_TTJets_DiLept_MC2018.root";
-*/
         fileNames["TT_600to800"] = "tree_TTJets_HT-600to800_MC2016.root";
         fileNames["TT_800to1200"] = "tree_TTJets_HT-800to1200_MC2016.root";
         fileNames["TT_1200to2500"] = "tree_TTJets_HT-1200to2500_MC2016.root";
@@ -123,37 +87,6 @@ public :
 	    fileNames["ST_t-channel_top"] = "tree_ST_t-channel_top_MC2016.root";
 	    fileNames["ST_tW_antitop"] = "tree_ST_tW_antitop_MC2016.root";
 	    fileNames["ST_tW_top"] = "tree_ST_tW_top_MC2016.root";
-/*
-        
-	    fileNames["ST_s-channel"] = "tree_ST_s-channel_MC2018.root";
-	    fileNames["ST_tW_antitop"] = "tree_ST_tW_antitop_MC2018.root";
-	    fileNames["ST_tW_top"] = "tree_ST_tW_top_MC2018.root";
-*/
-        fileNames["DY_100to200"] = "tree_DYJetsToLL_M-50_HT-100to200_MC2016.root";
-        fileNames["DY_200to400"] = "tree_DYJetsToLL_M-50_HT-200to400_MC2016.root";
-        fileNames["DY_400to600"] = "tree_DYJetsToLL_M-50_HT-400to600_MC2016.root";
-        fileNames["DY_600toInf"] = "tree_DYJetsToLL_M-50_HT-600toInf_MC2016.root";
-
-        fileNames["GJets0p4_100to200"] = "tree_GJets_DR-0p4_HT-100to200_MC2016.root";
-        fileNames["GJets0p4_200to400"] = "tree_GJets_DR-0p4_HT-200to400_MC2016.root";
-        fileNames["GJets0p4_400to600"] = "tree_GJets_DR-0p4_HT-400to600_MC2016.root";
-        fileNames["GJets0p4_600toInf"] = "tree_GJets_DR-0p4_HT-600toInf_MC2016.root";
-	
-        fileNames["GJets_100to200"] = "tree_GJets_HT-100to200_MC2016.root";
-        fileNames["GJets_200to400"] = "tree_GJets_HT-200to400_MC2016.root";
-        fileNames["GJets_400to600"] = "tree_GJets_HT-400to600_MC2016.root";
-        fileNames["GJets_600toInf"] = "tree_GJets_HT-600toInf_MC2016.root";
-
-  /*      
-        fileNames["Other_TTGJets"] = "tree_TTGJets_MC2018.root";
-        fileNames["Other_TTWJetsToQQ"] = "tree_TTWJetsToQQ_MC2018.root";
-        fileNames["Other_TTWJetsToLNu"] = "tree_TTWJetsToLNu_MC2018.root";
-        fileNames["Other_TTZToLLNuNu"] = "tree_TTZToLLNuNu_MC2018.root";
-        fileNames["Other_TTZToQQ"] = "tree_TTZToQQ_MC2018.root";
-        fileNames["Other_WWTo1L1Nu2Q"] = "tree_WWTo1L1Nu2Q_MC2018.root";
-        fileNames["Other_WZTo1L3Nu"] = "tree_WZTo1L3Nu_MC2018.root";
-        fileNames["Other_ZZTo2L2Q"] = "tree_ZZTo2L2Q_MC2018.root";
-*/
 
         fileNames["Other_WWTo1L1Nu2Q"] = "tree_WWTo1L1Nu2Q_MC2016.root";
         //fileNames["Other_WWTo2L2Nu"] = "tree_WWTo2L2Nu_MC2016.root"; //n/a for all years
@@ -171,8 +104,6 @@ public :
         fileNames["Other_TTZToLLNuNu"] = "tree_TTZToLLNuNu_MC2016.root";
         fileNames["Other_TTZToQQ"] = "tree_TTZToQQ_MC2016.root";
       
- 
-         // These are already in singleTop section!!!
         fileNames["MET_2016B"] = "tree_MET_2016B.root";
         fileNames["MET_2016C"] = "tree_MET_2016C.root";
         fileNames["MET_2016D"] = "tree_MET_2016D.root";
@@ -180,17 +111,6 @@ public :
         fileNames["MET_2016F"] = "tree_MET_2016F.root";
         fileNames["MET_2016G"] = "tree_MET_2016G.root";
         fileNames["MET_2016H"] = "tree_MET_2016H.root";
-
-	    fileNames["MET_2017B"] = "tree_MET_2017B.root";
-	    fileNames["MET_2017C"] = "tree_MET_2017C.root";
-        fileNames["MET_2017D"] = "tree_MET_2017D.root";
-        fileNames["MET_2017E"] = "tree_MET_2017E.root";
-        fileNames["MET_2017F"] = "tree_MET_2017F.root";
-
-	    fileNames["MET_2018A"] = "tree_MET_2018A.root";
-	    fileNames["MET_2018B"] = "tree_MET_2018B.root";
-	    fileNames["MET_2018C"] = "tree_MET_2018C.root";
-        fileNames["MET_2018D"] = "tree_MET_2018D.root";
 
         fileNames["VBFG_1000"] = "tree_VBFG_mG1000_v3_MC2016.root";
         fileNames["VBFG_2000"] = "tree_VBFG_mG2000_v15_MC2018.root";
@@ -204,6 +124,16 @@ public :
         fileNames["VBFG_4000"] = "tree_VBFG_mG4000_v15_MC2018.root";
         fileNames["VBFG_4500"] = "tree_VBFG_mG4500_v15_MC2018.root";
 
+        fileNames["VBFRad_1000"] = "tree_VBFRad_mRad1000_v15_MC2018.root";
+        fileNames["VBFRad_4500"] = "tree_VBFRad_mRad4500_v15_MC2018.root";
+
+        fileNames["VBFWp_1000"] = "tree_VBFWp_mWp1000_v3_MC2016.root";
+        fileNames["VBFWp_4500"] = "tree_VBFWp_mWp4500_v15_MC2018.root";
+
+        fileNames["ggFRad_1000"] = "tree_ggFRad_mRad1000_v15_MC2018.root";
+        fileNames["ggFRad_4500"] = "tree_ggFRad_mRad4500_v15_MC2018.root";
+
+
         fileNames["ggFG_1000"] = "tree_ggFG_mG1000_v14_MC2017.root";
         fileNames["ggFG_2000"] = "tree_ggFG_mG2000_v14_MC2017.root";
         fileNames["ggFG_1200"] = "tree_ggFG_mG1200_v14_MC2017.root";
@@ -211,44 +141,10 @@ public :
         fileNames["ggFG_1600"] = "tree_ggFG_mG1600_v14_MC2017.root";
         fileNames["ggFG_1800"] = "tree_ggFG_mG1800_v14_MC2017.root";
         fileNames["ggFG_2500"] = "tree_ggFG_mG2500_v14_MC2017.root";
-        //fileNames["ggFG_3000"] = "tree_ggFG_mG3000_v14_MC2017.root"; // sample not ready yet, failed ntuplizer.
+        fileNames["ggFG_3000"] = "tree_ggFG_mG3000_v14_MC2017.root"; 
         fileNames["ggFG_3500"] = "tree_ggFG_mG3500_v14_MC2017.root";
         fileNames["ggFG_4000"] = "tree_ggFG_mG4000_v14_MC2017.root";
         fileNames["ggFG_4500"] = "tree_ggFG_mG4500_v14_MC2017.root";
-
-        fileNames["SingleElectron_2016C"] = "tree_SingleElectron_2016C.root";
-        fileNames["SingleElectron_2016D"] = "tree_SingleElectron_2016D.root";
-        fileNames["SingleElectron_2016E"] = "tree_SingleElectron_2016E.root";
-        fileNames["SingleElectron_2016F"] = "tree_SingleElectron_2016F.root";
-        fileNames["SingleElectron_2016G"] = "tree_SingleElectron_2016G.root";
-        fileNames["SingleElectron_2016H"] = "tree_SingleElectron_2016H.root";
-
-        fileNames["SingleMuon_2016B"] = "tree_SingleMuon_2016B.root";
-        fileNames["SingleMuon_2016C"] = "tree_SingleMuon_2016C.root";
-        fileNames["SingleMuon_2016D"] = "tree_SingleMuon_2016D.root";
-        fileNames["SingleMuon_2016E"] = "tree_SingleMuon_2016E.root";
-        fileNames["SingleMuon_2016F"] = "tree_SingleMuon_2016F.root";
-        fileNames["SingleMuon_2016G"] = "tree_SingleMuon_2016G.root";
-        fileNames["SingleMuon_2016H"] = "tree_SingleMuon_2016H.root";
-
- 	    fileNames["SinglePhoton_2016B"] = "tree_SinglePhoton_2016B.root";
- 	    fileNames["SinglePhoton_2016C"] = "tree_SinglePhoton_2016C.root";
- 	    fileNames["SinglePhoton_2016D"] = "tree_SinglePhoton_2016D.root";
- 	    fileNames["SinglePhoton_2016E"] = "tree_SinglePhoton_2016E.root";
- 	    fileNames["SinglePhoton_2016F"] = "tree_SinglePhoton_2016F.root";
- 	    fileNames["SinglePhoton_2016G"] = "tree_SinglePhoton_2016G.root";
- 	    fileNames["SinglePhoton_2016H"] = "tree_SinglePhoton_2016H.root";
-
- 	    fileNames["SinglePhoton_2017B"] = "tree_SinglePhoton_2017B.root";
- 	    fileNames["SinglePhoton_2017C"] = "tree_SinglePhoton_2017C.root";
- 	    fileNames["SinglePhoton_2017D"] = "tree_SinglePhoton_2017D.root";
- 	    fileNames["SinglePhoton_2017E"] = "tree_SinglePhoton_2017E.root";
- 	    fileNames["SinglePhoton_2017F"] = "tree_SinglePhoton_2017F.root";
-
- 	    fileNames["SinglePhoton_2018A"] = "tree_EGamma_2018A.root";
-	    fileNames["SinglePhoton_2018B"] = "tree_EGamma_2018B.root";
- 	    fileNames["SinglePhoton_2018C"] = "tree_EGamma_2018C.root";
- 	    fileNames["SinglePhoton_2018D"] = "tree_EGamma_2018D.root";
 
 	for( auto name : backgrounds ){
 

@@ -7,9 +7,12 @@ r.gROOT.ProcessLine(".L tdrstyle.C")
 r.gROOT.ProcessLine("setTDRStyle()")
 
 #plot_dir="ZSR_All_May15/2018/ZSRHPNoVBF"
-plot_dir="plots/ZSR_HP_VBF/2018_Test"
-input_file_name = "Test_Files_Jul29/ZSRHPVBF_NewSkim_v1_2018_Test.root"
-output_file_name = "Test_Files_Jul29/ZSRHPVBF_NewSkim_v1_2018_Test_Output.root"
+#plot_dir="plots/ZSR_HP_VBF/2018"
+plot_dir="plots/Z_Baseline_NoData/2018"
+#input_file_name = "AN_v0_Sep08/ZSR_HP_VBF_AN_v0_2018.root"
+#output_file_name ="AN_v0_Sep08/ZSR_HP_VBF_AN_v0_2018_Output.root"
+input_file_name = "AN_v0_Sep08/ZBaseline_AN_v0_2018.root"
+output_file_name ="AN_v0_Sep08/ZBaseline_AN_v0_2018_NoData_Output.root"
 
 input_file = r.TFile(input_file_name,"READ")    
 
@@ -131,7 +134,7 @@ def plot(plot_var = "photonIsoChrgLowSieie_EB_photonLoose" ):
     for i in range(len(samples_histo)):
         leg.AddEntry(samples_histo[i],samples_labels[i],"f")
     for i in range(len(signal_histo)):
-        leg.AddEntry(signal_histo[i],"VBFG 1200","f")
+        leg.AddEntry(signal_histo[i],"VBFG 1000","f")
 
 
     can = r.TCanvas("can","can",500,500)
@@ -143,9 +146,11 @@ def plot(plot_var = "photonIsoChrgLowSieie_EB_photonLoose" ):
     leg.Draw()
 
     if total!=None:
-        stack.SetMaximum(1.5*max(total.GetMaximum(),samples_histo[0].GetMaximum()))
+        stack.SetMaximum(1.5*max(total.GetMaximum(),signal_histo[0].GetMaximum()))
+        #stack.SetMaximum(1.5*max(total.GetMaximum(),samples_histo[0].GetMaximum()))
     else :
-        stack.SetMaximum(1.5*samples_histo[0].GetMaximum())
+        stack.SetMaximum(1.5*signal_histo[0].GetMaximum())
+        #stack.SetMaximum(1.5*samples_histo[0].GetMaximum())
     stack.SetMinimum(0.1)
 
     stack.GetYaxis().SetTitle("Events")
@@ -187,15 +192,17 @@ def plot(plot_var = "photonIsoChrgLowSieie_EB_photonLoose" ):
     LUMItext.Draw()
 
     #can.SaveAs("../plots/"+plot_dir+"/"+plot_var+".png")
-    can.SaveAs("Test_Files_Jul29/"+plot_dir+"/"+plot_var+".png")
+    can.SaveAs("AN_v0_Sep08/"+plot_dir+"/"+plot_var+".pdf")
     # for space between legend and plot 
     can.SetLogy()
     if total!=None:
-        stack.SetMaximum(20.0*max(total.GetMaximum(),samples_histo[0].GetMaximum()))
+        stack.SetMaximum(20.0*max(total.GetMaximum(),signal_histo[0].GetMaximum()))
+        #stack.SetMaximum(20.0*max(total.GetMaximum(),samples_histo[0].GetMaximum()))
     else :
-        stack.SetMaximum(20.0*samples_histo[0].GetMaximum())
+        stack.SetMaximum(20.0*signal_histo[0].GetMaximum())
+        #stack.SetMaximum(20.0*samples_histo[0].GetMaximum())
     stack.SetMinimum(0.1)
-    can.SaveAs("Test_Files_Jul29/"+plot_dir+"/"+plot_var+"_LogY.png")
+    can.SaveAs("AN_v0_Sep08/"+plot_dir+"/"+plot_var+"_LogY.pdf")
 
     output_file.cd()
     for h in samples_histo :

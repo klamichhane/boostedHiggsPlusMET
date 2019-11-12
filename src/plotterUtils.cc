@@ -14,9 +14,9 @@
 
 using namespace std;
 
-double lumi=59546.381; // 2018
+//double lumi=59546.381; // 2018
 //double lumi=41486.136;   // 2017
-//double lumi=35815.165; // 2016
+double lumi=35815.165; // 2016
 
 template <typename ntupleType> class plot{
 
@@ -69,7 +69,7 @@ public:
     label = label_;
     xlabel = xlabel_ ; 
     ylabel = ylabel_ ; 
-    nbinsx = nbinsx_; lowerx = lowerx_; upperx = upperx_;
+    nbinsx = nbinsx_; lowerx = lowerx_; upperx = upperx_; 
     nbinsy = nbinsy_; lowery = lowery_; uppery = uppery_;
     binEdges=NULL;
     stack=0;
