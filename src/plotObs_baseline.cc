@@ -572,7 +572,7 @@ void process(string selection_label,
         // HEM Veto
         if(! selectionFunc(ntuple) ) continue;
         if (filename.Contains("MC2018")){
-            if ( (ntuple->EvtNum % 1000) < (1000*21.0/59.6)) continue;
+            if ( ntuple->EvtNum % 1000 < 1000*21.0/59.6) continue;
             if(! passHEMjetVeto(ntuple, 30) ) continue;
         }
         
@@ -623,7 +623,9 @@ void process(string selection_label,
 
       // HEM Veto  
       if(year=="2018"){  
-        if ( ntuple->EvtNum % 1000 < 1000*21.0/59.6) continue;
+        //cout<<"evtnum1: "<<ntuple->EvtNum<<endl;
+        if ((ntuple->EvtNum % 1000) < (1000*21.0/59.6)) continue;
+        //cout<<"evtnum2: "<<ntuple->EvtNum<<endl;
         if(!passHEMjetVeto(ntuple,30)) continue;  
       }          
 

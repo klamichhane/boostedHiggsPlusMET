@@ -55,6 +55,7 @@ double ZMT(double pt1, double phi1, double pt2, double phi2){
 template<typename ntupleType>void ntupleBranchStatus(ntupleType* ntuple){
   ntuple->fChain->SetBranchStatus("*",0);
   ntuple->fChain->SetBranchStatus("RunNum",1);
+  ntuple->fChain->SetBranchStatus("EvtNum",1);
   ntuple->fChain->SetBranchStatus("Muons",1);
   ntuple->fChain->SetBranchStatus("NMuons",1);
   ntuple->fChain->SetBranchStatus("Electrons",1);
