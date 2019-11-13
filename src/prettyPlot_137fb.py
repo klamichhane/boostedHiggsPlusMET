@@ -12,9 +12,13 @@ r.gROOT.ProcessLine("setTDRStyle()")
 #input_file_name = "AN_v0_Sep08/Full_Run2/ZSB_HP_VBF_AN_v0_137fb.root"
 #output_file_name= "AN_v0_Sep08/Full_Run2/ZSB_HP_VBF_AN_v0_137fb_Output.root"
 
-plot_dir="plots/Closure_Test/stack_plots"
-input_file_name = "AN_v0_Sep08/Full_Run2/AlphaSR_HP_VBF_AN_v0_137fb_v2.root"
-output_file_name= "AN_v0_Sep08/Full_Run2/AlphaSR_HP_VBF_AN_v0_137fb_v2_Output.root"
+#plot_dir="plots/Closure_Test/stack_plots"
+#input_file_name = "AN_v0_Sep08/Full_Run2/AlphaSR_HP_VBF_AN_v0_137fb_v2.root"
+#output_file_name= "AN_v0_Sep08/Full_Run2/AlphaSR_HP_VBF_AN_v0_137fb_v2_Output.root"
+
+plot_dir="StackPlots"
+input_file_name = "AN_v0_Closure_FullPurity/AlphaSB_HP_VBF_AN_v0_137fb_v2.root"
+output_file_name= "AN_v0_Closure_FullPurity/AlphaSB_HP_VBF_AN_v0_137fb_v2_Output.root"
 
 input_file = r.TFile(input_file_name,"READ")    
 
@@ -273,7 +277,8 @@ def plot(plot_var = "photonIsoChrgLowSieie_EB_photonLoose" ):
     l.Draw("same"); 
     
 
-    can.SaveAs("AN_v0_Sep08/"+plot_dir+"/"+plot_var+".pdf")
+    #can.SaveAs("AN_v0_Sep08/"+plot_dir+"/"+plot_var+".pdf")
+    can.SaveAs("AN_v0_Closure_FullPurity/"+plot_dir+"/"+plot_var+".pdf")
     #can.SaveAs("Test_Files_Jul29/"+plot_dir+"/"+plot_var+".png")
     # for space between legend and plot 
     topPad.SetLogy()
@@ -282,7 +287,8 @@ def plot(plot_var = "photonIsoChrgLowSieie_EB_photonLoose" ):
     else :
         stack.SetMaximum(200.0*data_histo[0].GetMaximum())
     stack.SetMinimum(0.1)
-    can.SaveAs("AN_v0_Sep08/"+plot_dir+"/"+plot_var+"_LogY.pdf")
+    #can.SaveAs("AN_v0_Sep08/"+plot_dir+"/"+plot_var+"_LogY.pdf")
+    can.SaveAs("AN_v0_Closure_FullPurity/"+plot_dir+"/"+plot_var+"_LogY.pdf")
 
     output_file.cd()
     for h in samples_histo :
