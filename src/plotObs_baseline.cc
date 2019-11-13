@@ -549,9 +549,8 @@ void process(string selection_label,
   for( int iSample = 0 ; iSample < skims.ntuples.size() ; iSample++){
     RA2bTree* ntuple = skims.ntuples[iSample];
      isMC_ = true;
-    //TFile* outputFile = new TFile("plotObs_"+selection_label+"_baseline_"+skims.sampleName[iSample]+".root","RECREATE");
-    TFile* outputFile = new TFile("AN_v0_Sep08/plotObs_"+selection_label+"_baseline_"+skims.sampleName[iSample]+".root","RECREATE");
-    //TFile* outputFile = new TFile("Test_Files_Jul29/plotObs_"+selection_label+"_baseline_"+skims.sampleName[iSample]+".root","RECREATE");
+    //TFile* outputFile = new TFile("AN_v0_Sep08/plotObs_"+selection_label+"_baseline_"+skims.sampleName[iSample]+".root","RECREATE");
+    TFile* outputFile = new TFile("AN_v0_Closure_FullPurity/plotObs_"+selection_label+"_baseline_"+skims.sampleName[iSample]+".root","RECREATE");
     
     for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
       plots[iPlot].addNtuple(ntuple,skims.sampleName[iSample]);
@@ -602,9 +601,7 @@ void process(string selection_label,
   for( int iSample = 0 ; iSample < skims.signalNtuples.size() ; iSample++){
     RA2bTree* ntuple = skims.signalNtuples[iSample];
     isMC_ = true;
-    //TFile* outputFile = new TFile("plotObs_"+selection_label+"_baseline_"+skims.signalSampleName[iSample]+".root","RECREATE");
-    TFile* outputFile = new TFile("AN_v0_Sep08/plotObs_"+selection_label+"_baseline_"+skims.signalSampleName[iSample]+".root","RECREATE");
-    //TFile* outputFile = new TFile("Test_Files_Jul29/plotObs_"+selection_label+"_baseline_"+skims.signalSampleName[iSample]+".root","RECREATE");
+    TFile* outputFile = new TFile("AN_v0_Closure_FullPurity/plotObs_"+selection_label+"_baseline_"+skims.signalSampleName[iSample]+".root","RECREATE");
 
     sigSamples.push_back(ntuple);
     for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
@@ -739,9 +736,7 @@ void process(string selection_label,
   // Data samples
   for( int iSample = 0 ; iSample < skims.dataNtuple.size() ; iSample++){
     RA2bTree* ntuple = skims.dataNtuple[iSample];
-    //TFile* outputFile = new TFile("plotObs_"+selection_label+"_baseline_"+skims.dataSampleName[iSample]+".root","RECREATE");
-    TFile* outputFile = new TFile("AN_v0_Sep08/plotObs_"+selection_label+"_baseline_"+skims.dataSampleName[iSample]+".root","RECREATE");
-    //TFile* outputFile = new TFile("Test_Files_Jul29/plotObs_"+selection_label+"_baseline_"+skims.dataSampleName[iSample]+".root","RECREATE");
+    TFile* outputFile = new TFile("AN_v0_Closure_FullPurity/plotObs_"+selection_label+"_baseline_"+skims.dataSampleName[iSample]+".root","RECREATE");
 	TString filename;  
     for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
         plots[iPlot].addDataNtuple(ntuple,skims.dataSampleName[iSample]);
