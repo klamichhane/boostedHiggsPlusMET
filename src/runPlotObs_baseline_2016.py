@@ -88,7 +88,7 @@ for sample in backgroundSamples :
     #p = Process(target=runPlotObsBaseline, args=("ZSRHPNoVBF",sample,"","") )
     #p = Process(target=runPlotObsBaseline, args=("ZSRVBF",sample,"","") )
     #p = Process(target=runPlotObsBaseline, args=("ZSRHPVBF",sample,"","") )
-    p = Process(target=runPlotObsBaseline, args=("AlphaSRHPVBF",sample,"","") )
+    p = Process(target=runPlotObsBaseline, args=("AlphaSRHPNoVBF",sample,"","") )
     p.start()
     processes.append(p)
 
@@ -99,7 +99,7 @@ for sample in signalSamples :
     #p = Process(target=runPlotObsBaseline, args=("ZSRHPNoVBF","",sample, "") )
     #p = Process(target=runPlotObsBaseline, args=("ZSRVBF","",sample, "") )
     #p = Process(target=runPlotObsBaseline, args=("ZSRHPVBF","",sample, "") )
-    p = Process(target=runPlotObsBaseline, args=("AlphaSRHPVBF","",sample, "") )
+    p = Process(target=runPlotObsBaseline, args=("AlphaSRHPNoVBF","",sample, "") )
     p.start()
     processes.append(p)
 
@@ -110,7 +110,7 @@ for sample in dataSamples :
     #p = Process(target=runPlotObsBaseline, args=("ZSRHPVBF","","",sample) )
     #p = Process(target=runPlotObsBaseline, args=("ZSRVBF","","",sample) )
     #p = Process(target=runPlotObsBaseline, args=("ZSRHPVBF","","",sample) )
-    p = Process(target=runPlotObsBaseline, args=("AlphaSRHPVBF","","",sample) )
+    p = Process(target=runPlotObsBaseline, args=("AlphaSRHPNoVBF","","",sample) )
     p.start()
     processes.append(p)
 

@@ -209,6 +209,24 @@ template<typename ntupleType> bool genLevelZZcut(ntupleType* ntuple){
     else return false;
 }
 
+// Gen level leptons from W/Z decay
+template<typename ntupleType> int getNumGenLep(ntupleType* ntuple){
+    int numLep=0;
+    for( int i=0 ; i < ntuple->GenParticles->size() ; i++ ){
+        int id = abs(ntuple->GenParticles_PdgId->at(i));
+        int mid = abs(ntuple->GenParticles_ParentId->at(i));
+        if( (id == 11 || id==13 || id==15) && 
+            (mid == 23 || mid ==24)  
+            &&ntuple->GenParticles_Status->at(i) == 23 
+            )
+            numLep++;
+    }
+    return numLep;
+}
+
+
+
+
 /***************************************************************/
 /* - - - - - - - - - - - - custom weights - - - - - - - - - -  */
 /***************************************************************/
@@ -1803,13 +1821,15 @@ template<typename ntupleType> bool baselineCutNoVBF(ntupleType* ntuple){
             &&  DeltaPhiCuts(ntuple) 
 	        ////&&  ntuple->Photons->size()==0 
             &&  PhotonCut(ntuple) // photon veto
-            &&  ntuple->NMuons==0 
-            &&  ntuple->NElectrons==0 
-            ////&&  ntuple->BTags == 0  
+            //&&  ntuple->NMuons==0 
+            //&&  ntuple->NElectrons==0 
+            &&  ntuple->Muons->size()==0 
+            &&  ntuple->Electrons->size()==0 
             &&  ntuple->BTagsDeepCSV==0 
             &&  ntuple->isoElectronTracks==0 && ntuple->isoMuonTracks==0 && ntuple->isoPionTracks==0 
             &&  HTRatioCut(ntuple)
 	        &&  FiltersCut(ntuple)
+            &&  getNumGenLep(ntuple)==0
             //&&  ZMTCut(ntuple)
             //&&  VBFdEtaDebugCuts(ntuple)
             //&&  EcalNEMFCut(ntuple)

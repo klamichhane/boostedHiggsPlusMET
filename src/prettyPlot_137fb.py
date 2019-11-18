@@ -17,8 +17,8 @@ r.gROOT.ProcessLine("setTDRStyle()")
 #output_file_name= "AN_v0_Sep08/Full_Run2/AlphaSR_HP_VBF_AN_v0_137fb_v2_Output.root"
 
 plot_dir="StackPlots"
-input_file_name = "AN_v0_Closure_FullPurity/AlphaSB_HP_VBF_AN_v0_137fb_v2.root"
-output_file_name= "AN_v0_Closure_FullPurity/AlphaSB_HP_VBF_AN_v0_137fb_v2_Output.root"
+input_file_name = "AN_v0_Closure_FullPurity/AlphaSR_HP_NoVBF_AN_v0_137fb_v2.root"
+output_file_name= "AN_v0_Closure_FullPurity/AlphaSR_HP_NoVBF_AN_v0_137fb_v2_Output.root"
 
 input_file = r.TFile(input_file_name,"READ")    
 

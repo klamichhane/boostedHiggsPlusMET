@@ -11,14 +11,14 @@
 #include <time.h>       /* clock_t, clock, CLOCKS_PER_SEC */
 #include <cassert>
 #include "plotterUtils.cc"
-#include "skimSamples_2016.cc"
-//#include "skimSamples_2017.cc"
+//#include "skimSamples_2016.cc"
+#include "skimSamples_2017.cc"
 //#include "skimSamples_2018.cc"
 #include "definitions.h"
 #include "RA2bTree.cc"
 #include "TriggerEfficiencySextet.cc"
 
-string year = "2016"; 
+string year = "2017"; //change the sample files above also 
 double lum = 0.0;
 
 using namespace std;

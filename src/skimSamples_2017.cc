@@ -9,7 +9,7 @@
 static const TString BASE_DIR_DATA = "/home/whitbeck/raid/temp/SusyRA2Analysis2015/Skims/Run2ProductionV17/";
 static const TString BASE_DIR = "/home/whitbeck/raid/temp/SusyRA2Analysis2015/Skims_TTU_Jul19/Run2ProductionV17/";
 static const TString BASE_DIR_SIG = "/home/whitbeck/raid/temp/SusyRA2Analysis2015/Skims_TTU_Jul19/Run2ProductionV17/Sig_Samples/";
-//static const TString BASE_DIR_SIG = "/home/whitbeck/raid/temp/SusyRA2Analysis2015/Skims/Run2ProductionV16/VBF_G_V2/";
+static const TString BASE_DIR_SIG_Unskim = "/home/whitbeck/raid/temp/SusyRA2Analysis2015/Skims_TTU_Jul19/Run2ProductionV17/UnSkim_Sig/";
 static const bool RE_MINIAOD = false;
 
 class skimSamples{
@@ -221,11 +221,12 @@ public :
 	for( auto name : signals ){
 
 	  if( fileNames.find(name) != fileNames.end() ){
-	    TChain* temp = new TChain("tree");
-	    //TChain* temp = new TChain("TreeMaker2/PreSelection");
+	    TChain* temp = new TChain("TreeMaker2/PreSelection");
         //VBFG1000 = new TChain("TreeMaker2/PreSelection");
-	    temp->Add(BASE_DIR_SIG+"/"+fileNames[name]);	  
-	    //temp->Add(BASE_DIR_DATA+skimType+"/"+fileNames[name]);	  
+	    temp->Add(BASE_DIR_SIG_Unskim+"/"+fileNames[name]);	  
+        //use below for skim sample
+	    //TChain* temp = new TChain("tree");
+	    //temp->Add(BASE_DIR_SIG+"/"+fileNames[name]);	  
 	    signalNtuples.push_back(new RA2bTree(temp));
 	    signalSampleName.push_back(name);
 	  }
