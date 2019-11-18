@@ -11,14 +11,14 @@
 #include <time.h>       /* clock_t, clock, CLOCKS_PER_SEC */
 #include <cassert>
 #include "plotterUtils.cc"
-//#include "skimSamples_2016.cc"
+#include "skimSamples_2016.cc"
 //#include "skimSamples_2017.cc"
-#include "skimSamples_2018.cc"
+//#include "skimSamples_2018.cc"
 #include "definitions.h"
 #include "RA2bTree.cc"
 #include "TriggerEfficiencySextet.cc"
 
-string year = "2018"; 
+string year = "2016"; 
 double lum = 0.0;
 
 using namespace std;
@@ -550,7 +550,7 @@ void process(string selection_label,
     RA2bTree* ntuple = skims.ntuples[iSample];
      isMC_ = true;
     //TFile* outputFile = new TFile("plotObs_"+selection_label+"_baseline_"+skims.sampleName[iSample]+".root","RECREATE");
-    TFile* outputFile = new TFile("AN_v0_Sep08/plotObs_"+selection_label+"_baseline_"+skims.sampleName[iSample]+".root","RECREATE");
+    TFile* outputFile = new TFile("AN_v0_NLO/plotObs_"+selection_label+"_baseline_"+skims.sampleName[iSample]+".root","RECREATE");
     //TFile* outputFile = new TFile("Test_Files_Jul29/plotObs_"+selection_label+"_baseline_"+skims.sampleName[iSample]+".root","RECREATE");
     
     for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
@@ -583,6 +583,14 @@ void process(string selection_label,
         }
         //else weight = ntuple->Weight*lumi;
         else weight = ntuple->Weight*lum;
+
+        //NLO wt for WJets and ZJets Sample
+        if( skims.sampleName[iSample] == "ZJets" ){        
+            weight *= ZJetsNLOWeights(ntuple);
+        }
+        if( skims.sampleName[iSample] == "WJets" ){
+            weight *= WJetsNLOWeights(ntuple);
+        }
       // ------------ end weights -------------
 
       //cout << "event passed all selections" << endl;
@@ -603,7 +611,7 @@ void process(string selection_label,
     RA2bTree* ntuple = skims.signalNtuples[iSample];
     isMC_ = true;
     //TFile* outputFile = new TFile("plotObs_"+selection_label+"_baseline_"+skims.signalSampleName[iSample]+".root","RECREATE");
-    TFile* outputFile = new TFile("AN_v0_Sep08/plotObs_"+selection_label+"_baseline_"+skims.signalSampleName[iSample]+".root","RECREATE");
+    TFile* outputFile = new TFile("AN_v0_NLO/plotObs_"+selection_label+"_baseline_"+skims.signalSampleName[iSample]+".root","RECREATE");
     //TFile* outputFile = new TFile("Test_Files_Jul29/plotObs_"+selection_label+"_baseline_"+skims.signalSampleName[iSample]+".root","RECREATE");
 
     sigSamples.push_back(ntuple);
@@ -740,7 +748,7 @@ void process(string selection_label,
   for( int iSample = 0 ; iSample < skims.dataNtuple.size() ; iSample++){
     RA2bTree* ntuple = skims.dataNtuple[iSample];
     //TFile* outputFile = new TFile("plotObs_"+selection_label+"_baseline_"+skims.dataSampleName[iSample]+".root","RECREATE");
-    TFile* outputFile = new TFile("AN_v0_Sep08/plotObs_"+selection_label+"_baseline_"+skims.dataSampleName[iSample]+".root","RECREATE");
+    TFile* outputFile = new TFile("AN_v0_NLO/plotObs_"+selection_label+"_baseline_"+skims.dataSampleName[iSample]+".root","RECREATE");
     //TFile* outputFile = new TFile("Test_Files_Jul29/plotObs_"+selection_label+"_baseline_"+skims.dataSampleName[iSample]+".root","RECREATE");
 	TString filename;  
     for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){

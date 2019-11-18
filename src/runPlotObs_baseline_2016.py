@@ -52,8 +52,8 @@ backgroundSamples=[#"QCD_200to300",
                    #"Other_TTZToQQ",
 ]
 
-signalSamples=["ggFG_1000",
-               #"VBFG_1000", 
+signalSamples=[#"ggFG_1000",
+               "VBFG_1000", 
                #"VBFG_1200", 
                #"VBFG_1400", 
                #"VBFG_1600", 
@@ -82,10 +82,10 @@ def runPlotObsBaseline(sel,bkg,sig,data):
 
 processes=[]
 for sample in backgroundSamples : 
-    #p = Process(target=runPlotObsBaseline, args=("ZSRNoVBF",sample,"","") )
+    p = Process(target=runPlotObsBaseline, args=("ZSBNoVBF",sample,"","") )
     #p = Process(target=runPlotObsBaseline, args=("ZNoSelection",sample,"","") )
     #p = Process(target=runPlotObsBaseline, args=("ZSBHPVBF",sample,"","") )
-    p = Process(target=runPlotObsBaseline, args=("ZSRHPNoVBF",sample,"","") )
+    #p = Process(target=runPlotObsBaseline, args=("ZSRHPNoVBF",sample,"","") )
     #p = Process(target=runPlotObsBaseline, args=("ZSRVBF",sample,"","") )
     #p = Process(target=runPlotObsBaseline, args=("ZSRHPVBF",sample,"","") )
     #p = Process(target=runPlotObsBaseline, args=("AlphaSRHPVBF",sample,"","") )
@@ -93,10 +93,10 @@ for sample in backgroundSamples :
     processes.append(p)
 
 for sample in signalSamples : 
-    p = Process(target=runPlotObsBaseline, args=("ZNoSelection","",sample,"") )
-    #p = Process(target=runPlotObsBaseline, args=("ZSRNoVBF","",sample,"") )
+    #p = Process(target=runPlotObsBaseline, args=("ZNoSelection","",sample,"") )
+    p = Process(target=runPlotObsBaseline, args=("ZSBNoVBF","",sample,"") )
     #p = Process(target=runPlotObsBaseline, args=("ZSBHPVBF","",sample, "") )
-    p = Process(target=runPlotObsBaseline, args=("ZSRHPNoVBF","",sample, "") )
+    #p = Process(target=runPlotObsBaseline, args=("ZSRHPNoVBF","",sample, "") )
     #p = Process(target=runPlotObsBaseline, args=("ZSRVBF","",sample, "") )
     #p = Process(target=runPlotObsBaseline, args=("ZSRHPVBF","",sample, "") )
     #p = Process(target=runPlotObsBaseline, args=("AlphaSRHPVBF","",sample, "") )
@@ -104,8 +104,8 @@ for sample in signalSamples :
     processes.append(p)
 
 for sample in dataSamples : 
-    p = Process(target=runPlotObsBaseline, args=("ZNoSelection","","",sample) )
-    #p = Process(target=runPlotObsBaseline, args=("ZSRNoVBF","","",sample) )
+    #p = Process(target=runPlotObsBaseline, args=("ZNoSelection","","",sample) )
+    p = Process(target=runPlotObsBaseline, args=("ZSBNoVBF","","",sample) )
     #p = Process(target=runPlotObsBaseline, args=("ZSBHPVBF","","", sample) )
     #p = Process(target=runPlotObsBaseline, args=("ZSRHPVBF","","",sample) )
     #p = Process(target=runPlotObsBaseline, args=("ZSRVBF","","",sample) )
