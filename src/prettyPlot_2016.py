@@ -9,12 +9,12 @@ r.gROOT.ProcessLine("setTDRStyle()")
 #cat = "SB HP VBF"
 
 
-#plot_dir="plots/ZSB_HP_VBF/2016"
-plot_dir="plots/Closure_Test/stack_plots"
-#input_file_name = "AN_v0_Sep08/ZSB_HP_VBF_AN_v0_2016.root" 
-#output_file_name= "AN_v0_Sep08/ZSB_HP_VBF_AN_v0_2016_Output.root"
-input_file_name = "AN_v0_Sep08/AlphaSR_HP_VBF_AN_v0_2016_v2.root" 
-output_file_name= "AN_v0_Sep08/AlphaSR_HP_VBF_AN_v0_2016_v2_Output.root"
+plot_dir="plots/ZSB_Baseline/2017"
+#plot_dir="plots/Closure_Test/stack_plots"
+input_file_name = "AN_v0_NLO/ZSB_Baseline_AN_v0_2017.root" 
+output_file_name= "AN_v0_NLO/ZSB_Baseline_AN_v0_2017_Output.root"
+#input_file_name = "AN_v0_Sep08/AlphaSR_HP_VBF_AN_v0_2016_v2.root" 
+#output_file_name= "AN_v0_Sep08/AlphaSR_HP_VBF_AN_v0_2016_v2_Output.root"
 
 input_file = r.TFile(input_file_name,"READ")    
 
@@ -65,7 +65,7 @@ def plot(plot_var = "photonIsoChrgLowSieie_EB_photonLoose" ):
 
     #signal_samples=["VBFG_1000",
     #                "ggFG_1000"]
-    signal_samples=[#"VBFG_1000"
+    signal_samples=["VBFG_1000"
                    ]
 
     data_samples=["MET_2016H",#]
@@ -254,6 +254,7 @@ def plot(plot_var = "photonIsoChrgLowSieie_EB_photonLoose" ):
     ratio.GetXaxis().SetTitleFont(43);
     ratio.GetXaxis().SetTitleSize(24);
     ratio.GetXaxis().SetTitleOffset(2.8);
+    ratio.GetXaxis().SetNdivisions(505);
     # Draw a horizontal line at 1 in ratio plot
     nbins = ratio.GetNbinsX()
     l = r.TLine(ratio.GetBinLowEdge(1),1.0,ratio.GetBinLowEdge(nbins+1),1.0);
@@ -265,7 +266,8 @@ def plot(plot_var = "photonIsoChrgLowSieie_EB_photonLoose" ):
 
     #can.SaveAs("../plots/"+plot_dir+"/"+plot_var+".png")
     #can.SaveAs("../plots_NewSkim_v1/"+plot_dir+"/"+plot_var+".png")
-    can.SaveAs("AN_v0_Sep08/"+plot_dir+"/"+plot_var+".pdf")
+    can.SaveAs("AN_v0_NLO/"+plot_dir+"/"+plot_var+".pdf")
+    #can.SaveAs("AN_v0_Sep08/"+plot_dir+"/"+plot_var+".pdf")
     #can.SaveAs("Test_Files_Jul29/"+plot_dir+"/"+plot_var+".png")
     # for space between legend and plot 
     topPad.SetLogy()
@@ -275,7 +277,8 @@ def plot(plot_var = "photonIsoChrgLowSieie_EB_photonLoose" ):
         stack.SetMaximum(20.0*data_histo[0].GetMaximum())
     stack.SetMinimum(0.1)
     #can.SaveAs("../plots/"+plot_dir+"/"+plot_var+"_LogY.png")
-    can.SaveAs("AN_v0_Sep08/"+plot_dir+"/"+plot_var+"_LogY.pdf")
+    can.SaveAs("AN_v0_NLO/"+plot_dir+"/"+plot_var+"_LogY.pdf")
+    #can.SaveAs("AN_v0_Sep08/"+plot_dir+"/"+plot_var+"_LogY.pdf")
     #can.SaveAs("Test_Files_Jul29/"+plot_dir+"/"+plot_var+"_LogY.png")
 
     output_file.cd()

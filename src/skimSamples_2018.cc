@@ -81,17 +81,28 @@ public :
         fileNames["TT_2L"] = "tree_TTJets_DiLept_MC2018.root";
         
 	    fileNames["ST_s-channel"] = "tree_ST_s-channel_MC2018.root";
+        fileNames["ST_t-channel_antitop"] = "tree_ST_t-channel_antitop_MC2018.root"; // from 2016
+        fileNames["ST_t-channel_top"] = "tree_ST_t-channel_top_MC2018.root"; // from 2016
 	    fileNames["ST_tW_antitop"] = "tree_ST_tW_antitop_MC2018.root";
 	    fileNames["ST_tW_top"] = "tree_ST_tW_top_MC2018.root";
 
-        fileNames["Other_TTGJets"] = "tree_TTGJets_MC2018.root";
+        // Some samples are used from 2016+2017:
+        //fileNames["Other_WWTo2L2Nu"] = "tree_WWTo2L2Nu_MC2017.root"; //n/a for all years
+        fileNames["Other_WWTo1L1Nu2Q"] = "tree_WWTo1L1Nu2Q_MC2018.root";
+        fileNames["Other_WWZ"] = "tree_WWZ_MC2018.root"; //using 2016 sample
+        fileNames["Other_WZTo1L1Nu2Q"] = "tree_WZTo1L1Nu2Q_MC2018.root"; //using 2017 sample
+        fileNames["Other_WZTo1L3Nu"] = "tree_WZTo1L3Nu_MC2018.root";
+        fileNames["Other_WZZ"] = "tree_WZZ_MC2018.root"; // using 2017 sample
+        fileNames["Other_ZZTo2L2Q"] = "tree_ZZTo2L2Q_MC2018.root";
+        fileNames["Other_ZZTo2Q2Nu"] = "tree_ZZTo2Q2Nu_MC2018.root"; // using 2016 sample
+        fileNames["Other_ZZZ"] = "tree_ZZZ_MC2018.root"; // using 2017 sample
+        fileNames["Other_TTTT"] = "tree_TTTT_MC2018.root"; //using 2017 sample
+        fileNames["Other_TTWJetsToLNu"] = "tree_TTWJetsToLNu_MC2018.root"; 
         fileNames["Other_TTWJetsToQQ"] = "tree_TTWJetsToQQ_MC2018.root";
-        fileNames["Other_TTWJetsToLNu"] = "tree_TTWJetsToLNu_MC2018.root";
+        fileNames["Other_TTGJets"] = "tree_TTGJets_MC2018.root";
         fileNames["Other_TTZToLLNuNu"] = "tree_TTZToLLNuNu_MC2018.root";
         fileNames["Other_TTZToQQ"] = "tree_TTZToQQ_MC2018.root";
-        fileNames["Other_WWTo1L1Nu2Q"] = "tree_WWTo1L1Nu2Q_MC2018.root";
-        fileNames["Other_WZTo1L3Nu"] = "tree_WZTo1L3Nu_MC2018.root";
-        fileNames["Other_ZZTo2L2Q"] = "tree_ZZTo2L2Q_MC2018.root";
+
 
 	    fileNames["MET_2018A"] = "tree_MET_2018A.root";
 	    fileNames["MET_2018B"] = "tree_MET_2018B.root";

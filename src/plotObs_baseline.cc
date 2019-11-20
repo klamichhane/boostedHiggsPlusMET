@@ -585,10 +585,11 @@ void process(string selection_label,
         else weight = ntuple->Weight*lum;
 
         //NLO wt for WJets and ZJets Sample
-        if( skims.sampleName[iSample] == "ZJets" ){        
+        if ( filename.Contains("_ZJetsTo")){        
             weight *= ZJetsNLOWeights(ntuple);
         }
-        if( skims.sampleName[iSample] == "WJets" ){
+        //if( skims.sampleName[iSample] == "WJets" ){
+        if ( filename.Contains("_WJetsTo")){        
             weight *= WJetsNLOWeights(ntuple);
         }
       // ------------ end weights -------------

@@ -92,12 +92,12 @@ public :
 
         fileNames["Other_WWTo1L1Nu2Q"] = "tree_WWTo1L1Nu2Q_MC2017.root";
         //fileNames["Other_WWTo2L2Nu"] = "tree_WWTo2L2Nu_MC2017.root"; //n/a for all years
-        //fileNames["Other_WWZ"] = "tree_WWZ_MC2017.root"; //for 2016 only
+        fileNames["Other_WWZ"] = "tree_WWZ_MC2017.root"; //using 2016 sample
         fileNames["Other_WZTo1L1Nu2Q"] = "tree_WZTo1L1Nu2Q_MC2017.root"; // for 16 n 17
         fileNames["Other_WZTo1L3Nu"] = "tree_WZTo1L3Nu_MC2017.root";
         fileNames["Other_WZZ"] = "tree_WZZ_MC2017.root"; // for 16 n 17
         fileNames["Other_ZZTo2L2Q"] = "tree_ZZTo2L2Q_MC2017.root";
-        //fileNames["Other_ZZTo2Q2Nu"] = "tree_ZZTo2Q2Nu_MC2017.root"; // for 2016 only
+        fileNames["Other_ZZTo2Q2Nu"] = "tree_ZZTo2Q2Nu_MC2017.root"; // using 2016 sample
         fileNames["Other_ZZZ"] = "tree_ZZZ_MC2017.root"; // for 16 n 17
         fileNames["Other_TTTT"] = "tree_TTTT_MC2017.root"; // for 16 n 17
         fileNames["Other_TTWJetsToLNu"] = "tree_TTWJetsToLNu_MC2017.root";

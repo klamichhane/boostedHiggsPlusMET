@@ -6,12 +6,15 @@ r.gROOT.SetBatch(True)
 r.gROOT.ProcessLine(".L tdrstyle.C")
 r.gROOT.ProcessLine("setTDRStyle()")
 
-#plot_dir="plots/ZSB_HP_VBF/2017"
-plot_dir="plots/Closure_Test/stack_plots"
-#input_file_name = "AN_v0_Sep08/ZSB_HP_VBF_AN_v0_2017.root"
-#output_file_name = "AN_v0_Sep08/ZSB_HP_VBF_AN_v0_2017_Output.root"
-input_file_name = "AN_v0_Sep08/AlphaSR_HP_VBF_AN_v0_2017_v2.root"
-output_file_name ="AN_v0_Sep08/AlphaSR_HP_VBF_AN_v0_2017_v2_Output.root"
+#cat = "SB HP VBF"
+
+
+plot_dir="plots/ZSB_Baseline/2017"
+#plot_dir="plots/Closure_Test/stack_plots"
+input_file_name = "AN_v0_NLO/ZSB_Baseline_AN_v0_2017.root" 
+output_file_name= "AN_v0_NLO/ZSB_Baseline_AN_v0_2017_Output.root"
+#input_file_name = "AN_v0_Sep08/AlphaSR_HP_VBF_AN_v0_2016_v2.root" 
+#output_file_name= "AN_v0_Sep08/AlphaSR_HP_VBF_AN_v0_2016_v2_Output.root"
 
 input_file = r.TFile(input_file_name,"READ")    
 
@@ -31,10 +34,12 @@ def plot(plot_var = "photonIsoChrgLowSieie_EB_photonLoose" ):
               "TT_1LFromTbar",
               "TT_2L"],
              ["Other_WWTo1L1Nu2Q",
+              "Other_WWZ",
               "Other_WZTo1L1Nu2Q",
               "Other_WZTo1L3Nu",
               "Other_WZZ",
               "Other_ZZTo2L2Q",
+              "Other_ZZTo2Q2Nu",
               "Other_ZZZ",
               "Other_TTTT",
               "Other_TTWJetsToLNu",
@@ -58,7 +63,9 @@ def plot(plot_var = "photonIsoChrgLowSieie_EB_photonLoose" ):
               "ZJets_2500toInf"]
              ]
 
-    signal_samples=[#"VBFG_1000"
+    #signal_samples=["VBFG_1000",
+    #                "ggFG_1000"]
+    signal_samples=["VBFG_1000"
                    ]
 
     data_samples=["MET_2017F",#]
@@ -67,8 +74,9 @@ def plot(plot_var = "photonIsoChrgLowSieie_EB_photonLoose" ):
                 "MET_2017C",
                 "MET_2017B"]
 
-    #samples_labels = ["Single top","TT","Other","WJets","ZJets"]
     samples_labels = ["SnglT","TT","Other","WJets","ZJets"]
+    #signal_labels = ["VBFG_1000"]
+    #signal_line_color = [2,46]
     samples_fill_color = [r.kOrange,r.kCyan,r.kOrange+3,r.kBlue,r.kGreen+1]
     samples_line_color = [1,1,1,1,1]
     
@@ -96,8 +104,10 @@ def plot(plot_var = "photonIsoChrgLowSieie_EB_photonLoose" ):
  ## for signal sample
     signal_histo=[]
     for i,signal_sample_names in enumerate(signal_samples) :
+        #if i<len(signal_samples):
         if i==0:
             signal_histo.append(input_file.Get(plot_var+"_"+signal_sample_names))
+            #signal_histo[-1].SetLineColor(signal_line_color[i])
             signal_histo[-1].SetLineColor(r.kRed)
             signal_histo[-1].SetLineWidth(2)
             #signal_histo[-1].SetName(plot_var+"_"+signal_samples_labels[i])
@@ -105,7 +115,7 @@ def plot(plot_var = "photonIsoChrgLowSieie_EB_photonLoose" ):
                 print "looking for:",plot_var+"_"+sample_name
                 assert(signal_histo[-1]!=None)
         else :
-            signal_histo[-1].Add(input_file.Get(plot_var+"_"+signal_sample_name))
+            signal_histo[-1].Add(input_file.Get(plot_var+"_"+signal_sample_names))
  ## end of signal sample
 
     data_histo=[]
@@ -132,14 +142,17 @@ def plot(plot_var = "photonIsoChrgLowSieie_EB_photonLoose" ):
     for i,h in enumerate(samples_histo) : 
         #print h.GetTitle(),"before",h.Integral()
         if h.Integral()>0 and total!=None:
-            #h.Scale(data_histo[0].Integral(0,(data_histo[0].GetNbinsX()+1))/total.Integral(0,(total.GetNbinsX()+1)))
+            #print h.GetTitle(),"before h, total, data: ",h.Integral(0,h.GetNbinsX()+1), total.Integral(0,total.GetNbinsX()+1), data_histo[0].Integral(0,data_histo[0].GetNbinsX()+1)
+            #h.Scale(data_histo[0].Integral(1,(data_histo[0].GetNbinsX()+1))/total.Integral(1,(total.GetNbinsX()+1)))
             h.Scale(data_histo[0].Integral()/total.Integral())
-        #print h.GetTitle(),"after",h.Integral()
+            #print h.GetTitle(),"after",h.Integral()
+            #print h.GetTitle(),"after h, total, data: ",h.Integral(0,h.GetNbinsX()+1), total.Integral(0,total.GetNbinsX()+1), data_histo[0].Integral(0,data_histo[0].GetNbinsX()+1)
         stack.Add(h)
     if total!=None and total.Integral()>0: 
     #if total!=None: 
-        #total.Scale(data_histo[0].Integral(0,(data_histo[0].GetNbinsX()+1))/total.Integral(0,(total.GetNbinsX()+1)))
         total.Scale(data_histo[0].Integral()/total.Integral())
+        #total.Scale(data_histo[0].Integral(1,(data_histo[0].GetNbinsX()+1))/total.Integral(1,(total.GetNbinsX()+1)))
+        #print total.GetTitle()," afterII total, data: ",total.Integral(0,total.GetNbinsX()+1), data_histo[0].Integral(0,data_histo[0].GetNbinsX()+1)
 
     # For legend
     leg = r.TLegend(0.45,.77,.9,.92) 
@@ -149,12 +162,12 @@ def plot(plot_var = "photonIsoChrgLowSieie_EB_photonLoose" ):
 
     if data_histo:
        leg.AddEntry(data_histo[-1],"data","p") 
-       #leg.AddEntry(data_histo[-1],"MET 2017","p") 
+       #leg.AddEntry(data_histo[-1],"MET 2016","p") 
     for i in range(len(samples_histo)):
         leg.AddEntry(samples_histo[i],samples_labels[i],"f")
     for i in range(len(signal_histo)):
         leg.AddEntry(signal_histo[i],"VBFG 1000","f")
-        #leg.AddEntry(signal_histo[i],signal_samples_labels[i],"f")
+        #leg.AddEntry(signal_histo[i],signal_labels[i],"f")
 
 
     can = r.TCanvas("can","can",500,500)
@@ -169,8 +182,8 @@ def plot(plot_var = "photonIsoChrgLowSieie_EB_photonLoose" ):
     topPad.cd();
     
     stack.Draw("histo")    
-    #for j in signal_histo :
-    #signal_histo[0].Draw("histo SAME")
+    for i in range(len(signal_histo)): 
+        signal_histo[i].Draw("histo SAME")
     data_histo[0].Draw("SAME,e1p") 
     leg.Draw()
 
@@ -192,6 +205,12 @@ def plot(plot_var = "photonIsoChrgLowSieie_EB_photonLoose" ):
     stack.GetXaxis().SetTitleFont(43);
     stack.GetXaxis().SetTitleSize(24);
     stack.GetXaxis().SetTitleOffset(1.7);
+
+    #Catext = r.TText(.17,.8,cat)
+    #Catext.SetNDC()
+    #Catext.SetTextFont(51)
+    #Catext.SetTextSize(0.08)
+    #Catext.Draw()
 
     CMStext = r.TText(.17,.95,"CMS")
     CMStext.SetNDC()
@@ -233,6 +252,7 @@ def plot(plot_var = "photonIsoChrgLowSieie_EB_photonLoose" ):
     ratio.GetXaxis().SetTitleFont(43);
     ratio.GetXaxis().SetTitleSize(24);
     ratio.GetXaxis().SetTitleOffset(2.8);
+    ratio.GetXaxis().SetNdivisions(505);
     # Draw a horizontal line at 1 in ratio plot
     nbins = ratio.GetNbinsX()
     l = r.TLine(ratio.GetBinLowEdge(1),1.0,ratio.GetBinLowEdge(nbins+1),1.0);
@@ -244,7 +264,8 @@ def plot(plot_var = "photonIsoChrgLowSieie_EB_photonLoose" ):
 
     #can.SaveAs("../plots/"+plot_dir+"/"+plot_var+".png")
     #can.SaveAs("../plots_NewSkim_v1/"+plot_dir+"/"+plot_var+".png")
-    can.SaveAs("AN_v0_Sep08/"+plot_dir+"/"+plot_var+".pdf")
+    can.SaveAs("AN_v0_NLO/"+plot_dir+"/"+plot_var+".pdf")
+    #can.SaveAs("AN_v0_Sep08/"+plot_dir+"/"+plot_var+".pdf")
     #can.SaveAs("Test_Files_Jul29/"+plot_dir+"/"+plot_var+".png")
     # for space between legend and plot 
     topPad.SetLogy()
@@ -254,7 +275,8 @@ def plot(plot_var = "photonIsoChrgLowSieie_EB_photonLoose" ):
         stack.SetMaximum(20.0*data_histo[0].GetMaximum())
     stack.SetMinimum(0.1)
     #can.SaveAs("../plots/"+plot_dir+"/"+plot_var+"_LogY.png")
-    can.SaveAs("AN_v0_Sep08/"+plot_dir+"/"+plot_var+"_LogY.pdf")
+    can.SaveAs("AN_v0_NLO/"+plot_dir+"/"+plot_var+"_LogY.pdf")
+    #can.SaveAs("AN_v0_Sep08/"+plot_dir+"/"+plot_var+"_LogY.pdf")
     #can.SaveAs("Test_Files_Jul29/"+plot_dir+"/"+plot_var+"_LogY.png")
 
     output_file.cd()
