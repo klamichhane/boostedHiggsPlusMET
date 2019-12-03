@@ -1,48 +1,57 @@
 from multiprocessing import Process
 import os
+from sys import argv
+from datetime import datetime
+import time
+
+start = datetime.now()
+print "started 2017 at: {}".format(start)
 
 #os.environ["DYLD_LIBRARY_PATH"] = "/Users/whitbeck/root_build/lib"
+cat = argv[1]
+print "started {0} 2016 at: {1}".format(cat,start)
+
 
 #os.system('make plotObs_baseline')
 backgroundSamples=[#"QCD_200to300",
-                   #"ZJets_100to200",
-                   #"ZJets_200to400",
-                   #"ZJets_400to600",
-                   #"ZJets_600to800",
-                   #"ZJets_800to1200",
-                   #"ZJets_1200to2500",
-                   #"ZJets_2500toInf",
-                   #"WJets_100to200",
-                   #"WJets_200to400",
-                   #"WJets_400to600",
-                   #"WJets_600to800",
-                   #"WJets_800to1200",
-                   #"WJets_1200to2500",
-                   #"WJets_2500toInf",
-                   #"TT_600to800",
-                   #"TT_800to1200",
-                   #"TT_1200to2500",
-                   #"TT_2500toInf",
-                   #"TT_1LFromT", #KL
-                   #"TT_1LFromTbar", #KL
-                   #"TT_2L",   #KL
-                   #"ST_s-channel",
-                   #"ST_t-channel_antitop", # remove for 2018
-                   #"ST_t-channel_top", # remove for 2018
-                   #"ST_tW_antitop",
-                   #"ST_tW_top",
-                   #"Other_WWTo1L1Nu2Q",
-                   #"Other_WZTo1L1Nu2Q", #remove for 2018
-                   #"Other_WZTo1L3Nu",
-                   #"Other_WZZ", #remove for 2018
-                   #"Other_ZZTo2L2Q",
-                   #"Other_ZZZ", #remove for 2018
-                   #"Other_TTTT", #remove for 2018
-                   #"Other_TTWJetsToLNu",
-                   #"Other_TTWJetsToQQ",
-                   #"Other_TTGJets",
-                   #"Other_TTZToLLNuNu",
-                   #"Other_TTZToQQ",
+                   "ZJets_100to200",
+                   "ZJets_200to400",
+                   "ZJets_400to600",
+                   "ZJets_600to800",
+                   "ZJets_800to1200",
+                   "ZJets_1200to2500",
+                   "ZJets_2500toInf",
+                   "WJets_100to200",
+                   "WJets_200to400",
+                   "WJets_400to600",
+                   "WJets_600to800",
+                   "WJets_800to1200",
+                   "WJets_1200to2500",
+                   "WJets_2500toInf",
+                   "TT_600to800",
+                   "TT_800to1200",
+                   "TT_1200to2500",
+                   "TT_2500toInf",
+                   "TT_1LFromT", #KL
+                   "TT_1LFromTbar", #KL
+                   "TT_2L",   #KL
+                   "ST_s-channel",
+                   "ST_t-channel_antitop", # remove for 2018
+                   "ST_t-channel_top", # remove for 2018
+                   "ST_tW_antitop",
+                   "ST_tW_top",
+                   "Other_WWTo1L1Nu2Q",
+                   "Other_WZTo1L1Nu2Q", #remove for 2018
+                   "Other_WZTo1L3Nu",
+                   "Other_WZZ", #remove for 2018
+                   "Other_ZZTo2L2Q",
+                   "Other_ZZZ", #remove for 2018
+                   "Other_TTTT", #remove for 2018
+                   "Other_TTWJetsToLNu",
+                   "Other_TTWJetsToQQ",
+                   "Other_TTGJets",
+                   "Other_TTZToLLNuNu",
+                   "Other_TTZToQQ",
 
                    #"Other_WWTo2L2Nu", #remove for 2017 n 18
                    #"Other_WWZ", #remove for 2017 n 18
@@ -73,11 +82,11 @@ signalSamples=[#"ggFRad_800",
                #"ggFRad_8000",
               ]
 
-dataSamples=[#"MET_2017B",
-             #"MET_2017C",
-             #"MET_2017D",
-             #"MET_2017E",
-             #"MET_2017F",
+dataSamples=["MET_2017B",
+             "MET_2017C",
+             "MET_2017D",
+             "MET_2017E",
+             "MET_2017F",
              ]
 
 def runPlotObsBaseline(sel,bkg,sig,data):
@@ -91,17 +100,18 @@ for sample in backgroundSamples :
     #p = Process(target=runPlotObsBaseline, args=("ZSBHPVBF",sample,"","") )
     #p = Process(target=runPlotObsBaseline, args=("ZSRHPVBF",sample,"","") )
     #p = Process(target=runPlotObsBaseline, args=("ZSRNoVBF",sample,"","") )
-    p = Process(target=runPlotObsBaseline, args=("AlphaSRHPNoVBF",sample,"","") )
+    p = Process(target=runPlotObsBaseline, args=(str(cat),sample,"","") )
+    #p = Process(target=runPlotObsBaseline, args=("AlphaSRHPNoVBF",sample,"","") )
     p.start()
     processes.append(p)
 
 for sample in signalSamples : 
-    p = Process(target=runPlotObsBaseline, args=("ZNoSelection","",sample,"") )
+    #p = Process(target=runPlotObsBaseline, args=("ZNoSelection","",sample,"") )
     #p = Process(target=runPlotObsBaseline, args=("ZSBNoVBF","",sample,"") )
     #p = Process(target=runPlotObsBaseline, args=("ZSBHPNoVBF","",sample, "") )
     #p = Process(target=runPlotObsBaseline, args=("ZSRHPNoVBF","",sample, "") )
     #p = Process(target=runPlotObsBaseline, args=("ZSRVBF","",sample, "") )
-    #p = Process(target=runPlotObsBaseline, args=("AlphaSRHPNoVBF","",sample, "") )
+    p = Process(target=runPlotObsBaseline, args=(str(cat),"",sample, "") )
     p.start()
     processes.append(p)
 
@@ -111,12 +121,29 @@ for sample in dataSamples :
     #p = Process(target=runPlotObsBaseline, args=("ZSBHPVBF","","", sample) )
     #p = Process(target=runPlotObsBaseline, args=("ZSRHPVBF","","",sample) )
     #p = Process(target=runPlotObsBaseline, args=("ZSRNoVBF","","",sample) )
-    p = Process(target=runPlotObsBaseline, args=("AlphaSRHPNoVBF","","",sample) )
+    p = Process(target=runPlotObsBaseline, args=(str(cat),"","",sample) )
+    #p = Process(target=runPlotObsBaseline, args=("AlphaSRHPNoVBF","","",sample) )
     p.start()
     processes.append(p)
 
 for p in processes : 
     p.join()
+
+end = datetime.now()
+
+print "started {0} 2017 at: {1}".format(cat,start)
+print "ended {0} 2017 at: {1}".format(cat,end)
+print "processed {0} 2017 at: {1}".format(cat,end-start)
+
+print""
+time.sleep(20)
+print "hadding "+cat
+os.system("hadd AN_v0_Closure_LooseVbfHP/{0}_AN_v0_2017_v4.root AN_v0_Closure_LooseVbfHP/plotObs_{0}_baseline_*.root".format(cat))
+time.sleep(20)
+print "removing files for "+cat
+os.system("rm AN_v0_Closure_LooseVbfHP/plotObs_{0}_baseline_*.root".format(cat))
+time.sleep(20)
+
 
 #os.system("hadd -f plotObs_photon_baseline.root plotObs_photon_baseline_*.root")
 #os.system("rm plotObs_photon_baseline_*.root")

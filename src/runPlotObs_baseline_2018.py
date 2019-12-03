@@ -1,7 +1,15 @@
 from multiprocessing import Process
 import os
+from sys import argv
+from datetime import datetime
+import time
+
+start = datetime.now()
+print "started 2018 at: {}".format(start)
 
 #os.environ["DYLD_LIBRARY_PATH"] = "/Users/whitbeck/root_build/lib"
+cat = argv[1]
+print "started {0} 2018 at: {1}".format(cat,start)
 
 backgroundSamples=[#"QCD_200to300",
                    "ZJets_100to200",
@@ -83,7 +91,7 @@ for sample in backgroundSamples :
     #p = Process(target=runPlotObsBaseline, args=("ZSRHPVBF",sample,"","") )
     #p = Process(target=runPlotObsBaseline, args=("ZSRVBF",sample,"","") )
     #p = Process(target=runPlotObsBaseline, args=("AlphaSRHPVBF",sample,"","") )
-    p = Process(target=runPlotObsBaseline, args=("AlphaSRHPNoVBF",sample,"","") )
+    p = Process(target=runPlotObsBaseline, args=(str(cat),sample,"","") )
     p.start()
     processes.append(p)
 
@@ -94,7 +102,7 @@ for sample in signalSamples :
     #p = Process(target=runPlotObsBaseline, args=("ZSRHPNoVBF","",sample, "") )
     #p = Process(target=runPlotObsBaseline, args=("ZSRVBF","",sample, "") )
     #p = Process(target=runPlotObsBaseline, args=("AlphaSRHPVBF","",sample, "") )
-    p = Process(target=runPlotObsBaseline, args=("AlphaSRHPNoVBF","",sample, "") )
+    p = Process(target=runPlotObsBaseline, args=(str(cat),"",sample, "") )
     p.start()
     processes.append(p)
 
@@ -105,16 +113,32 @@ for sample in dataSamples :
     #p = Process(target=runPlotObsBaseline, args=("ZSRHPVBF","","", sample) )
     #p = Process(target=runPlotObsBaseline, args=("ZSRVBF","","", sample) )
     #p = Process(target=runPlotObsBaseline, args=("AlphaSRHPVBF","","", sample) )
-    p = Process(target=runPlotObsBaseline, args=("AlphaSRHPNoVBF","","", sample) )
+    p = Process(target=runPlotObsBaseline, args=(str(cat),"","", sample) )
     p.start()
     processes.append(p)
 
 for p in processes : 
     p.join()
 
+end = datetime.now()
+
+print "started {0} 2018 at: {1}".format(cat,start)
+print "ended {0} 2018 at: {1}".format(cat,end)
+print "processed {0} 2018 at: {1}".format(cat,end-start)
+
+print""
+time.sleep(20)
+print "hadding "+cat
+os.system("hadd AN_v0_Closure_LooseVbfHP/{0}_AN_v0_2018_v4.root AN_v0_Closure_LooseVbfHP/plotObs_{0}_baseline_*.root".format(cat))
+time.sleep(20)
+print "removing files for "+cat
+os.system("rm AN_v0_Closure_LooseVbfHP/plotObs_{0}_baseline_*.root".format(cat))
+time.sleep(20)
+
+
 #os.system("hadd -f plotObs_photon_baseline.root plotObs_photon_baseline_*.root")
 #os.system("rm plotObs_photon_baseline_*.root")
-2    
+#2    
     
 
 

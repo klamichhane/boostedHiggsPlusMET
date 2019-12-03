@@ -17,8 +17,11 @@ r.gROOT.ProcessLine("setTDRStyle()")
 #output_file_name= "AN_v0_Sep08/Full_Run2/AlphaSR_HP_VBF_AN_v0_137fb_v2_Output.root"
 
 plot_dir="StackPlots"
+#input_file_name = "AN_v0_Closure_LooseVbfHP/AlphaSB_HP_NoVBF_AN_v0_137fb_v5.root"
+#input_file_name = "AN_v0_Closure_LooseVbfFP/AlphaSR_HP_VBF_AN_v0_137fb_v3.root"
 input_file_name = "AN_v0_Closure_FullPurity/AlphaSR_HP_NoVBF_AN_v0_137fb_v2.root"
-output_file_name= "AN_v0_Closure_FullPurity/AlphaSR_HP_NoVBF_AN_v0_137fb_v2_Output.root"
+output_file_name= "AN_v0_Closure_FullPurity/AlphaSR_HP_NoVBF_AN_v0_137fb_v21_Output.root"
+#output_file_name= "AN_v0_Closure_LooseVbfHP/NoNormToData/AlphaSB_HP_NoVBF_AN_v0_137fb_v31_Output.root"
 
 input_file = r.TFile(input_file_name,"READ")    
 
@@ -155,19 +158,12 @@ def plot(plot_var = "photonIsoChrgLowSieie_EB_photonLoose" ):
             total.Add(h)
 
     for i,h in enumerate(samples_histo) : 
-        #print h.GetTitle(),"before",h.Integral()
-        if h.Integral()>0 and total!=None:
-            #print h.GetTitle(),"before h, total, data: ",h.Integral(0,h.GetNbinsX()+1), total.Integral(0,total.GetNbinsX()+1), data_histo[0].Integral(0,data_histo[0].GetNbinsX()+1)
-            #h.Scale(data_histo[0].Integral(1,(data_histo[0].GetNbinsX()+1))/total.Integral(1,(total.GetNbinsX()+1)))
-            h.Scale(data_histo[0].Integral()/total.Integral())
-            #print h.GetTitle(),"after",h.Integral()
-            #print h.GetTitle(),"after h, total, data: ",h.Integral(0,h.GetNbinsX()+1), total.Integral(0,total.GetNbinsX()+1), data_histo[0].Integral(0,data_histo[0].GetNbinsX()+1)
+        #if h.Integral()>0 and total!=None:
+        #    h.Scale(data_histo[0].Integral()/total.Integral())
         stack.Add(h)
-    if total!=None and total.Integral()>0: 
-    #if total!=None: 
-        total.Scale(data_histo[0].Integral()/total.Integral())
-        #total.Scale(data_histo[0].Integral(1,(data_histo[0].GetNbinsX()+1))/total.Integral(1,(total.GetNbinsX()+1)))
-        #print total.GetTitle()," afterII total, data: ",total.Integral(0,total.GetNbinsX()+1), data_histo[0].Integral(0,data_histo[0].GetNbinsX()+1)
+    #if total!=None and total.Integral()>0: 
+    ##if total!=None: 
+    #    total.Scale(data_histo[0].Integral()/total.Integral())
 
     # For legend
     leg = r.TLegend(0.45,.77,.9,.92) 
@@ -288,6 +284,7 @@ def plot(plot_var = "photonIsoChrgLowSieie_EB_photonLoose" ):
         stack.SetMaximum(200.0*data_histo[0].GetMaximum())
     stack.SetMinimum(0.1)
     #can.SaveAs("AN_v0_Sep08/"+plot_dir+"/"+plot_var+"_LogY.pdf")
+    #can.SaveAs("AN_v0_Closure_LooseVbfHP/"+plot_dir+"/"+plot_var+"_LogY.pdf")
     can.SaveAs("AN_v0_Closure_FullPurity/"+plot_dir+"/"+plot_var+"_LogY.pdf")
 
     output_file.cd()

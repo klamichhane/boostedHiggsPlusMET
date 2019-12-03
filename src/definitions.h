@@ -1746,8 +1746,8 @@ template<typename ntupleType> double fillVBF_j2Pt(ntupleType* ntuple){
 
 template<typename ntupleType> bool VBFCuts(ntupleType* ntuple){
     vector<TLorentzVector> vbf_jets = cleanedVBFjets(ntuple,0);
-    return ( fillVBF_dEta(ntuple)>4.0 &&
-             fillVBF_Mjj(ntuple)>500.0 &&
+    return ( fillVBF_dEta(ntuple)>3.0 &&
+             fillVBF_Mjj(ntuple)>300.0 &&
              fillVBF_j1j2Eta(ntuple)<0 &&
              vbf_jets[0].Pt()>30.0 && vbf_jets[1].Pt()>30.0);
 }             
@@ -1821,15 +1821,15 @@ template<typename ntupleType> bool baselineCutNoVBF(ntupleType* ntuple){
             &&  DeltaPhiCuts(ntuple) 
 	        ////&&  ntuple->Photons->size()==0 
             &&  PhotonCut(ntuple) // photon veto
-            //&&  ntuple->NMuons==0 
-            //&&  ntuple->NElectrons==0 
-            &&  ntuple->Muons->size()==0 
-            &&  ntuple->Electrons->size()==0 
+            &&  ntuple->NMuons==0 
+            &&  ntuple->NElectrons==0 
+            //&&  ntuple->Muons->size()==0 
+            //&&  ntuple->Electrons->size()==0 
             &&  ntuple->BTagsDeepCSV==0 
             &&  ntuple->isoElectronTracks==0 && ntuple->isoMuonTracks==0 && ntuple->isoPionTracks==0 
             &&  HTRatioCut(ntuple)
 	        &&  FiltersCut(ntuple)
-            &&  getNumGenLep(ntuple)==0
+            //&&  getNumGenLep(ntuple)==0
             //&&  ZMTCut(ntuple)
             //&&  VBFdEtaDebugCuts(ntuple)
             //&&  EcalNEMFCut(ntuple)
@@ -1915,15 +1915,15 @@ template<typename ntupleType> bool ZSidebandHPCut(ntupleType* ntuple){
 template<typename ntupleType> bool ZAlphaSBHPCutnoVBF(ntupleType* ntuple){
   return ( baselineCutNoVBF(ntuple) &&
           AlphaSideBandCut(ntuple) &&
-          //HighPurityCut(ntuple));            
-          FullPurityCut(ntuple));            
+          HighPurityCut(ntuple));            
+          //FullPurityCut(ntuple));            
 }
 
 template<typename ntupleType> bool ZAlphaSBHPCutVBF(ntupleType* ntuple){
   return ( baselineCutNoVBF(ntuple) &&
           AlphaSideBandCut(ntuple) &&
-          //HighPurityCut(ntuple) &&
-          FullPurityCut(ntuple) &&
+          HighPurityCut(ntuple) &&
+          //FullPurityCut(ntuple) &&
           VBFCuts(ntuple)  
          );            
 }
@@ -1932,15 +1932,15 @@ template<typename ntupleType> bool ZAlphaSBHPCutVBF(ntupleType* ntuple){
 template<typename ntupleType> bool ZAlphaSRHPCutnoVBF(ntupleType* ntuple){
   return ( baselineCutNoVBF(ntuple) &&
           AlphaSRCut(ntuple) && 
-          //HighPurityCut(ntuple));            
-          FullPurityCut(ntuple));            
+          HighPurityCut(ntuple));            
+          //FullPurityCut(ntuple));            
 }
 
 template<typename ntupleType> bool ZAlphaSRHPCutVBF(ntupleType* ntuple){
   return ( baselineCutNoVBF(ntuple) &&
           AlphaSRCut(ntuple) &&
-          //HighPurityCut(ntuple) &&
-          FullPurityCut(ntuple) &&
+          HighPurityCut(ntuple) &&
+          //FullPurityCut(ntuple) &&
           VBFCuts(ntuple)  
          );            
 }

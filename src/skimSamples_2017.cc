@@ -221,12 +221,11 @@ public :
 	for( auto name : signals ){
 
 	  if( fileNames.find(name) != fileNames.end() ){
-	    TChain* temp = new TChain("TreeMaker2/PreSelection");
-        //VBFG1000 = new TChain("TreeMaker2/PreSelection");
-	    temp->Add(BASE_DIR_SIG_Unskim+"/"+fileNames[name]);	  
+	    //TChain* temp = new TChain("TreeMaker2/PreSelection");
+	    //temp->Add(BASE_DIR_SIG_Unskim+"/"+fileNames[name]);	  
         //use below for skim sample
-	    //TChain* temp = new TChain("tree");
-	    //temp->Add(BASE_DIR_SIG+"/"+fileNames[name]);	  
+	    TChain* temp = new TChain("tree");
+	    temp->Add(BASE_DIR_SIG+"/"+fileNames[name]);	  
 	    signalNtuples.push_back(new RA2bTree(temp));
 	    signalSampleName.push_back(name);
 	  }
