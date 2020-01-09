@@ -4,8 +4,12 @@ from sys import argv
 from datetime import datetime
 import time
 
-year = "2016"
-que = ["AlphaSBHPNoVBF","AlphaSRHPNoVBF","AlphaSBHPVBF","AlphaSRHPVBF"]
+#year = "2017"
+year = sys.argv[1]
+#que = ["AlphaSBHPNoVBF","AlphaSRHPNoVBF","AlphaSBHPVBF","AlphaSRHPVBF"]
+#que = ["AlphaSBHPVBFfail","AlphaSRHPVBFfail"]
+que = ["AlphaSBHPVBF","AlphaSRHPVBF","AlphaSBHPVBFfail","AlphaSRHPVBFfail"]
+#que = ["AlphaSBFPVBFfail","AlphaSRFPVBFfail","AlphaSBHPVBFfail","AlphaSRHPVBFfail"]
 
 for i in range(len(que)):
     start = datetime.now()

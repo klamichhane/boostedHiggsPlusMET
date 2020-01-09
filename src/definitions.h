@@ -1746,11 +1746,28 @@ template<typename ntupleType> double fillVBF_j2Pt(ntupleType* ntuple){
 
 template<typename ntupleType> bool VBFCuts(ntupleType* ntuple){
     vector<TLorentzVector> vbf_jets = cleanedVBFjets(ntuple,0);
+    return ( fillVBF_dEta(ntuple)>4.0 &&
+             fillVBF_Mjj(ntuple)>500.0 &&
+             fillVBF_j1j2Eta(ntuple)<0 &&
+             vbf_jets[0].Pt()>30.0 && vbf_jets[1].Pt()>30.0);
+}             
+
+template<typename ntupleType> bool LooseVBFCuts(ntupleType* ntuple){
+    vector<TLorentzVector> vbf_jets = cleanedVBFjets(ntuple,0);
     return ( fillVBF_dEta(ntuple)>3.0 &&
              fillVBF_Mjj(ntuple)>300.0 &&
              fillVBF_j1j2Eta(ntuple)<0 &&
              vbf_jets[0].Pt()>30.0 && vbf_jets[1].Pt()>30.0);
 }             
+
+template<typename ntupleType> bool VBFFailCut(ntupleType* ntuple){
+    return !VBFCuts(ntuple);
+}
+
+template<typename ntupleType> bool LooseVBFFailCut(ntupleType* ntuple){
+    return !LooseVBFCuts(ntuple);
+}
+
 
 template<typename ntupleType> bool VBFdEtaDebugCuts(ntupleType* ntuple){
     vector<TLorentzVector> vbf_jets = cleanedVBFjets(ntuple,0);
@@ -1912,39 +1929,143 @@ template<typename ntupleType> bool ZSidebandHPCut(ntupleType* ntuple){
            VBFCuts(ntuple));
 }
 // For Alpha Closure test
-template<typename ntupleType> bool ZAlphaSBHPCutnoVBF(ntupleType* ntuple){
+template<typename ntupleType> bool ZAlphaSBHPnoVBF(ntupleType* ntuple){
   return ( baselineCutNoVBF(ntuple) &&
           AlphaSideBandCut(ntuple) &&
           HighPurityCut(ntuple));            
-          //FullPurityCut(ntuple));            
 }
 
-template<typename ntupleType> bool ZAlphaSBHPCutVBF(ntupleType* ntuple){
+template<typename ntupleType> bool ZAlphaSBHPVBF(ntupleType* ntuple){
   return ( baselineCutNoVBF(ntuple) &&
           AlphaSideBandCut(ntuple) &&
           HighPurityCut(ntuple) &&
-          //FullPurityCut(ntuple) &&
           VBFCuts(ntuple)  
          );            
 }
 
+template<typename ntupleType> bool ZAlphaSBHPVBFfail(ntupleType* ntuple){
+  return ( baselineCutNoVBF(ntuple) &&
+          AlphaSideBandCut(ntuple) &&
+          VBFFailCut(ntuple) &&  
+          HighPurityCut(ntuple));            
+}
+
+template<typename ntupleType> bool ZAlphaSBFPVBF(ntupleType* ntuple){
+  return ( baselineCutNoVBF(ntuple) &&
+          AlphaSideBandCut(ntuple) &&
+          FullPurityCut(ntuple) &&
+          VBFCuts(ntuple)  
+         );            
+}
+
+template<typename ntupleType> bool ZAlphaSBFPVBFfail(ntupleType* ntuple){
+  return ( baselineCutNoVBF(ntuple) &&
+          AlphaSideBandCut(ntuple) &&
+          VBFFailCut(ntuple) &&  
+          FullPurityCut(ntuple));            
+}
+
+template<typename ntupleType> bool ZAlphaSBHPLooseVBF(ntupleType* ntuple){
+  return ( baselineCutNoVBF(ntuple) &&
+          AlphaSideBandCut(ntuple) &&
+          HighPurityCut(ntuple) &&
+          LooseVBFCuts(ntuple)  
+         );            
+}
+
+template<typename ntupleType> bool ZAlphaSBHPLooseVBFfail(ntupleType* ntuple){
+  return ( baselineCutNoVBF(ntuple) &&
+          AlphaSideBandCut(ntuple) &&
+          LooseVBFFailCut(ntuple) &&  
+          HighPurityCut(ntuple));            
+}
+
+template<typename ntupleType> bool ZAlphaSBFPLooseVBF(ntupleType* ntuple){
+  return ( baselineCutNoVBF(ntuple) &&
+          AlphaSideBandCut(ntuple) &&
+          FullPurityCut(ntuple) &&
+          LooseVBFCuts(ntuple)  
+         );            
+}
+
+template<typename ntupleType> bool ZAlphaSBFPLooseVBFfail(ntupleType* ntuple){
+  return ( baselineCutNoVBF(ntuple) &&
+          AlphaSideBandCut(ntuple) &&
+          LooseVBFFailCut(ntuple) &&  
+          FullPurityCut(ntuple));            
+}
+
+
 //  at Alpha SR
-template<typename ntupleType> bool ZAlphaSRHPCutnoVBF(ntupleType* ntuple){
+template<typename ntupleType> bool ZAlphaSRHPnoVBF(ntupleType* ntuple){
   return ( baselineCutNoVBF(ntuple) &&
           AlphaSRCut(ntuple) && 
           HighPurityCut(ntuple));            
-          //FullPurityCut(ntuple));            
 }
 
-template<typename ntupleType> bool ZAlphaSRHPCutVBF(ntupleType* ntuple){
+template<typename ntupleType> bool ZAlphaSRHPVBF(ntupleType* ntuple){
   return ( baselineCutNoVBF(ntuple) &&
           AlphaSRCut(ntuple) &&
           HighPurityCut(ntuple) &&
-          //FullPurityCut(ntuple) &&
           VBFCuts(ntuple)  
          );            
 }
 
+template<typename ntupleType> bool ZAlphaSRHPVBFfail(ntupleType* ntuple){
+  return ( baselineCutNoVBF(ntuple) &&
+          AlphaSRCut(ntuple) && 
+          VBFFailCut(ntuple) &&  
+          HighPurityCut(ntuple)
+          );            
+}
+
+template<typename ntupleType> bool ZAlphaSRFPVBF(ntupleType* ntuple){
+  return ( baselineCutNoVBF(ntuple) &&
+          AlphaSRCut(ntuple) &&
+          FullPurityCut(ntuple) &&
+          VBFCuts(ntuple)  
+         );            
+}
+
+template<typename ntupleType> bool ZAlphaSRFPVBFfail(ntupleType* ntuple){
+  return ( baselineCutNoVBF(ntuple) &&
+          AlphaSRCut(ntuple) && 
+          VBFFailCut(ntuple) &&  
+          FullPurityCut(ntuple)
+          );            
+}
+
+template<typename ntupleType> bool ZAlphaSRHPLooseVBF(ntupleType* ntuple){
+  return ( baselineCutNoVBF(ntuple) &&
+          AlphaSRCut(ntuple) &&
+          HighPurityCut(ntuple) &&
+          LooseVBFCuts(ntuple)  
+         );            
+}
+
+template<typename ntupleType> bool ZAlphaSRHPLooseVBFfail(ntupleType* ntuple){
+  return ( baselineCutNoVBF(ntuple) &&
+          AlphaSRCut(ntuple) && 
+          LooseVBFFailCut(ntuple) &&  
+          HighPurityCut(ntuple)
+          );            
+}
+
+template<typename ntupleType> bool ZAlphaSRFPLooseVBF(ntupleType* ntuple){
+  return ( baselineCutNoVBF(ntuple) &&
+          AlphaSRCut(ntuple) &&
+          FullPurityCut(ntuple) &&
+          LooseVBFCuts(ntuple)  
+         );            
+}
+
+template<typename ntupleType> bool ZAlphaSRFPLooseVBFfail(ntupleType* ntuple){
+  return ( baselineCutNoVBF(ntuple) &&
+          AlphaSRCut(ntuple) && 
+          LooseVBFFailCut(ntuple) &&  
+          FullPurityCut(ntuple)
+          );            
+}
 
 // end of Alhpha Closure part
 

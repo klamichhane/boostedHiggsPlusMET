@@ -11,15 +11,16 @@
 #include <time.h>       /* clock_t, clock, CLOCKS_PER_SEC */
 #include <cassert>
 #include "plotterUtils.cc"
-#include "skimSamples_2016.cc"
-//#include "skimSamples_2017.cc"
+//#include "skimSamples_2016.cc"
+#include "skimSamples_2017.cc"
 //#include "skimSamples_2018.cc"
 #include "definitions.h"
 #include "RA2bTree.cc"
 #include "TriggerEfficiencySextet.cc"
 
-string year = "2016"; //change the sample files above also 
+string year = "2017"; //change the sample files above also 
 double lum = 0.0;
+double p0, p1, p2;
 
 using namespace std;
 
@@ -29,9 +30,9 @@ void process(string selection_label,
 	     string signalSample,
 	     string dataSample){
     
-    if(year=="2016") {lum=35815.165;} 
-    if(year=="2017") {lum=41486.136;}
-    if(year=="2018") {lum=59546.381;}
+    if(year=="2016") {lum=35815.165; p0=1.21277e+02; p1=8.77679e+01;p2=9.94172e-01;} 
+    if(year=="2017") {lum=41486.136; p0=1.61724e+02; p1=6.91644e+01; p2=9.89446e-01;}
+    if(year=="2018") {lum=59546.381; p0=1.70454e+02; p1=6.64100e+01; p2=9.89298e-01;}
 cout<<"year: "<<year<<" lumi: "<<lum<<endl;
 
   // set up selectors
@@ -44,19 +45,10 @@ cout<<"year: "<<year<<" lumi: "<<lum<<endl;
         selectionFunc = ZSignalRegionCutNoVBF;
     }else if( selection_label == "ZSRVBF"){
         selectionFunc = ZSignalRegionCut;
-    //}else if( selection_label == "ZSRHPNoVBF_SigBkg"){
     }else if( selection_label == "ZSRHPNoVBF"){
         selectionFunc = ZSignalRegionHPCutNoVBF;
     }else if( selection_label == "ZSRHPVBF"){
         selectionFunc = ZSignalRegionHPCut;
-    }else if( selection_label == "ZSRHPVBF-TightMjjdEta"){
-        selectionFunc = ZSignalRegionHPCut;
-    }else if( selection_label == "ZSRHPVBFEta"){
-        selectionFunc = ZHPEtaCut;
-    }else if( selection_label == "ZSRLPNoVBF"){
-        selectionFunc = ZSignalRegionLPCutNoVBF;
-    }else if( selection_label == "ZSRLPVBF"){
-        selectionFunc = ZSignalRegionLPCut;
     }else if( selection_label == "ZSBNoVBF" ){
         selectionFunc = ZSidebandnoVBFCut;
     }else if( selection_label == "ZSBVBF" ){
@@ -66,17 +58,42 @@ cout<<"year: "<<year<<" lumi: "<<lum<<endl;
     }else if( selection_label == "ZSBHPVBF" ){
         selectionFunc = ZSidebandHPCut;
     }else if( selection_label == "AlphaSBHPNoVBF" ){
-        selectionFunc = ZAlphaSBHPCutnoVBF;
+        selectionFunc = ZAlphaSBHPnoVBF;
     }else if( selection_label == "AlphaSBHPVBF" ){
-        selectionFunc = ZAlphaSBHPCutVBF;
+        selectionFunc = ZAlphaSBHPVBF;
+    }else if( selection_label == "AlphaSBHPVBFfail" ){
+        selectionFunc = ZAlphaSBHPVBFfail;
+    }else if( selection_label == "AlphaSBFPVBF" ){
+        selectionFunc = ZAlphaSBFPVBF;
+    }else if( selection_label == "AlphaSBFPVBFfail" ){
+        selectionFunc = ZAlphaSBFPVBFfail;
+    }else if( selection_label == "AlphaSBHPLooseVBF" ){
+        selectionFunc = ZAlphaSBHPLooseVBF;
+    }else if( selection_label == "AlphaSBHPLooseVBFfail" ){
+        selectionFunc = ZAlphaSBHPLooseVBFfail;
+    }else if( selection_label == "AlphaSBFPLooseVBF" ){
+        selectionFunc = ZAlphaSBFPLooseVBF;
+    }else if( selection_label == "AlphaSBFPLooseVBFfail" ){
+        selectionFunc = ZAlphaSBFPLooseVBFfail;
+
     }else if( selection_label == "AlphaSRHPNoVBF" ){
-        selectionFunc = ZAlphaSRHPCutnoVBF;
+        selectionFunc = ZAlphaSRHPnoVBF;
     }else if( selection_label == "AlphaSRHPVBF" ){
-        selectionFunc = ZAlphaSRHPCutVBF;
-    }else if( selection_label == "ZSBLPNoVBF"){
-        selectionFunc = ZSidebandLPCutnoVBF;
-    }else if( selection_label == "ZSBLPVBF"){
-        selectionFunc = ZSidebandLPCut;
+        selectionFunc = ZAlphaSRHPVBF;
+    }else if( selection_label == "AlphaSRHPVBFfail" ){
+        selectionFunc = ZAlphaSRHPVBFfail;
+    }else if( selection_label == "AlphaSRFPVBF" ){
+        selectionFunc = ZAlphaSRFPVBF;
+    }else if( selection_label == "AlphaSRFPVBFfail" ){
+        selectionFunc = ZAlphaSRFPVBFfail;
+    }else if( selection_label == "AlphaSRHPLooseVBF" ){
+        selectionFunc = ZAlphaSRHPLooseVBF;
+    }else if( selection_label == "AlphaSRHPLooseVBFfail" ){
+        selectionFunc = ZAlphaSRHPLooseVBFfail;
+    }else if( selection_label == "AlphaSRFPLooseVBF" ){
+        selectionFunc = ZAlphaSRFPLooseVBF;
+    }else if( selection_label == "AlphaSRFPLooseVBFfail" ){
+        selectionFunc = ZAlphaSRFPLooseVBFfail;
     }else{
         assert(0);
     }
@@ -196,7 +213,7 @@ cout<<"year: "<<year<<" lumi: "<<lum<<endl;
     RA2bTree* ntuple = skims.ntuples[iSample];
      isMC_ = true;
     //TFile* outputFile = new TFile("AN_v0_Sep08/plotObs_"+selection_label+"_baseline_"+skims.sampleName[iSample]+".root","RECREATE");
-    TFile* outputFile = new TFile("AN_v0_Closure_LooseVbfHP/plotObs_"+selection_label+"_baseline_"+skims.sampleName[iSample]+".root","RECREATE");
+    TFile* outputFile = new TFile("AN_v0_Closure_VBF_trigwt/plotObs_"+selection_label+"_baseline_"+skims.sampleName[iSample]+".root","RECREATE");
     
     for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
       plots[iPlot].addNtuple(ntuple,skims.sampleName[iSample]);
@@ -205,7 +222,8 @@ cout<<"year: "<<year<<" lumi: "<<lum<<endl;
     ntupleBranchStatus<RA2bTree>(ntuple);
     TString filename;
     double weight = 0.;
-    
+    double trigwt = 0.;    
+
     for( int iEvt = 0 ; iEvt < min(MAX_EVENTS,numEvents) ; iEvt++ ){
     //for( int iEvt = 0 ; iEvt < min(0,numEvents) ; iEvt++ ){
         ntuple->GetEntry(iEvt);
@@ -221,13 +239,15 @@ cout<<"year: "<<year<<" lumi: "<<lum<<endl;
             if(! passHEMjetVeto(ntuple, 30) ) continue;
         }
         
+        trigwt = (TMath::Erf((ntuple->MET - p0) / p1) + 1) / 2. * p2;
+
         // Prefiring wt for 2016 & 2017 only
         if (filename.Contains("MC2016") || filename.Contains("MC2017")){
-            weight = ntuple->Weight*lum*ntuple->NonPrefiringProb;   //weight = ntuple->Weight*lumii*customPUweights(ntuple);
+            weight = ntuple->Weight*lum*ntuple->NonPrefiringProb*trigwt;   //weight = ntuple->Weight*lumii*customPUweights(ntuple);
             //weight = ntuple->Weight*lumi*ntuple->NonPrefiringProb;   //weight = ntuple->Weight*lumii*customPUweights(ntuple);
         }
         //else weight = ntuple->Weight*lumi;
-        else weight = ntuple->Weight*lum;
+        else weight = ntuple->Weight*lum*trigwt;
       // ------------ end weights -------------
 
       //cout << "event passed all selections" << endl;
@@ -247,7 +267,7 @@ cout<<"year: "<<year<<" lumi: "<<lum<<endl;
   for( int iSample = 0 ; iSample < skims.signalNtuples.size() ; iSample++){
     RA2bTree* ntuple = skims.signalNtuples[iSample];
     isMC_ = true;
-    TFile* outputFile = new TFile("AN_v0_Closure_LooseVbfHP/plotObs_"+selection_label+"_baseline_"+skims.signalSampleName[iSample]+".root","RECREATE");
+    TFile* outputFile = new TFile("AN_v0_Closure_VBF_trigwt/plotObs_"+selection_label+"_baseline_"+skims.signalSampleName[iSample]+".root","RECREATE");
 
     sigSamples.push_back(ntuple);
     for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
@@ -382,7 +402,7 @@ cout<<"year: "<<year<<" lumi: "<<lum<<endl;
   // Data samples
   for( int iSample = 0 ; iSample < skims.dataNtuple.size() ; iSample++){
     RA2bTree* ntuple = skims.dataNtuple[iSample];
-    TFile* outputFile = new TFile("AN_v0_Closure_LooseVbfHP/plotObs_"+selection_label+"_baseline_"+skims.dataSampleName[iSample]+".root","RECREATE");
+    TFile* outputFile = new TFile("AN_v0_Closure_VBF_trigwt/plotObs_"+selection_label+"_baseline_"+skims.dataSampleName[iSample]+".root","RECREATE");
 	TString filename;  
     for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
         plots[iPlot].addDataNtuple(ntuple,skims.dataSampleName[iSample]);

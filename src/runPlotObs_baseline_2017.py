@@ -138,10 +138,10 @@ print "processed {0} 2017 at: {1}".format(cat,end-start)
 print""
 time.sleep(20)
 print "hadding "+cat
-os.system("hadd AN_v0_Closure_LooseVbfHP/{0}_AN_v0_2017_v4.root AN_v0_Closure_LooseVbfHP/plotObs_{0}_baseline_*.root".format(cat))
+os.system("hadd AN_v0_Closure_VBF_trigwt/{0}_AN_v0_2017_v1.root AN_v0_Closure_VBF_trigwt/plotObs_{0}_baseline_*.root".format(cat))
 time.sleep(20)
 print "removing files for "+cat
-os.system("rm AN_v0_Closure_LooseVbfHP/plotObs_{0}_baseline_*.root".format(cat))
+os.system("rm AN_v0_Closure_VBF_trigwt/plotObs_{0}_baseline_*.root".format(cat))
 time.sleep(20)
 
 
