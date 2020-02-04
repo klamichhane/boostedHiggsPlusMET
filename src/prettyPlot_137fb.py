@@ -18,8 +18,8 @@ r.gROOT.ProcessLine("setTDRStyle()")
 
 plot_dir="StackPlots"
 #input_file_name = "AN_v0_Closure_LooseVbfHP/AlphaSB_HP_NoVBF_AN_v0_137fb_v5.root"
-input_file_name = "AN_v0_Closure_FailVBF/HP_VBFfail/AlphaSBHPVBFfail_AN_v0_137fb_v1.root"
-output_file_name= "AN_v0_Closure_FailVBF/HP_VBFfail/AlphaSB_HP_VBFfail_AN_v0_137fb_v1_Output.root"
+input_file_name = "AN_v0_Closure_VBF_trigwt/HP_VBF/AlphaSBHPVBF_AN_v0_137fb_v1.root"
+output_file_name= "AN_v0_Closure_VBF_trigwt/HP_VBF/AlphaSB_HP_VBF_AN_v0_137fb_v1_Output.root"
 
 input_file = r.TFile(input_file_name,"READ")    
 

@@ -12,13 +12,13 @@
 #include <cassert>
 #include "plotterUtils.cc"
 //#include "skimSamples_2016.cc"
-#include "skimSamples_2017.cc"
-//#include "skimSamples_2018.cc"
+//#include "skimSamples_2017.cc"
+#include "skimSamples_2018.cc"
 #include "definitions.h"
 #include "RA2bTree.cc"
 #include "TriggerEfficiencySextet.cc"
 
-string year = "2017"; //change the sample files above also 
+string year = "2018"; //change the sample files above also 
 double lum = 0.0;
 double p0, p1, p2;
 
