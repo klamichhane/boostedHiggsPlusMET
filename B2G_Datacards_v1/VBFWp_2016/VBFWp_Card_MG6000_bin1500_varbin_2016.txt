@@ -1,0 +1,21 @@
+imax 2  number of channels
+jmax 2  number of backgrounds
+kmax *  number of nuisance parameters (sources of systematic uncertainties)
+bin signalRegion_1500 controlRegion_1500
+observation 0.200669288635 1.0
+bin       signalRegion_1500 signalRegion_1500 signalRegion_1500 controlRegion_1500 controlRegion_1500 controlRegion_1500
+process      sig                bkg             rare            sig                 bkg             rare
+process       0                  1                2              0                   1                2
+rate       0.00635369075537   0.189628213644   0.0766828507185   0.00212548057628    1.48968207836   0.0259868297726
+#--------------------------
+flat_1500 lnU - 100 - - 100 -
+bkgPdfUnc lnN - 1.02699995041 - - 1.02699995041 -
+bkgScaleUnc lnN - 0.980000019073 - - 0.980000019073 -
+rareUnc_1500 lnN - - 1.2 - - 1.2
+sigUnc_1500 lnN 1.2 - - 1.2 - -
+SigSR_stat_VBF_1500 lnN 1.33335042835 - - - - -
+BkgSR_stat_VBF_1500 lnN - 1.35487793301 - - - -
+RareSR_stat_VBF_1500 lnN - - 1.73501059784 - - -
+SigSB_stat_VBF_1500 lnN - - - 1.57735025522 - -
+BkgSB_stat_VBF_1500 lnN - - - - 1.12469885179 -
+RareSB_stat_VBF_1500 lnN - - - - - 1.76663214307
