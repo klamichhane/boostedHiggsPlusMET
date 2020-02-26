@@ -1,5 +1,15 @@
 from multiprocessing import Process
 import os
+from sys import argv
+from datetime import datetime
+import time
+
+start = datetime.now()
+
+cat = argv[1]
+year = argv[2]
+print "started {0} {2} at: {1}".format(cat,start,year)
+
 
 #os.environ["DYLD_LIBRARY_PATH"] = "/Users/whitbeck/root_build/lib"
 
@@ -79,33 +89,21 @@ def runPlotObsBaseline(sel,bkg,sig,data):
 
 processes=[]
 for sample in backgroundSamples : 
-    p = Process(target=runPlotObsBaseline, args=("ZSBNoVBF",sample,"","") )
-    #p = Process(target=runPlotObsBaseline, args=("ZNoSelection",sample,"","") )
+    p = Process(target=runPlotObsBaseline, args=(str(cat),sample,"","") )
     #p = Process(target=runPlotObsBaseline, args=("ZSBHPVBF",sample,"","") )
-    #p = Process(target=runPlotObsBaseline, args=("ZSRHPNoVBF",sample,"","") )
-    #p = Process(target=runPlotObsBaseline, args=("ZSRVBF",sample,"","") )
-    #p = Process(target=runPlotObsBaseline, args=("ZSRHPVBF",sample,"","") )
     #p = Process(target=runPlotObsBaseline, args=("AlphaSRHPVBF",sample,"","") )
     p.start()
     processes.append(p)
 
 for sample in signalSamples : 
-    #p = Process(target=runPlotObsBaseline, args=("ZNoSelection","",sample,"") )
-    p = Process(target=runPlotObsBaseline, args=("ZSBNoVBF","",sample,"") )
+    p = Process(target=runPlotObsBaseline, args=(str(cat),"",sample,"") )
     #p = Process(target=runPlotObsBaseline, args=("ZSBHPVBF","",sample, "") )
-    #p = Process(target=runPlotObsBaseline, args=("ZSRHPNoVBF","",sample, "") )
-    #p = Process(target=runPlotObsBaseline, args=("ZSRVBF","",sample, "") )
-    #p = Process(target=runPlotObsBaseline, args=("ZSRHPVBF","",sample, "") )
     #p = Process(target=runPlotObsBaseline, args=("AlphaSRHPVBF","",sample, "") )
     p.start()
     processes.append(p)
 
 for sample in dataSamples : 
-    #p = Process(target=runPlotObsBaseline, args=("ZNoSelection","","",sample) )
-    p = Process(target=runPlotObsBaseline, args=("ZSBNoVBF","","",sample) )
-    #p = Process(target=runPlotObsBaseline, args=("ZSBHPVBF","","", sample) )
-    #p = Process(target=runPlotObsBaseline, args=("ZSRHPVBF","","",sample) )
-    #p = Process(target=runPlotObsBaseline, args=("ZSRVBF","","",sample) )
+    p = Process(target=runPlotObsBaseline, args=(str(cat),"","",sample) )
     #p = Process(target=runPlotObsBaseline, args=("ZSRHPVBF","","",sample) )
     #p = Process(target=runPlotObsBaseline, args=("AlphaSRHPVBF","","",sample) )
     p.start()
@@ -114,10 +112,22 @@ for sample in dataSamples :
 for p in processes : 
     p.join()
 
+end = datetime.now()
 
-#print "If running 2016 & 2018: set tau21 HP value to: 0.35"
-#os.system("hadd -f plotObs_photon_baseline.root plotObs_photon_baseline_*.root")
-#os.system("rm plotObs_photon_baseline_*.root")
+print "started {0} {2} at: {1}".format(cat,start,year)
+print "ended {0} {2} at: {1}".format(cat,end,year)
+print "processed {0} {2} at: {1}".format(cat,end-start,year)
+
+print""
+#time.sleep(20)
+print "hadding "+cat
+os.system("hadd -f AN_v1_files/{1}/{0}_AN_v1_{1}.root AN_v1_files/{1}/plotObs_{0}_*.root".format(cat,year))
+#time.sleep(20)
+print "removing files for "+cat
+os.system("rm AN_v1_files/{1}/plotObs_{0}_*.root".format(cat,year))
+#time.sleep(20)
+
+
 2    
     
 

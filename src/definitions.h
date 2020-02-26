@@ -957,7 +957,7 @@ template<typename ntupleType> double fillDeltaPhi3(ntupleType* ntuple){
 
 template<typename ntupleType> double fillDeltaPhi4(ntupleType* ntuple){
   //return ntuple->DeltaPhi4;
-  if( ntuple->Jets->size()<4 || ntuple->Jets->at(3).Pt()<30) return 999.;  
+  if( ntuple->Jets->size() < 4 || ntuple->Jets->at(3).Pt()<30) return 999.;  
   double phi1 = ntuple->Jets->at(3).Phi();  
   double phi2 = ntuple->METPhi;  
   double Dphi4 = CalcdPhi(phi1, phi2);  
@@ -1726,13 +1726,29 @@ template<typename ntupleType> double fillVBF_j2Pt(ntupleType* ntuple){
         return -999.;
 }
 
-template<typename ntupleType> bool VBFCuts(ntupleType* ntuple){
+template<typename ntupleType> bool VBFCut(ntupleType* ntuple){
     vector<TLorentzVector> vbf_jets = cleanedVBFjets(ntuple,0);
     return ( fillVBF_dEta(ntuple)>4.0 &&
              fillVBF_Mjj(ntuple)>500.0 &&
              fillVBF_j1j2Eta(ntuple)<0 &&
              vbf_jets[0].Pt()>30.0 && vbf_jets[1].Pt()>30.0);
 }             
+
+template<typename ntupleType> bool LooseVBFCut(ntupleType* ntuple){
+    vector<TLorentzVector> vbf_jets = cleanedVBFjets(ntuple,0);
+    return ( fillVBF_dEta(ntuple)>3.0 &&
+             fillVBF_Mjj(ntuple)>300.0 &&
+             fillVBF_j1j2Eta(ntuple)<0 &&
+             vbf_jets[0].Pt()>30.0 && vbf_jets[1].Pt()>30.0);
+}
+
+template<typename ntupleType> bool VBFFailCut(ntupleType* ntuple){
+    return !VBFCut(ntuple);
+}
+
+template<typename ntupleType> bool LooseVBFFailCut(ntupleType* ntuple){
+    return !LooseVBFCut(ntuple);
+}
 
 template<typename ntupleType> bool VBFdEtaDebugCuts(ntupleType* ntuple){
     vector<TLorentzVector> vbf_jets = cleanedVBFjets(ntuple,0);
@@ -1773,6 +1789,14 @@ template<typename ntupleType> bool LowTau21DebugCut(ntupleType* ntuple){
          );
 }
 
+
+template<typename ntupleType> bool FullPurityCut(ntupleType* ntuple){
+    if(ntuple->JetsAK8->size()==0) return false;
+  return (
+         (ntuple->JetsAK8_NsubjettinessTau2->at(0)/ntuple->JetsAK8_NsubjettinessTau1->at(0))<0.75
+         );
+}
+
 template<typename ntupleType> bool HighPurityCut(ntupleType* ntuple){
     if(ntuple->JetsAK8->size()==0) return false;
   return (
@@ -1790,15 +1814,13 @@ template<typename ntupleType> bool LowPurityCut(ntupleType* ntuple){
 
 
 // 1) Baseline selection without VBF cut
-template<typename ntupleType> bool baselineCutNoVBF(ntupleType* ntuple){
+template<typename ntupleType> bool baselineCut(ntupleType* ntuple){
   return (  METCut(ntuple) 
 	        && AK8JetPtCut(ntuple) 
             &&  DeltaPhiCuts(ntuple) 
-	        ////&&  ntuple->Photons->size()==0 
             &&  PhotonCut(ntuple) // photon veto
             &&  ntuple->NMuons==0 
             &&  ntuple->NElectrons==0 
-            ////&&  ntuple->BTags == 0  
             &&  ntuple->BTagsDeepCSV==0 
             &&  ntuple->isoElectronTracks==0 && ntuple->isoMuonTracks==0 && ntuple->isoPionTracks==0 
             &&  HTRatioCut(ntuple)
@@ -1806,129 +1828,236 @@ template<typename ntupleType> bool baselineCutNoVBF(ntupleType* ntuple){
             //&&  ZMTCut(ntuple)
             //&&  VBFdEtaDebugCuts(ntuple)
             //&&  EcalNEMFCut(ntuple)
-            //&&  NJetsCut(ntuple)
-            //&&  LowTau21DebugCut(ntuple)
          );
 }
     
-// 2) Baseline with VBF cut
-template<typename ntupleType> bool baselineCut(ntupleType* ntuple){
-  return (baselineCutNoVBF(ntuple) &&
-           VBFCuts(ntuple));
-}
-
-// 3) Baseline + Z Signal region i.e. Pruned Mass [65,105] GeV without VBF cut 
-template<typename ntupleType> bool ZSignalRegionCutNoVBF(ntupleType* ntuple ){
-  return (baselineCutNoVBF(ntuple) && 
+// 2) SR Baseline i.e. Puppi SD Mass [65,105] GeV  
+template<typename ntupleType> bool ZSRCut(ntupleType* ntuple ){
+  return (baselineCut(ntuple) && 
           AK8JetSRCut(ntuple)); 
 }
 
-// 4) Baseline + Z Signal region i.e. Pruned Mass [65,105] GeV + VBF cut 
-template<typename ntupleType> bool ZSignalRegionCut(ntupleType* ntuple){
-  return ( ZSignalRegionCutNoVBF(ntuple) &&
-           VBFCuts(ntuple));
-}
-
-// 5) Baseline + Z Signal region i.e. Pruned Mass [65,105] GeV + HP without  VBF cut 
-template<typename ntupleType> bool ZSignalRegionHPCutNoVBF(ntupleType* ntuple){
-  return (  ZSignalRegionCutNoVBF(ntuple) && 
+// 3) Baseline + Z SR+ HP without  VBF cut 
+template<typename ntupleType> bool ZSRHPCut(ntupleType* ntuple){
+  return (  ZSRCut(ntuple) && 
             HighPurityCut(ntuple));
 }
 
-// 6) Baseline + Z Signal region i.e. Pruned Mass [65,105] GeV + HP with  VBF cut 
-template<typename ntupleType> bool ZSignalRegionHPCut(ntupleType* ntuple){
-  return (ZSignalRegionHPCutNoVBF(ntuple) && 
-           VBFCuts(ntuple));
+// 6) Baseline + Z SR + HP + VBF cut 
+template<typename ntupleType> bool ZSRHPVBFCut(ntupleType* ntuple){
+  return ( ZSRHPCut(ntuple) && 
+           VBFCut(ntuple));
 }
 
-// 6A) ZSRHPVBF + AK8 L1J eta > 1 cut 
-template<typename ntupleType> bool ZHPEtaCut(ntupleType* ntuple){
-  return (ZSignalRegionHPCut(ntuple) &&
-           AK8JEtaCut(ntuple));
-}
-// 7) Baseline + Z Signal region i.e. Pruned Mass [65,105] GeV + LP without  VBF cut 
-template<typename ntupleType> bool ZSignalRegionLPCutNoVBF(ntupleType* ntuple){
-  return (  ZSignalRegionCutNoVBF(ntuple) && 
-            LowPurityCut(ntuple));
+// 7) Baseline + Z SR + HP + failVBF cut 
+template<typename ntupleType> bool ZSRHPVBFfailCut(ntupleType* ntuple){
+  return ( ZSRHPCut(ntuple) && 
+           VBFFailCut(ntuple));
 }
 
-// 8) Baseline + Z Signal region i.e. Pruned Mass [65,105] GeV + LP with  VBF cut 
-template<typename ntupleType> bool ZSignalRegionLPCut(ntupleType* ntuple){
-  return ( ZSignalRegionLPCutNoVBF(ntuple) &&
-           VBFCuts(ntuple));
+// 7) Baseline + Z SR+ FP 
+template<typename ntupleType> bool ZSRFPCut(ntupleType* ntuple){
+  return (  ZSRCut(ntuple) && 
+            FullPurityCut(ntuple));
 }
 
-// 9) Z side band w/o vbf cut selection ([30,65][>135])
-template<typename ntupleType> bool ZSidebandnoVBFCut(ntupleType* ntuple){
-  return ( baselineCutNoVBF(ntuple) &&
+// 8) Baseline + Z SR + FP + VBF cut 
+template<typename ntupleType> bool ZSRFPVBFCut(ntupleType* ntuple){
+  return ( ZSRFPCut(ntuple) &&
+           VBFCut(ntuple));
+}
+
+// 9) Baseline + Z SR + FP + failVBF cut 
+template<typename ntupleType> bool ZSRFPVBFfailCut(ntupleType* ntuple){
+  return ( ZSRFPCut(ntuple) &&
+           VBFFailCut(ntuple));
+}
+
+// 8A) Baseline + Z SR + HP + LooseVBF cut 
+template<typename ntupleType> bool ZSRHPLooseVBFCut(ntupleType* ntuple){
+  return ( ZSRHPCut(ntuple) &&
+           LooseVBFCut(ntuple));
+}
+
+// 9A) Baseline + Z SR + HP + failLooseVBF cut 
+template<typename ntupleType> bool ZSRHPLooseVBFfailCut(ntupleType* ntuple){
+  return ( ZSRHPCut(ntuple) &&
+           LooseVBFFailCut(ntuple));
+}
+
+// 8AA) Baseline + Z SR + FP + LooseVBF cut 
+template<typename ntupleType> bool ZSRFPLooseVBFCut(ntupleType* ntuple){
+  return ( ZSRFPCut(ntuple) &&
+           LooseVBFCut(ntuple));
+}
+
+// 9AA) Baseline + Z SR + FP + failLooseVBF cut 
+template<typename ntupleType> bool ZSRFPLooseVBFfailCut(ntupleType* ntuple){
+  return ( ZSRFPCut(ntuple) &&
+           LooseVBFFailCut(ntuple));
+}
+
+// ###### Side Band ##############
+
+// 10) Z side band baseline selection ([30,65][>135,300])
+template<typename ntupleType> bool ZSBCut(ntupleType* ntuple){
+  return ( baselineCut(ntuple) &&
            AK8JetSideBandCut(ntuple) ); 
-}
-
-// 10) Z side band selection ([30,65][>135]) + vbf cut
-template<typename ntupleType> bool ZSidebandCut(ntupleType* ntuple){
-  return ( ZSidebandnoVBFCut(ntuple) &&
-           VBFCuts(ntuple));
 }
 
 // Z side band HP(tau21<0.35) selection
 // https://twiki.cern.ch/twiki/bin/view/CMS/JetWtagging#2016_scale_factors_and_correctio
 
-// 11) Z sideband high purity but without VBF cut
-template<typename ntupleType> bool ZSidebandHPCutnoVBF(ntupleType* ntuple){
-  return (ZSidebandnoVBFCut(ntuple) &&
+// 11) Z sideband high purity
+template<typename ntupleType> bool ZSBHPCut(ntupleType* ntuple){
+  return (ZSBCut(ntuple) &&
           HighPurityCut(ntuple));            
 }
 
 // 12) Z sideband High purity with VBF cut
-template<typename ntupleType> bool ZSidebandHPCut(ntupleType* ntuple){
-  return ( ZSidebandHPCutnoVBF(ntuple) && 
-           VBFCuts(ntuple));
-}
-// For Alpha Closure test
-template<typename ntupleType> bool ZAlphaSBHPCutnoVBF(ntupleType* ntuple){
-  return ( baselineCutNoVBF(ntuple) &&
-          AlphaSideBandCut(ntuple) &&
-          HighPurityCut(ntuple));            
+template<typename ntupleType> bool ZSBHPVBFCut(ntupleType* ntuple){
+  return ( ZSBHPCut(ntuple) && 
+           VBFCut(ntuple));
 }
 
-template<typename ntupleType> bool ZAlphaSBHPCutVBF(ntupleType* ntuple){
-  return ( baselineCutNoVBF(ntuple) &&
-          AlphaSideBandCut(ntuple) &&
+// 13) Z sideband High purity with VBFfail cut
+template<typename ntupleType> bool ZSBHPVBFfailCut(ntupleType* ntuple){
+  return ( ZSBHPCut(ntuple) && 
+           VBFFailCut(ntuple));
+}
+
+// 14) Baseline + Z SB+ FP 
+template<typename ntupleType> bool ZSBFPCut(ntupleType* ntuple){
+  return (  ZSBCut(ntuple) && 
+            FullPurityCut(ntuple));
+}
+
+// 15) Baseline + Z SB + FP + VBF cut 
+template<typename ntupleType> bool ZSBFPVBFCut(ntupleType* ntuple){
+  return ( ZSBFPCut(ntuple) &&
+           VBFCut(ntuple));
+}
+
+// 16) Baseline + Z SB + FP + failVBF cut 
+template<typename ntupleType> bool ZSBFPVBFfailCut(ntupleType* ntuple){
+  return ( ZSBFPCut(ntuple) &&
+           VBFFailCut(ntuple));
+}
+
+// 15A) Baseline + Z SB + HP + LooseVBF cut 
+template<typename ntupleType> bool ZSBHPLooseVBFCut(ntupleType* ntuple){
+  return ( ZSBHPCut(ntuple) &&
+           LooseVBFCut(ntuple));
+}
+
+// 16A) Baseline + Z SB + HP + failLooseVBF cut 
+template<typename ntupleType> bool ZSBHPLooseVBFfailCut(ntupleType* ntuple){
+  return ( ZSBHPCut(ntuple) &&
+           LooseVBFFailCut(ntuple));
+}
+
+// 15AA) Baseline + Z SB + FP + LooseVBF cut 
+template<typename ntupleType> bool ZSBFPLooseVBFCut(ntupleType* ntuple){
+  return ( ZSBFPCut(ntuple) &&
+           LooseVBFCut(ntuple));
+}
+
+// 16AA) Baseline + Z SB + FP + failLooseVBF cut 
+template<typename ntupleType> bool ZSBFPLooseVBFfailCut(ntupleType* ntuple){
+  return ( ZSBFPCut(ntuple) &&
+           LooseVBFFailCut(ntuple));
+}
+
+
+//############################################
+// ######## Closure test Part ################
+//############################################
+
+template<typename ntupleType> bool ZAlphaSBCut(ntupleType* ntuple){
+  return ( baselineCut(ntuple) &&
+          AlphaSideBandCut(ntuple));
+}
+
+template<typename ntupleType> bool ZAlphaSRCut(ntupleType* ntuple){
+  return ( baselineCut(ntuple) &&
+          AlphaSRCut(ntuple) );
+}
+
+template<typename ntupleType> bool ZAlphaSBHPVBFCut(ntupleType* ntuple){
+  return ( ZAlphaSBCut(ntuple) &&
           HighPurityCut(ntuple) &&
-          VBFCuts(ntuple)  
-         );            
+          VBFCut(ntuple));            
 }
 
-//  at Alpha SR
-template<typename ntupleType> bool ZAlphaSRHPCutnoVBF(ntupleType* ntuple){
-  return ( baselineCutNoVBF(ntuple) &&
-          AlphaSRCut(ntuple) && 
-          HighPurityCut(ntuple));            
-}
-
-template<typename ntupleType> bool ZAlphaSRHPCutVBF(ntupleType* ntuple){
-  return ( baselineCutNoVBF(ntuple) &&
-          AlphaSRCut(ntuple) &&
+template<typename ntupleType> bool ZAlphaSBHPVBFfailCut(ntupleType* ntuple){
+  return ( ZAlphaSBCut(ntuple) &&
           HighPurityCut(ntuple) &&
-          VBFCuts(ntuple)  
-         );            
+          VBFFailCut(ntuple));            
 }
 
+template<typename ntupleType> bool ZAlphaSBFPVBFCut(ntupleType* ntuple){
+  return ( ZAlphaSBCut(ntuple) &&
+          FullPurityCut(ntuple) &&
+          VBFCut(ntuple));            
+}
+
+template<typename ntupleType> bool ZAlphaSBFPVBFfailCut(ntupleType* ntuple){
+  return ( ZAlphaSBCut(ntuple) &&
+          FullPurityCut(ntuple) &&
+          VBFFailCut(ntuple));            
+}
+
+template<typename ntupleType> bool ZAlphaSBHPLooseVBFCut(ntupleType* ntuple){
+  return ( ZAlphaSBCut(ntuple) &&
+          HighPurityCut(ntuple) &&
+          LooseVBFCut(ntuple));            
+}
+
+template<typename ntupleType> bool ZAlphaSBHPLooseVBFfailCut(ntupleType* ntuple){
+  return ( ZAlphaSBCut(ntuple) &&
+          HighPurityCut(ntuple) &&
+          LooseVBFFailCut(ntuple));            
+}
+
+
+//  at Alpha SR AlphaSRCut(ntuple) 
+template<typename ntupleType> bool ZAlphaSRHPVBFCut(ntupleType* ntuple){
+  return ( ZAlphaSRCut(ntuple) &&
+          HighPurityCut(ntuple) &&
+          VBFCut(ntuple));
+}
+
+template<typename ntupleType> bool ZAlphaSRHPVBFfailCut(ntupleType* ntuple){
+  return ( ZAlphaSRCut(ntuple) &&
+          HighPurityCut(ntuple) &&
+          VBFFailCut(ntuple));
+}
+
+template<typename ntupleType> bool ZAlphaSRFPVBFCut(ntupleType* ntuple){
+  return ( ZAlphaSRCut(ntuple) &&
+          FullPurityCut(ntuple) &&
+          VBFCut(ntuple));
+}
+
+template<typename ntupleType> bool ZAlphaSRFPVBFfailCut(ntupleType* ntuple){
+  return ( ZAlphaSRCut(ntuple) &&
+          FullPurityCut(ntuple) &&
+          VBFFailCut(ntuple));
+}
+
+template<typename ntupleType> bool ZAlphaSRHPLooseVBFCut(ntupleType* ntuple){
+  return ( ZAlphaSRCut(ntuple) &&
+          HighPurityCut(ntuple) &&
+          LooseVBFCut(ntuple));
+}
+
+template<typename ntupleType> bool ZAlphaSRHPLooseVBFfailCut(ntupleType* ntuple){
+  return ( ZAlphaSRCut(ntuple) &&
+          HighPurityCut(ntuple) &&
+          LooseVBFFailCut(ntuple));
+}
 
 // end of Alhpha Closure part
-
-// 13) Z side band LP (0.45<tau21<0.75) without VBF selection
-template<typename ntupleType> bool ZSidebandLPCutnoVBF(ntupleType* ntuple){
-  return ( ZSidebandnoVBFCut(ntuple) &&
-           LowPurityCut(ntuple)); 
-}
-
-// 14) Z side band LP (0.45<tau21<0.75) wit VBF selection
-template<typename ntupleType> bool ZSidebandLPCut(ntupleType* ntuple){
-  return ( ZSidebandLPCutnoVBF(ntuple) && 
-           VBFCuts(ntuple));
-}
-
 
 /////////////////////////
 //// End of VBF Part ////
@@ -2334,10 +2463,12 @@ template<typename ntupleType> bool signalTriggerCut(ntupleType* ntuple){
 
     return (ntuple->TriggerPass->at(110) == 1 || ntuple->TriggerPass->at(112) == 1 || 
            ntuple->TriggerPass->at(116) == 1 || ntuple->TriggerPass->at(118) == 1 || 
-           ntuple->TriggerPass->at(120) == 1 || ntuple->TriggerPass->at(124) == 1 || 
-           ntuple->TriggerPass->at(126) == 1 || ntuple->TriggerPass->at(128) == 1 || 
+           ntuple->TriggerPass->at(120) == 1 || ntuple->TriggerPass->at(124) == 1 
+           /* // below are METNoMU triggers 
+           || ntuple->TriggerPass->at(126) == 1 || ntuple->TriggerPass->at(128) == 1 || 
            ntuple->TriggerPass->at(131) == 1 || ntuple->TriggerPass->at(133) == 1 || 
-           ntuple->TriggerPass->at(135) == 1 || ntuple->TriggerPass->at(136) == 1) ; 
+           ntuple->TriggerPass->at(135) == 1 || ntuple->TriggerPass->at(136) == 1 
+           */ ); 
 
 }
 

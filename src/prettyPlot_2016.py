@@ -6,15 +6,21 @@ r.gROOT.SetBatch(True)
 r.gROOT.ProcessLine(".L tdrstyle.C")
 r.gROOT.ProcessLine("setTDRStyle()")
 
-#cat = "SB HP VBF"
+year = "2016"
+#cat = "ZSB"
+#cat = "ZSBHP"
+#cat = "ZSBHPVBF"
+#cat = "ZSBHPVBFfail"
+#cat = "ZSBFPVBF"
+#cat = "ZSBFPVBFfail"
+
+norm = "Norm"
 
 
-plot_dir="plots/ZSB_Baseline/2017"
-#plot_dir="plots/Closure_Test/stack_plots"
-input_file_name = "AN_v0_NLO/ZSB_Baseline_AN_v0_2017.root" 
-output_file_name= "AN_v0_NLO/ZSB_Baseline_AN_v0_2017_Output.root"
-#input_file_name = "AN_v0_Sep08/AlphaSR_HP_VBF_AN_v0_2016_v2.root" 
-#output_file_name= "AN_v0_Sep08/AlphaSR_HP_VBF_AN_v0_2016_v2_Output.root"
+plot_dir="AN_v1_plots/{2}/{0}/{1}".format(cat,year,norm)
+input_file_name = "AN_v1_files/{0}/{1}_AN_v1_{0}.root".format(year,cat)
+output_file_name= "AN_v1_files/{0}/Output_{2}/{1}_AN_v1_{0}_Output_{2}.root".format(year,cat,norm)
+
 
 input_file = r.TFile(input_file_name,"READ")    
 
@@ -208,12 +214,6 @@ def plot(plot_var = "photonIsoChrgLowSieie_EB_photonLoose" ):
     stack.GetXaxis().SetTitleSize(24);
     stack.GetXaxis().SetTitleOffset(1.7);
 
-    #Catext = r.TText(.17,.8,cat)
-    #Catext.SetNDC()
-    #Catext.SetTextFont(51)
-    #Catext.SetTextSize(0.08)
-    #Catext.Draw()
-
     CMStext = r.TText(.17,.95,"CMS")
     CMStext.SetNDC()
     CMStext.SetTextFont(61)
@@ -266,7 +266,7 @@ def plot(plot_var = "photonIsoChrgLowSieie_EB_photonLoose" ):
 
     #can.SaveAs("../plots/"+plot_dir+"/"+plot_var+".png")
     #can.SaveAs("../plots_NewSkim_v1/"+plot_dir+"/"+plot_var+".png")
-    can.SaveAs("AN_v0_NLO/"+plot_dir+"/"+plot_var+".pdf")
+    can.SaveAs(plot_dir+"/"+plot_var+".pdf")
     #can.SaveAs("AN_v0_Sep08/"+plot_dir+"/"+plot_var+".pdf")
     #can.SaveAs("Test_Files_Jul29/"+plot_dir+"/"+plot_var+".png")
     # for space between legend and plot 
@@ -277,7 +277,7 @@ def plot(plot_var = "photonIsoChrgLowSieie_EB_photonLoose" ):
         stack.SetMaximum(20.0*data_histo[0].GetMaximum())
     stack.SetMinimum(0.1)
     #can.SaveAs("../plots/"+plot_dir+"/"+plot_var+"_LogY.png")
-    can.SaveAs("AN_v0_NLO/"+plot_dir+"/"+plot_var+"_LogY.pdf")
+    can.SaveAs(plot_dir+"/"+plot_var+"_LogY.pdf")
     #can.SaveAs("AN_v0_Sep08/"+plot_dir+"/"+plot_var+"_LogY.pdf")
     #can.SaveAs("Test_Files_Jul29/"+plot_dir+"/"+plot_var+"_LogY.png")
 
@@ -285,6 +285,7 @@ def plot(plot_var = "photonIsoChrgLowSieie_EB_photonLoose" ):
     for h in samples_histo :
         r.TH1F(h).Write()
     data_histo[0].Write()
+    total.Write()
     for i in signal_histo :
         r.TH1F(i).Write()
 

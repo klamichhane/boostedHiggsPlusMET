@@ -6,15 +6,32 @@ r.gROOT.SetBatch(True)
 r.gROOT.ProcessLine(".L tdrstyle.C")
 r.gROOT.ProcessLine("setTDRStyle()")
 
+year = argv[1]
+cat = argv[2]
+
+#year = "137fb"
+#cat = "ZSB"
+#cat = "ZSBHP"
+#cat = "ZSBHPVBF"
+#cat = "ZSBHPVBFfail"
+#cat = "ZSBFPVBF"
+#cat = "ZSBFPVBFfail"
+
+#norm = "NoNorm"
+norm = "Norm"
+
+#cat = "ZSBHPVBFfail"
 #cat = "SB HP VBF"
 
-plot_dir="plots/ZSB_Baseline/FullRun2"
-input_file_name = "AN_v0_NLO/ZSB_Baseline_AN_v0_137fb.root"
-output_file_name= "AN_v0_NLO/ZSB_Baseline_AN_v0_137fb_Output.root"
+plot_dir="AN_v1_plots/{2}/{0}/{1}".format(cat,year,norm)
+input_file_name = "AN_v1_files/{0}/{1}_AN_v1_{0}.root".format(year,cat)
+output_file_name= "AN_v1_files/{0}/Output_{2}/{1}_AN_v1_{0}_Output_{2}.root".format(year,cat,norm)
 
-#plot_dir="plots/Closure_Test/stack_plots"
-#input_file_name = "AN_v0_Sep08/Full_Run2/AlphaSR_HP_VBF_AN_v0_137fb_v2.root"
-#output_file_name= "AN_v0_Sep08/Full_Run2/AlphaSR_HP_VBF_AN_v0_137fb_v2_Output.root"
+if year == "2016": lumi="35.8/fb"
+elif year == "2017": lumi="41.5/fb"
+elif year == "2018": lumi="59.5/fb"
+elif year == "137fb": lumi="137/fb"
+
 
 input_file = r.TFile(input_file_name,"READ")    
 
@@ -68,22 +85,13 @@ def plot(plot_var = "photonIsoChrgLowSieie_EB_photonLoose" ):
     signal_samples=["VBFG_1000"
                    ]
 
-    data_samples=["MET_2016H",#]
-                "MET_2016G",
-                "MET_2016F",
-                "MET_2016E",
-                "MET_2016D",
-                "MET_2016C",
-                "MET_2016B",
-                "MET_2017F",
-                "MET_2017E",
-                "MET_2017D",
-                "MET_2017C",
-                "MET_2017B",
-                "MET_2018D",
-                "MET_2018C",
-                "MET_2018B",
-                "MET_2018A"]
+    if year=="2016": data_samples=["MET_2016B","MET_2016C","MET_2016D","MET_2016E","MET_2016F","MET_2016G","MET_2016H"]
+    if year=="2017": data_samples=["MET_2017B","MET_2017C","MET_2017D","MET_2017E","MET_2017F"]
+    if year=="2018": data_samples=["MET_2018A","MET_2018B","MET_2018C","MET_2018D"]
+    if year=="137fb":data_samples=["MET_2016H","MET_2016G","MET_2016F","MET_2016E","MET_2016D","MET_2016C","MET_2016B",
+                                   "MET_2017F","MET_2017E","MET_2017D","MET_2017C","MET_2017B",
+                                   "MET_2018D","MET_2018C","MET_2018B","MET_2018A"]
+
 
     samples_labels = ["SnglT","TT","Other","WJets","ZJets"]
     #signal_labels = ["VBFG_1000"]
@@ -119,7 +127,7 @@ def plot(plot_var = "photonIsoChrgLowSieie_EB_photonLoose" ):
         if i==0:
             signal_histo.append(input_file.Get(plot_var+"_"+signal_sample_names))
             #signal_histo[-1].SetLineColor(signal_line_color[i])
-            #signal_histo[-1].SetLineColor(r.kRed)
+            signal_histo[-1].SetLineColor(r.kRed)
             signal_histo[-1].SetLineWidth(2)
             #signal_histo[-1].SetName(plot_var+"_"+signal_samples_labels[i])
             if signal_histo[-1]==None :
@@ -151,19 +159,12 @@ def plot(plot_var = "photonIsoChrgLowSieie_EB_photonLoose" ):
             total.Add(h)
 
     for i,h in enumerate(samples_histo) : 
-        #print h.GetTitle(),"before",h.Integral()
         if h.Integral()>0 and total!=None:
-            #print h.GetTitle(),"before h, total, data: ",h.Integral(0,h.GetNbinsX()+1), total.Integral(0,total.GetNbinsX()+1), data_histo[0].Integral(0,data_histo[0].GetNbinsX()+1)
-            #h.Scale(data_histo[0].Integral(1,(data_histo[0].GetNbinsX()+1))/total.Integral(1,(total.GetNbinsX()+1)))
             h.Scale(data_histo[0].Integral()/total.Integral())
-            #print h.GetTitle(),"after",h.Integral()
-            #print h.GetTitle(),"after h, total, data: ",h.Integral(0,h.GetNbinsX()+1), total.Integral(0,total.GetNbinsX()+1), data_histo[0].Integral(0,data_histo[0].GetNbinsX()+1)
         stack.Add(h)
     if total!=None and total.Integral()>0: 
     #if total!=None: 
         total.Scale(data_histo[0].Integral()/total.Integral())
-        #total.Scale(data_histo[0].Integral(1,(data_histo[0].GetNbinsX()+1))/total.Integral(1,(total.GetNbinsX()+1)))
-        #print total.GetTitle()," afterII total, data: ",total.Integral(0,total.GetNbinsX()+1), data_histo[0].Integral(0,data_histo[0].GetNbinsX()+1)
 
     # For legend
     leg = r.TLegend(0.45,.77,.9,.92) 
@@ -217,12 +218,6 @@ def plot(plot_var = "photonIsoChrgLowSieie_EB_photonLoose" ):
     stack.GetXaxis().SetTitleSize(24);
     stack.GetXaxis().SetTitleOffset(1.7);
 
-    #Catext = r.TText(.17,.8,cat)
-    #Catext.SetNDC()
-    #Catext.SetTextFont(51)
-    #Catext.SetTextSize(0.08)
-    #Catext.Draw()
-
     CMStext = r.TText(.17,.95,"CMS")
     CMStext.SetNDC()
     CMStext.SetTextFont(61)
@@ -235,7 +230,7 @@ def plot(plot_var = "photonIsoChrgLowSieie_EB_photonLoose" ):
     SIMtext.SetTextSize(0.08)
     SIMtext.Draw()
     
-    LUMItext = r.TText(.60,.95,"13 TeV (137/fb)")
+    LUMItext = r.TText(.60,.95,"13 TeV ({0})".format(lumi))
     #LUMItext = r.TText(.60,.95,"13 TeV (59.5/fb)")
     LUMItext.SetNDC()
     LUMItext.SetTextFont(51)
@@ -273,8 +268,7 @@ def plot(plot_var = "photonIsoChrgLowSieie_EB_photonLoose" ):
     l.Draw("same"); 
     
 
-    #can.SaveAs("AN_v0_Sep08/"+plot_dir+"/"+plot_var+".pdf")
-    can.SaveAs("AN_v0_NLO/"+plot_dir+"/"+plot_var+".pdf")
+    can.SaveAs(plot_dir+"/"+plot_var+".pdf")
     #can.SaveAs("Test_Files_Jul29/"+plot_dir+"/"+plot_var+".png")
     # for space between legend and plot 
     topPad.SetLogy()
@@ -283,12 +277,13 @@ def plot(plot_var = "photonIsoChrgLowSieie_EB_photonLoose" ):
     else :
         stack.SetMaximum(200.0*data_histo[0].GetMaximum())
     stack.SetMinimum(0.1)
-    can.SaveAs("AN_v0_NLO/"+plot_dir+"/"+plot_var+"_LogY.pdf")
+    can.SaveAs(plot_dir+"/"+plot_var+"_LogY.pdf")
 
     output_file.cd()
     for h in samples_histo :
         r.TH1F(h).Write()
     data_histo[0].Write()
+    total.Write()
     for i in signal_histo :
         r.TH1F(i).Write()
 
@@ -315,6 +310,11 @@ print vars
 for var in vars : 
     plot(var)
 
+print ""
+print "Input file : {0}".format(input_file_name)
+print "Output file: {0}".format(output_file_name)
+print "plot dir   : {0}".format(plot_dir)
+print ""
     
 output_file.Close()
 input_file.Close()

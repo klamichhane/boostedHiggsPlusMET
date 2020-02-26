@@ -6,15 +6,35 @@ r.gROOT.SetBatch(True)
 r.gROOT.ProcessLine(".L tdrstyle.C")
 r.gROOT.ProcessLine("setTDRStyle()")
 
-#cat = "SR HP NoVBF"
+year = argv[1]
+cat = argv[2]
 
-plot_dir="plots/ZSR_HP_VBF/FullRun2"
-input_file_name = "AN_v0_Sep08/Full_Run2/ZSR_HP_VBF_AN_v0_137fb.root" 
-output_file_name= "AN_v0_Sep08/Full_Run2/ZSR_HP_VBF_AN_v0_137fb_Output.root"
+#year = "2016"
+#year = "2017"
+#year = "2018"
+#year = "137fb"
+#cat = "ZSR"
+#cat = "ZSRHP"
+#cat = "ZSRHPVBF"
+#cat = "ZSRHPVBFfail"
+#cat = "ZSRFPVBF"
+#cat = "ZSRFPVBFfail"
 
-#plot_dir="plots/Z_Baseline_NoData/FullRun2"
-#input_file_name = "AN_v0_Sep08/Full_Run2/ZBaseline_AN_v0_137fb.root" 
-#output_file_name= "AN_v0_Sep08/Full_Run2/ZBaseline_AN_v0_137fb_NoData_Output.root"
+norm = "NoNorm"
+
+
+plot_dir="AN_v1_plots/{2}/{0}/{1}".format(cat,year,norm)
+input_file_name = "AN_v1_files/{0}/{1}_AN_v1_{0}.root".format(year,cat)
+output_file_name= "AN_v1_files/{0}/Output_{2}/{1}_AN_v1_{0}_Output_{2}.root".format(year,cat,norm)
+
+if year == "2016": lumi="35.8/fb"
+elif year == "2017": lumi="41.5/fb"
+elif year == "2018": lumi="59.5/fb"
+elif year == "137fb": lumi="137/fb"
+
+print ""
+print "Input file: {0}; Output file: {1}".format(input_file_name,output_file_name)
+print ""
 
 input_file = r.TFile(input_file_name,"READ")    
 
@@ -217,14 +237,14 @@ def plot(plot_var = "photonIsoChrgLowSieie_EB_photonLoose" ):
     #LUMItext = r.TText(.60,.95,"(14/fb : Pre-HEM)") # RunA
     #LUMItext = r.TText(.60,.95,"(38.6/fb : Post-HEM)") # Run D
     #LUMItext = r.TText(.65,.95,"13 TeV (20.9/fb : Pre-HEM)")
-    LUMItext = r.TText(.60,.95,"13 TeV (137/fb)")
+    LUMItext = r.TText(.60,.95,"13 TeV ({0})".format(lumi))
     LUMItext.SetNDC()
     LUMItext.SetTextFont(51)
     LUMItext.SetTextSize(0.04) # was 0.08
     LUMItext.Draw()
 
     #can.SaveAs("../plots_NewSkim_v1/"+plot_dir+"/"+plot_var+".png")
-    can.SaveAs("AN_v0_Sep08/"+plot_dir+"/"+plot_var+".pdf")
+    can.SaveAs(plot_dir+"/"+plot_var+".pdf")
     # for space between legend and plot 
     can.SetLogy()
     if total!=None:
@@ -233,12 +253,13 @@ def plot(plot_var = "photonIsoChrgLowSieie_EB_photonLoose" ):
     else :
         stack.SetMaximum(200.0*samples_histo[0].GetMaximum())
     stack.SetMinimum(0.1)
-    can.SaveAs("AN_v0_Sep08/"+plot_dir+"/"+plot_var+"_LogY.pdf")
+    can.SaveAs(plot_dir+"/"+plot_var+"_LogY.pdf")
 
     output_file.cd()
     for h in samples_histo :
         r.TH1F(h).Write()
     #data_histo[0].Write()
+    total.Write()
     for i in signal_histo :
         r.TH1F(i).Write()
 
@@ -265,6 +286,11 @@ print vars
 for var in vars : 
     plot(var)
 
+print ""
+print "Input file : {0}".format(input_file_name)
+print "Output file: {0}".format(output_file_name)
+print "plot dir   : {0}".format(plot_dir)
+print ""
     
 output_file.Close()
 input_file.Close()

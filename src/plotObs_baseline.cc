@@ -11,15 +11,16 @@
 #include <time.h>       /* clock_t, clock, CLOCKS_PER_SEC */
 #include <cassert>
 #include "plotterUtils.cc"
-#include "skimSamples_2016.cc"
-//#include "skimSamples_2017.cc"
+//#include "skimSamples_2016.cc"
+#include "skimSamples_2017.cc"
 //#include "skimSamples_2018.cc"
 #include "definitions.h"
 #include "RA2bTree.cc"
 #include "TriggerEfficiencySextet.cc"
 
-string year = "2016"; 
+string year = "2017"; 
 double lum = 0.0;
+double p0, p1, p2;
 
 using namespace std;
 
@@ -29,53 +30,88 @@ void process(string selection_label,
 	     string signalSample,
 	     string dataSample){
     
-    if(year=="2016") {lum=35815.165;} 
-    if(year=="2017") {lum=41486.136;}
-    if(year=="2018") {lum=59546.381;}
+    if(year=="2016") {lum=35815.165; p0=1.21277e+02; p1=8.77679e+01;p2=9.94172e-01;}
+    if(year=="2017") {lum=41486.136; p0=1.61724e+02; p1=6.91644e+01; p2=9.89446e-01;}
+    if(year=="2018") {lum=59546.381; p0=1.70454e+02; p1=6.64100e+01; p2=9.89298e-01;}
+    cout<<"year: "<<year<<" lumi: "<<lum<<endl;
 
   // set up selectors
     bool (*selectionFunc)(RA2bTree*);
-    if( selection_label == "ZNoSelection"){
-        selectionFunc = baselineCutNoVBF;
-    }else if( selection_label == "baselineVBF" ){
+    if( selection_label == "Baseline"){
         selectionFunc = baselineCut;
-    }else if( selection_label == "ZSRNoVBF"){
-        selectionFunc = ZSignalRegionCutNoVBF;
-    }else if( selection_label == "ZSRVBF"){
-        selectionFunc = ZSignalRegionCut;
-    //}else if( selection_label == "ZSRHPNoVBF_SigBkg"){
-    }else if( selection_label == "ZSRHPNoVBF"){
-        selectionFunc = ZSignalRegionHPCutNoVBF;
+    }else if( selection_label == "ZSR"){
+        selectionFunc = ZSRCut;
+    }else if( selection_label == "ZSRHP"){
+        selectionFunc = ZSRHPCut;
     }else if( selection_label == "ZSRHPVBF"){
-        selectionFunc = ZSignalRegionHPCut;
-    }else if( selection_label == "ZSRHPVBF-TightMjjdEta"){
-        selectionFunc = ZSignalRegionHPCut;
-    }else if( selection_label == "ZSRHPVBFEta"){
-        selectionFunc = ZHPEtaCut;
-    }else if( selection_label == "ZSRLPNoVBF"){
-        selectionFunc = ZSignalRegionLPCutNoVBF;
-    }else if( selection_label == "ZSRLPVBF"){
-        selectionFunc = ZSignalRegionLPCut;
-    }else if( selection_label == "ZSBNoVBF" ){
-        selectionFunc = ZSidebandnoVBFCut;
-    }else if( selection_label == "ZSBVBF" ){
-        selectionFunc = ZSidebandCut;
-    }else if( selection_label == "ZSBHPNoVBF" ){
-        selectionFunc = ZSidebandHPCutnoVBF;
-    }else if( selection_label == "ZSBHPVBF" ){
-        selectionFunc = ZSidebandHPCut;
-    }else if( selection_label == "AlphaSBHPNoVBF" ){
-        selectionFunc = ZAlphaSBHPCutnoVBF;
-    }else if( selection_label == "AlphaSBHPVBF" ){
-        selectionFunc = ZAlphaSBHPCutVBF;
-    }else if( selection_label == "AlphaSRHPNoVBF" ){
-        selectionFunc = ZAlphaSRHPCutnoVBF;
-    }else if( selection_label == "AlphaSRHPVBF" ){
-        selectionFunc = ZAlphaSRHPCutVBF;
-    }else if( selection_label == "ZSBLPNoVBF"){
-        selectionFunc = ZSidebandLPCutnoVBF;
-    }else if( selection_label == "ZSBLPVBF"){
-        selectionFunc = ZSidebandLPCut;
+        selectionFunc = ZSRHPVBFCut;
+    }else if( selection_label == "ZSRHPVBFfail"){
+        selectionFunc = ZSRHPVBFfailCut;
+    }else if( selection_label == "ZSRFP"){
+        selectionFunc = ZSRFPCut;
+    }else if( selection_label == "ZSRFPVBF"){
+        selectionFunc = ZSRFPVBFCut;
+    }else if( selection_label == "ZSRFPVBFfail"){
+        selectionFunc = ZSRFPVBFfailCut;
+    }else if( selection_label == "ZSRHPLooseVBF"){
+        selectionFunc = ZSRHPLooseVBFCut;
+    }else if( selection_label == "ZSRHPLooseVBFfail" ){
+        selectionFunc = ZSRHPLooseVBFfailCut;
+    }else if( selection_label == "ZSRFPLooseVBF" ){
+        selectionFunc = ZSRFPLooseVBFCut;
+    }else if( selection_label == "ZSRFPLooseVBFfail" ){
+        selectionFunc = ZSRFPLooseVBFfailCut;
+    }else if( selection_label == "ZSB" ){
+        selectionFunc = ZSBCut;
+    }else if( selection_label == "ZSBHP"){
+        selectionFunc = ZSBHPCut;
+    }else if( selection_label == "ZSBHPVBF"){
+        selectionFunc = ZSBHPVBFCut;
+    }else if( selection_label == "ZSBHPVBFfail"){
+        selectionFunc = ZSBHPVBFfailCut;
+    }else if( selection_label == "ZSBFP"){
+        selectionFunc = ZSBFPCut;
+    }else if( selection_label == "ZSBFPVBF"){
+        selectionFunc = ZSBFPVBFCut;
+    }else if( selection_label == "ZSBFPVBFfail"){
+        selectionFunc = ZSBFPVBFfailCut;
+    }else if( selection_label == "ZSBHPLooseVBF"){
+        selectionFunc = ZSBHPLooseVBFCut;
+    }else if( selection_label == "ZSBHPLooseVBFfail" ){
+        selectionFunc = ZSBHPLooseVBFfailCut;
+    }else if( selection_label == "ZSBFPLooseVBF" ){
+        selectionFunc = ZSBFPLooseVBFCut;
+    }else if( selection_label == "ZSBFPLooseVBFfail" ){
+        selectionFunc = ZSBFPLooseVBFfailCut;
+
+
+    }else if( selection_label == "ZAlphaSBHPVBF" ){
+        selectionFunc = ZAlphaSBHPVBFCut;
+    }else if( selection_label == "ZAlphaSRHPVBF" ){
+        selectionFunc = ZAlphaSRHPVBFCut;
+    }else if( selection_label == "ZAlphaSBHPVBFfail" ){
+        selectionFunc = ZAlphaSBHPVBFfailCut;
+    }else if( selection_label == "ZAlphaSRHPVBFfail" ){
+        selectionFunc = ZAlphaSRHPVBFfailCut;
+
+    }else if( selection_label == "ZAlphaSBFPVBF" ){
+        selectionFunc = ZAlphaSBFPVBFCut;
+    }else if( selection_label == "ZAlphaSRFPVBF" ){
+        selectionFunc = ZAlphaSRFPVBFCut;
+    }else if( selection_label == "ZAlphaSBFPVBFfail" ){
+        selectionFunc = ZAlphaSBFPVBFfailCut;
+    }else if( selection_label == "ZAlphaSRFPVBFfail" ){
+        selectionFunc = ZAlphaSRFPVBFfailCut;
+
+    }else if( selection_label == "ZAlphaSBHPLooseVBF" ){
+        selectionFunc = ZAlphaSBHPLooseVBFCut;
+    }else if( selection_label == "ZAlphaSRHPLooseVBF" ){
+        selectionFunc = ZAlphaSRHPLooseVBFCut;
+    }else if( selection_label == "ZAlphaSBHPLooseVBFfail" ){
+        selectionFunc = ZAlphaSBHPLooseVBFfailCut;
+    }else if( selection_label == "ZAlphaSRHPLooseVBFfail" ){
+        selectionFunc = ZAlphaSRHPLooseVBFfailCut;
+
     }else{
         assert(0);
     }
@@ -109,6 +145,7 @@ void process(string selection_label,
   typedef plot<RA2bTree> plot;
 
   //plot HEMFracplot(*fillHEMTest1<RA2bTree>,"HEMFrac_"+selection_label,"HEM Frac",50,-0.5,999.5);//1 bin
+  plot Oneplot(*fillOne<RA2bTree>,"One_"+selection_label,"Bkg_composition",1,0.5,1.5);//1 bin
   plot NVtxplot(*fillNVtx<RA2bTree>,"NVtx_"+selection_label,"NVtx",80,0.5,80.5);//1 bin
   plot NVtx1plot(*fillNVtx<RA2bTree>,"NVtx1_"+selection_label,"NVtx",50,0.5,50.5);//1 bin
   plot METplot(*fillMET<RA2bTree>,"MET_"+selection_label,"MET [GeV]",56,200.,3000.);//50 GeV bin
@@ -261,31 +298,32 @@ void process(string selection_label,
   plot GMassplot(*fillGMass<RA2bTree>,"GMass_"+selection_label,"M_{G} [GeV]",25,500.,3000.); // 100 GeV bin
   plot GMass1plot(*fillGMass<RA2bTree>,"GMass1_"+selection_label,"M_{G} [GeV]",70,0.,7000.); // 100 GeV bin
   plot GMass2plot(*fillGMass<RA2bTree>,"GMass2_"+selection_label,"M_{G} [GeV]",65,500.,7000.); // 100 GeV bin
-  plot ZMTplot(*fillZMT<RA2bTree>,"ZMT_"+selection_label,"MT [GeV]",40,400.,4000.); // 100 GeV bin
+  plot ZMTplot(*fillZMT<RA2bTree>,"ZMT_"+selection_label,"MT [GeV]",36,400.,4000.); // 100 GeV bin
   plot ZMT1plot(*fillZMT<RA2bTree>,"ZMT1_"+selection_label,"MT [GeV]",32,400.,2000.); //50 GeV bin
-  plot ZMT2plot(*fillZMT<RA2bTree>,"ZMT2_"+selection_label,"MT [GeV]",44,400.,1500.); // 25 GeV bin
   plot ZMT3plot(*fillZMT<RA2bTree>,"ZMT3_"+selection_label,"MT [GeV]",52,400.,3000.); // 50 GeV bin
-  plot ZMT31plot(*fillZMT<RA2bTree>,"ZMT31_"+selection_label,"MT [GeV]",22,500.,2700.); // 100 GeV bin
-  plot ZMT311plot(*fillZMT<RA2bTree>,"ZMT311_"+selection_label,"MT [GeV]",44,500.,2700.); // 50 GeV bin
-  plot ZMT312plot(*fillZMT<RA2bTree>,"ZMT312_"+selection_label,"MT [GeV]",88,500.,2700.); //25 GeV bin
-  plot ZMT313plot(*fillZMT<RA2bTree>,"ZMT313_"+selection_label,"MT [GeV]",42,500.,4700.); // 100 GeV bin
+  plot ZMT31plot(*fillZMT<RA2bTree>,"ZMT31_"+selection_label,"MT [GeV]",23,400.,2700.); // 100 GeV bin ZSBFPVBF
+  plot ZMT311plot(*fillZMT<RA2bTree>,"ZMT311_"+selection_label,"MT [GeV]",46,400.,2700.); // 50 GeV bin ZSBFPVBF
+  plot ZMT312plot(*fillZMT<RA2bTree>,"ZMT312_"+selection_label,"MT [GeV]",92,400.,2700.); //25 GeV bin  ZSBFPVBF
+  plot ZMT313plot(*fillZMT<RA2bTree>,"ZMT313_"+selection_label,"MT [GeV]",31,400.,3500.); // 100 GeV bin ZSBFPVBFfail
+  plot ZMT314plot(*fillZMT<RA2bTree>,"ZMT314_"+selection_label,"MT [GeV]",62,400.,3500.); // 50 GeV bin ZSBFPVBFfail
   plot ZMT4plot(*fillZMT<RA2bTree>,"ZMT4_"+selection_label,"MT [GeV]",24,400.,1000.); // 25 GeV bin
-  plot ZMT41plot(*fillZMT<RA2bTree>,"ZMT41_"+selection_label,"MT [GeV]",20,500.,1000.); // 25 GeV bin
-  plot ZMT5plot(*fillZMT<RA2bTree>,"ZMT5_"+selection_label,"MT [GeV]",40,0.,1000.); // 25 GeV bin
-  plot ZMT6plot(*fillZMT<RA2bTree>,"ZMT6_"+selection_label,"MT [GeV]",30,0.,1500.); // 50 GeV bin
-  plot ZMT7plot(*fillZMT<RA2bTree>,"ZMT7_"+selection_label,"MT [GeV]",40,0.,2000.); // 50 GeV bin
-  plot ZMT8plot(*fillZMT<RA2bTree>,"ZMT8_"+selection_label,"MT [GeV]",55,500.,6000.); // 50 GeV bin
+  plot ZMT7plot(*fillZMT<RA2bTree>,"ZMT7_"+selection_label,"MT [GeV]",65,0.,6500.); // 100 GeV bin
+  plot ZMT8plot(*fillZMT<RA2bTree>,"ZMT8_"+selection_label,"MT [GeV]",60,500.,6500.); // 100 GeV bin
   plot ZMT9plot(*fillZMT<RA2bTree>,"ZMT9_"+selection_label,"MT [GeV]",45,500.,5000.); // 100 GeV bin
   plot ZMT10plot(*fillZMT<RA2bTree>,"ZMT10_"+selection_label,"MT [GeV]",90,0.,9000.); // 100 GeV bin
   plot MTpTRatioplot(*fillMTpTRatio<RA2bTree>,"MTpTRatio_"+selection_label,"MT/pT",100,0.,3.); //0.04
   plot pTMTRatioplot(*fillpTMTRatio<RA2bTree>,"pTMTRatio_"+selection_label,"pT/MT",100,0.,1.); //0.04
 
-  double edges_ggf[22]={500,600,700,800,900,1000,1100,1200,1300,1400,1500,1600,1700,1800,1900,2000,2100,2250,2400,2550,2700,2900};  
+  double edges_ggf[23]={400,500,600,700,800,900,1000,1100,1200,1300,1400,1500,1600,1700,1800,1900,2000,2100,2250,2400,2550,2700,2900};  
   double edges_vbf[16]={400,500,600,700,800,900,1000,1100,1200,1300,1400,1500,1600,1700,1850,2100};
-  double edges_ggf50[39]={500,550,600,650,700,750,800,850,900,950,1000,1050,1100,1150,1200,1250,1300,1350,1400,1450,1500,1550,1600,1650,1700,1750,1800,1850,1900,1950,2000,2050,2100,2150,2250,2400,2550,2700,2900};  
+  double edges_vbfhp137[20]={400,500,600,700,800,900,1000,1100,1200,1300,1400,1500,1600,1700,1800,1900,2000,2100,2250,2400};
+  double edges_vbffailhp137[23]={400,500,600,700,800,900,1000,1100,1200,1300,1400,1500,1600,1700,1800,1900,2000,2100,2200,2350,2550,2750,3000};
+  double edges_ggf50[39]={400,450,500,550,600,650,700,750,800,850,900,950,1000,1050,1100,1150,1200,1250,1300,1350,1400,1450,1500,1550,1600,1650,1700,1750,1800,1850,1900,1950,2000,2050,2100,2200,2400,2600,2900};  
   double edges_vbf50[29]={400,450,500,550,600,650,700,750,800,850,900,950,1000,1050,1100,1150,1200,1250,1300,1350,1400,1450,1500,1550,1600,1650,1700,1850,2100};
-  plot ZMT_ggFplot(*fillZMT<RA2bTree>,"ZMT_ggF_"+selection_label,"MT [GeV]",21,edges_ggf); 
+  plot ZMT_ggFplot(*fillZMT<RA2bTree>,"ZMT_ggF_"+selection_label,"MT [GeV]",22,edges_ggf); 
   plot ZMT_vbFplot(*fillZMT<RA2bTree>,"ZMT_VBF_"+selection_label,"MT [GeV]",15,edges_vbf); 
+  plot ZMT_vbFhpplot(*fillZMT<RA2bTree>,"ZMT_VBF137_"+selection_label,"MT [GeV]",19,edges_vbfhp137); 
+  plot ZMT_vbFfailhpplot(*fillZMT<RA2bTree>,"ZMT_VBFfail137_"+selection_label,"MT [GeV]",22,edges_vbffailhp137); 
   plot ZMT_ggF50plot(*fillZMT<RA2bTree>,"ZMT_ggF50_"+selection_label,"MT [GeV]",38,edges_ggf50); 
   plot ZMT_vbF50plot(*fillZMT<RA2bTree>,"ZMT_VBF50_"+selection_label,"MT [GeV]",28,edges_vbf50); 
 
@@ -335,6 +373,7 @@ void process(string selection_label,
   vector<plot> plots;
   //plots.push_back(HEMFracplot);
 
+  plots.push_back(Oneplot);
   plots.push_back(NVtxplot);
   plots.push_back(NVtx1plot);
   plots.push_back(METplot);
@@ -490,16 +529,13 @@ void process(string selection_label,
   plots.push_back(GMass2plot);
   plots.push_back(ZMTplot);
   plots.push_back(ZMT1plot);
-  plots.push_back(ZMT2plot);
   plots.push_back(ZMT3plot);
   plots.push_back(ZMT31plot);
   plots.push_back(ZMT311plot);
   plots.push_back(ZMT312plot);
   plots.push_back(ZMT313plot);
+  plots.push_back(ZMT314plot);
   plots.push_back(ZMT4plot); 
-  plots.push_back(ZMT41plot); 
-  plots.push_back(ZMT5plot); 
-  plots.push_back(ZMT6plot); 
   plots.push_back(ZMT7plot); 
   plots.push_back(ZMT8plot); 
   plots.push_back(ZMT9plot); 
@@ -509,6 +545,8 @@ void process(string selection_label,
     
   plots.push_back(ZMT_ggFplot);  
   plots.push_back(ZMT_vbFplot);  
+  plots.push_back(ZMT_vbFhpplot);  
+  plots.push_back(ZMT_vbFfailhpplot);  
   plots.push_back(ZMT_ggF50plot);  
   plots.push_back(ZMT_vbF50plot);  
 
@@ -550,8 +588,7 @@ void process(string selection_label,
     RA2bTree* ntuple = skims.ntuples[iSample];
      isMC_ = true;
     //TFile* outputFile = new TFile("plotObs_"+selection_label+"_baseline_"+skims.sampleName[iSample]+".root","RECREATE");
-    TFile* outputFile = new TFile("AN_v0_NLO/plotObs_"+selection_label+"_baseline_"+skims.sampleName[iSample]+".root","RECREATE");
-    //TFile* outputFile = new TFile("Test_Files_Jul29/plotObs_"+selection_label+"_baseline_"+skims.sampleName[iSample]+".root","RECREATE");
+    TFile* outputFile = new TFile("AN_v1_files/"+year+"/plotObs_"+selection_label+"_"+skims.sampleName[iSample]+".root","RECREATE");
     
     for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
       plots[iPlot].addNtuple(ntuple,skims.sampleName[iSample]);
@@ -560,9 +597,10 @@ void process(string selection_label,
     ntupleBranchStatus<RA2bTree>(ntuple);
     TString filename;
     double weight = 0.;
+    double trigwt = 0.;
     
     for( int iEvt = 0 ; iEvt < min(MAX_EVENTS,numEvents) ; iEvt++ ){
-    //for( int iEvt = 0 ; iEvt < min(0,numEvents) ; iEvt++ ){
+    //for( int iEvt = 0 ; iEvt < min(100,numEvents) ; iEvt++ ){
         ntuple->GetEntry(iEvt);
         if( iEvt % 100000 == 0 ) cout << skims.sampleName[iSample] << ": " << iEvt << "/" << numEvents << endl;
         filename = ntuple->fChain->GetFile()->GetName();
@@ -576,15 +614,19 @@ void process(string selection_label,
             if(! passHEMjetVeto(ntuple, 30) ) continue;
         }
         
+        //trig wt
+        trigwt = (TMath::Erf((ntuple->MET - p0) / p1) + 1) / 2. * p2;        
+
         // Prefiring wt for 2016 & 2017 only
         if (filename.Contains("MC2016") || filename.Contains("MC2017")){
-            weight = ntuple->Weight*lum*ntuple->NonPrefiringProb;   //weight = ntuple->Weight*lumii*customPUweights(ntuple);
+            weight = ntuple->Weight*lum*ntuple->NonPrefiringProb*trigwt;   //weight = ntuple->Weight*lumii*customPUweights(ntuple);
             //weight = ntuple->Weight*lumi*ntuple->NonPrefiringProb;   //weight = ntuple->Weight*lumii*customPUweights(ntuple);
         }
         //else weight = ntuple->Weight*lumi;
-        else weight = ntuple->Weight*lum;
+        else weight = ntuple->Weight*lum*trigwt;
 
         //NLO wt for WJets and ZJets Sample
+        /*
         if ( filename.Contains("_ZJetsTo")){        
             weight *= ZJetsNLOWeights(ntuple);
         }
@@ -592,6 +634,7 @@ void process(string selection_label,
         if ( filename.Contains("_WJetsTo")){        
             weight *= WJetsNLOWeights(ntuple);
         }
+       */ 
       // ------------ end weights -------------
 
       //cout << "event passed all selections" << endl;
@@ -612,8 +655,7 @@ void process(string selection_label,
     RA2bTree* ntuple = skims.signalNtuples[iSample];
     isMC_ = true;
     //TFile* outputFile = new TFile("plotObs_"+selection_label+"_baseline_"+skims.signalSampleName[iSample]+".root","RECREATE");
-    TFile* outputFile = new TFile("AN_v0_NLO/plotObs_"+selection_label+"_baseline_"+skims.signalSampleName[iSample]+".root","RECREATE");
-    //TFile* outputFile = new TFile("Test_Files_Jul29/plotObs_"+selection_label+"_baseline_"+skims.signalSampleName[iSample]+".root","RECREATE");
+    TFile* outputFile = new TFile("AN_v1_files/"+year+"/plotObs_"+selection_label+"_"+skims.signalSampleName[iSample]+".root","RECREATE");
 
     sigSamples.push_back(ntuple);
     for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
@@ -623,12 +665,15 @@ void process(string selection_label,
     int numEvents = ntuple->fChain->GetEntries();
     ntupleBranchStatus<RA2bTree>(ntuple);
 
+    double trigwt = 0.;
+
     for( int iEvt = 0 ; iEvt < min(MAX_EVENTS,numEvents) ; iEvt++ ){
-    //for( int iEvt = 0 ; iEvt < min(0,numEvents) ; iEvt++ ){
+    //for( int iEvt = 0 ; iEvt < min(100,numEvents) ; iEvt++ ){
       ntuple->GetEntry(iEvt);
       if( iEvt % 100000 == 0 ) cout << skims.signalSampleName[iSample] << ": " << iEvt << "/" << numEvents << endl;
 
       if(! selectionFunc(ntuple) ) continue;
+    
 
       // HEM Veto  
       if(year=="2018"){  
@@ -638,102 +683,149 @@ void process(string selection_label,
         if(!passHEMjetVeto(ntuple,30)) continue;  
       }          
 
+      // trig wt  
+      trigwt = (TMath::Erf((ntuple->MET - p0) / p1) + 1) / 2. * p2;  
+    
+      //std::cout<<"trigwt in sig sample: "<<trigwt<<endl;        
+
       for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
         TString sig_sample = skims.signalSampleName[iSample];    
 
         // based on 2018 samples for VBF
 	    if ((sig_sample=="VBFG_800") || (sig_sample=="VBFWp_800") || (sig_sample=="VBFRad_800")) 
-	        //plots[iPlot].fillSignal(ntuple,lumi*1*2e-05); 
-	        plots[iPlot].fillSignal(ntuple,lum*1*2e-05); 
+	        //plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
+	        plots[iPlot].fillSignal(ntuple,1); 
 	    if ((sig_sample=="VBFG_1000") || (sig_sample=="VBFWp_1000") || (sig_sample=="VBFRad_1000")) 
-	        plots[iPlot].fillSignal(ntuple,lum*1*2e-05); // wt for 48300 evts: 1pb/#evts
-	        // plots[iPlot].fillSignal(ntuple,lum*1*0.0000207); //for VBFG 2016 for 48300 evts: 1pb/#evts
+	        //plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); // wt for 48300 evts: 1pb/#evts
+	        plots[iPlot].fillSignal(ntuple,1); 
 	    if ((sig_sample=="VBFG_1200") || (sig_sample=="VBFWp_1200") || (sig_sample=="VBFRad_1200")) 
-	        plots[iPlot].fillSignal(ntuple,lum*1*2e-05); 
+	        //plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
+	        plots[iPlot].fillSignal(ntuple,1); 
 	    if ((sig_sample=="VBFG_1400") || (sig_sample=="VBFWp_1400") || (sig_sample=="VBFRad_1400")) 
-	        plots[iPlot].fillSignal(ntuple,lum*1*2e-05); 
+	        //plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
+	        plots[iPlot].fillSignal(ntuple,1); 
 	    if ((sig_sample=="VBFG_1600") || (sig_sample=="VBFWp_1600") || (sig_sample=="VBFRad_1600")) 
-	        plots[iPlot].fillSignal(ntuple,lum*1*2e-05); 
+	        //plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
+	        plots[iPlot].fillSignal(ntuple,1); 
 	    if ((sig_sample=="VBFG_1800") || (sig_sample=="VBFWp_1800") || (sig_sample=="VBFRad_1800")) 
-	        plots[iPlot].fillSignal(ntuple,lum*1*2e-05); 
+	        //plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
+	        plots[iPlot].fillSignal(ntuple,1); 
 	    if ((sig_sample=="VBFG_2000") || (sig_sample=="VBFWp_2000") || (sig_sample=="VBFRad_2000")) 
-	        plots[iPlot].fillSignal(ntuple,lum*1*2e-05); 
+	        //plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
+	        plots[iPlot].fillSignal(ntuple,1); 
 	    if ((sig_sample=="VBFG_2500") || (sig_sample=="VBFWp_2500") || (sig_sample=="VBFRad_2500")) 
-	        plots[iPlot].fillSignal(ntuple,lum*1*2e-05); 
+	        //plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
+	        plots[iPlot].fillSignal(ntuple,1); 
 	    if ((sig_sample=="VBFG_3000") || (sig_sample=="VBFWp_3000") || (sig_sample=="VBFRad_3000")) 
-	        plots[iPlot].fillSignal(ntuple,lum*1*2e-05); 
+	        //plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
+	        plots[iPlot].fillSignal(ntuple,1); 
 	    if ((sig_sample=="VBFG_3500") || (sig_sample=="VBFWp_3500") || (sig_sample=="VBFRad_3500")) 
-	        plots[iPlot].fillSignal(ntuple,lum*1*2e-05); 
+	        //plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
+	        plots[iPlot].fillSignal(ntuple,1); 
 	    if ((sig_sample=="VBFG_4000") || (sig_sample=="VBFWp_4000") || (sig_sample=="VBFRad_4000")) 
-	        plots[iPlot].fillSignal(ntuple,lum*1*2e-05); 
+	        //plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
+	        plots[iPlot].fillSignal(ntuple,1); 
 	    if ((sig_sample=="VBFG_4500") || (sig_sample=="VBFWp_4500") || (sig_sample=="VBFRad_4500")) 
-	        plots[iPlot].fillSignal(ntuple,lum*1*2e-05); 
+	        //plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
+	        plots[iPlot].fillSignal(ntuple,1); 
 	    if ((sig_sample=="VBFG_5000") || (sig_sample=="VBFWp_5000") || (sig_sample=="VBFRad_5000")) 
-	        plots[iPlot].fillSignal(ntuple,lum*1*2e-05); 
+	        //plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
+	        plots[iPlot].fillSignal(ntuple,1); 
 	    if ((sig_sample=="VBFG_5500") || (sig_sample=="VBFRad_5500")) 
-	        plots[iPlot].fillSignal(ntuple,lum*1*2e-05); 
+	        //plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
+	        plots[iPlot].fillSignal(ntuple,1); 
 	    if (sig_sample=="VBFWp_5500") 
-	        plots[iPlot].fillSignal(ntuple,lum*1*2.08333e-05); 
+	        //plots[iPlot].fillSignal(ntuple,lum*1*2.08333e-05*trigwt); 
+	        plots[iPlot].fillSignal(ntuple,1); 
 	    if ((sig_sample=="VBFG_6000") || (sig_sample=="VBFWp_6000") || (sig_sample=="VBFRad_6000")) 
-	        plots[iPlot].fillSignal(ntuple,lum*1*2e-05); 
+	        //plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
+	        plots[iPlot].fillSignal(ntuple,1); 
 	    if ((sig_sample=="VBFG_6500") || (sig_sample=="VBFWp_6500") || (sig_sample=="VBFRad_6500")) 
-	        plots[iPlot].fillSignal(ntuple,lum*1*2e-05); 
+	        //plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
+	        plots[iPlot].fillSignal(ntuple,1); 
 	    if ((sig_sample=="VBFG_7000") || (sig_sample=="VBFWp_7000")) 
-	        plots[iPlot].fillSignal(ntuple,lum*1*2e-05); 
+	        //plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
+	        plots[iPlot].fillSignal(ntuple,1); 
 	    if (sig_sample=="VBFRad_7000") 
-	        plots[iPlot].fillSignal(ntuple,lum*1*2.08333e-05); 
+	        //plots[iPlot].fillSignal(ntuple,lum*1*2.08333e-05*trigwt); 
+	        plots[iPlot].fillSignal(ntuple,1); 
 	    if ((sig_sample=="VBFG_7500") || (sig_sample=="VBFWp_7500") || (sig_sample=="VBFRad_7500")) 
-	        plots[iPlot].fillSignal(ntuple,lum*1*2e-05); 
+	        //plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
+	        plots[iPlot].fillSignal(ntuple,1); 
 	    if (sig_sample=="VBFG_8000") 
-	        plots[iPlot].fillSignal(ntuple,lum*1*2.222222e-05); 
+	        //plots[iPlot].fillSignal(ntuple,lum*1*2.222222e-05*trigwt); 
+	        plots[iPlot].fillSignal(ntuple,1); 
 	    if ((sig_sample=="VBFWp_8000") || (sig_sample=="VBFRad_8000")) 
-	        plots[iPlot].fillSignal(ntuple,lum*1*2e-05); 
+	        //plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
+	        plots[iPlot].fillSignal(ntuple,1); 
 
         // based on 2017 samples for ggF
 	    if ((sig_sample=="ggFG_800") || (sig_sample=="ggFWp_800") || (sig_sample=="ggFRad_800")) 
-	        plots[iPlot].fillSignal(ntuple,lum*1*2e-05); 
+	        //plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
+	        plots[iPlot].fillSignal(ntuple,1); 
 	    if ((sig_sample=="ggFG_1000") || (sig_sample=="ggFWp_1000") || (sig_sample=="ggFRad_1000")) 
-	        plots[iPlot].fillSignal(ntuple,lum*1*2e-05); // wt for 48300 evts: 1pb/#evts
+	        //plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); // wt for 48300 evts: 1pb/#evts
+	        plots[iPlot].fillSignal(ntuple,1); 
 	    if ((sig_sample=="ggFG_1200") || (sig_sample=="ggFWp_1200") || (sig_sample=="ggFRad_1200")) 
-	        plots[iPlot].fillSignal(ntuple,lum*1*2e-05); 
+	        //plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
+	        plots[iPlot].fillSignal(ntuple,1); 
 	    if ((sig_sample=="ggFG_1400") || (sig_sample=="ggFWp_1400") || (sig_sample=="ggFRad_1400")) 
-	        plots[iPlot].fillSignal(ntuple,lum*1*2e-05); 
+	        //plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
+	        plots[iPlot].fillSignal(ntuple,1); 
 	    if ((sig_sample=="ggFG_1600") || (sig_sample=="ggFWp_1600") || (sig_sample=="ggFRad_1600")) 
-	        plots[iPlot].fillSignal(ntuple,lum*1*2e-05); 
+	        //plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
+	        plots[iPlot].fillSignal(ntuple,1); 
 	    if ((sig_sample=="ggFG_1800") || (sig_sample=="ggFWp_1800") || (sig_sample=="ggFRad_1800")) 
-	        plots[iPlot].fillSignal(ntuple,lum*1*2e-05); 
+	        //plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
+	        plots[iPlot].fillSignal(ntuple,1); 
 	    if ((sig_sample=="ggFG_2000") || (sig_sample=="ggFWp_2000") || (sig_sample=="ggFRad_2000")) 
-	        plots[iPlot].fillSignal(ntuple,lum*1*2e-05); 
+	        //plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
+	        plots[iPlot].fillSignal(ntuple,1); 
 	    if ((sig_sample=="ggFG_2500") || (sig_sample=="ggFWp_2500") || (sig_sample=="ggFRad_2500")) 
-	        plots[iPlot].fillSignal(ntuple,lum*1*2e-05); 
+	        //plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
+	        plots[iPlot].fillSignal(ntuple,1); 
 	    if ((sig_sample=="ggFG_3000") || (sig_sample=="ggFWp_3000")) 
-	        plots[iPlot].fillSignal(ntuple,lum*1*2e-05); 
+	        //plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
+	        plots[iPlot].fillSignal(ntuple,1); 
 	    if (sig_sample=="ggFRad_3000") 
-	        plots[iPlot].fillSignal(ntuple,lum*1*2.325581395348837e-05); 
+	        //plots[iPlot].fillSignal(ntuple,lum*1*2.325581395348837e-05*trigwt); 
+	        plots[iPlot].fillSignal(ntuple,1); 
 	    if ((sig_sample=="ggFG_3500") || (sig_sample=="ggFWp_3500") || (sig_sample=="ggFRad_3500")) 
-	        plots[iPlot].fillSignal(ntuple,lum*1*2e-05); 
+	        //plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
+	        plots[iPlot].fillSignal(ntuple,1); 
 	    if ((sig_sample=="ggFG_4000") || (sig_sample=="ggFWp_4000") || (sig_sample=="ggFRad_4000")) 
-	        plots[iPlot].fillSignal(ntuple,lum*1*2e-05); 
+	        //plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
+	        plots[iPlot].fillSignal(ntuple,1); 
 	    if ((sig_sample=="ggFG_4500") || (sig_sample=="ggFWp_4500") || (sig_sample=="ggFRad_4500")) 
-	        plots[iPlot].fillSignal(ntuple,lum*1*2e-05); 
+	        //plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
+	        plots[iPlot].fillSignal(ntuple,1); 
 	    if ((sig_sample=="ggFG_5000") || (sig_sample=="ggFWp_5000") || (sig_sample=="ggFRad_5000")) 
-	        plots[iPlot].fillSignal(ntuple,lum*1*2e-05); 
+	        //plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
+	        plots[iPlot].fillSignal(ntuple,1); 
 	    if ((sig_sample=="ggFG_5500") || (sig_sample=="ggFWp_5500")) 
-	        plots[iPlot].fillSignal(ntuple,lum*1*2e-05); 
+	        //plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
+	        plots[iPlot].fillSignal(ntuple,1); 
 	    if (sig_sample=="ggFRad_5500") 
-	        plots[iPlot].fillSignal(ntuple,lum*1*2.08333e-05); 
+	        //plots[iPlot].fillSignal(ntuple,lum*1*2.08333e-05*trigwt); 
+	        plots[iPlot].fillSignal(ntuple,1); 
 	    if ((sig_sample=="ggFG_6000") || (sig_sample=="ggFWp_6000") || (sig_sample=="ggFRad_6000")) 
-	        plots[iPlot].fillSignal(ntuple,lum*1*2e-05); 
+	        //plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
+	        plots[iPlot].fillSignal(ntuple,1); 
 	    if ((sig_sample=="ggFG_6500") || (sig_sample=="ggFWp_6500") || (sig_sample=="ggFRad_6500")) 
-	        plots[iPlot].fillSignal(ntuple,lum*1*2e-05); 
+	        //plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
+	        plots[iPlot].fillSignal(ntuple,1); 
 	    if ((sig_sample=="ggFG_7000") || (sig_sample=="ggFWp_7000") || (sig_sample=="ggFRad_7000")) 
-	        plots[iPlot].fillSignal(ntuple,lum*1*2e-05); 
+	        //plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
+	        plots[iPlot].fillSignal(ntuple,1); 
 	    if ((sig_sample=="ggFG_7500") || (sig_sample=="ggFWp_7500")) 
-	        plots[iPlot].fillSignal(ntuple,lum*1*2e-05); 
+	        //plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
+	        plots[iPlot].fillSignal(ntuple,1); 
 	    if (sig_sample=="ggFRad_7500") 
-	        plots[iPlot].fillSignal(ntuple,lum*1*2.0408163265306123e-05); 
+	        //plots[iPlot].fillSignal(ntuple,lum*1*2.0408163265306123e-05*trigwt); 
+	        plots[iPlot].fillSignal(ntuple,1); 
 	    if ((sig_sample=="ggFG_8000") || (sig_sample=="ggFWp_8000") || (sig_sample=="ggFRad_8000")) 
-	        plots[iPlot].fillSignal(ntuple,lum*1*2e-05); 
+	        //plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
+	        plots[iPlot].fillSignal(ntuple,1); 
         }
     }
 
@@ -749,8 +841,7 @@ void process(string selection_label,
   for( int iSample = 0 ; iSample < skims.dataNtuple.size() ; iSample++){
     RA2bTree* ntuple = skims.dataNtuple[iSample];
     //TFile* outputFile = new TFile("plotObs_"+selection_label+"_baseline_"+skims.dataSampleName[iSample]+".root","RECREATE");
-    TFile* outputFile = new TFile("AN_v0_NLO/plotObs_"+selection_label+"_baseline_"+skims.dataSampleName[iSample]+".root","RECREATE");
-    //TFile* outputFile = new TFile("Test_Files_Jul29/plotObs_"+selection_label+"_baseline_"+skims.dataSampleName[iSample]+".root","RECREATE");
+    TFile* outputFile = new TFile("AN_v1_files/"+year+"/plotObs_"+selection_label+"_"+skims.dataSampleName[iSample]+".root","RECREATE");
 	TString filename;  
     for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
         plots[iPlot].addDataNtuple(ntuple,skims.dataSampleName[iSample]);
@@ -760,7 +851,7 @@ void process(string selection_label,
     ntupleBranchStatus<RA2bTree>(ntuple);
     cout << "data MET: " << numEvents << endl;
     for( int iEvt = 0 ; iEvt < min(MAX_EVENTS,numEvents) ; iEvt++ ){
-    //for( int iEvt = 0 ; iEvt < min(0,numEvents) ; iEvt++ ){
+    //for( int iEvt = 0 ; iEvt < min(100,numEvents) ; iEvt++ ){
         ntuple->GetEntry(iEvt);
         //cout<<"Run Num: "<<ntuple->RunNum<<endl;
         if( iEvt % 100000 == 0 ) cout << "data_MET: " << iEvt << "/" << min(MAX_EVENTS,numEvents) << endl;
