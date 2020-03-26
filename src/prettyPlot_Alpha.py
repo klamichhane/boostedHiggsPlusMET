@@ -10,25 +10,19 @@ year = argv[1]
 cat = argv[2]
 
 #year = "137fb"
-#cat = "ZSB"
-#cat = "ZSBHP"
-#cat = "ZSBHPVBF"
-#cat = "ZSBHPVBFfail"
-#cat = "ZSBFPVBF"
-#cat = "ZSBFPVBFfail"
+#cat = "ZAlphaSBHPVBF"
+#cat = "ZAlphaSBHPVBFfail"
+#cat = "ZAlphaSBHPLooseVBF"
+#cat = "ZAlphaSBHPLooseVBFfail"
+#cat = "ZAlphaSBFPVBF"
+#cat = "ZAlphaSBFPVBFfail"
 
 #norm = "NoNorm"
-norm = "Norm"
+#norm = "Norm"
 
-#cat = "ZSBHPVBFfail"
-#cat = "SB HP VBF"
-
-NLOdir = "AN_v1_NLO_"
-Origdir = "AN_v1_"
-
-plot_dir=NLOdir+"plots/{2}/{0}/{1}".format(cat,year,norm)
-input_file_name = NLOdir+"files/{0}/{1}_AN_v1_{0}.root".format(year,cat)
-output_file_name= NLOdir+"files/{0}/Output_{2}/{1}_AN_v1_{0}_Output_{2}.root".format(year,cat,norm)
+plot_dir="AN_v1_Closure/plots/"
+input_file_name = "AN_v1_files/{0}/{1}_AN_v1_{0}.root".format(year,cat)
+output_file_name= "AN_v1_Closure/{0}/{1}_AN_v1_{0}_Output.root".format(year,cat)
 
 if year == "2016": lumi="35.8/fb"
 elif year == "2017": lumi="41.5/fb"
@@ -83,9 +77,10 @@ def plot(plot_var = "photonIsoChrgLowSieie_EB_photonLoose" ):
               "ZJets_2500toInf"]
              ]
 
-    #signal_samples=["VBFG_1000", "ggFG_1000"]
-    if cat == "ZSBHPVBFfail": signal_samples=["ggFG_1000"]
-    else: signal_samples=["VBFG_1000"]
+    #signal_samples=["VBFG_1000",
+    #                "ggFG_1000"]
+    signal_samples=["VBFG_1000"
+                   ]
 
     if year=="2016": data_samples=["MET_2016B","MET_2016C","MET_2016D","MET_2016E","MET_2016F","MET_2016G","MET_2016H"]
     if year=="2017": data_samples=["MET_2017B","MET_2017C","MET_2017D","MET_2017E","MET_2017F"]
@@ -161,12 +156,11 @@ def plot(plot_var = "photonIsoChrgLowSieie_EB_photonLoose" ):
             total.Add(h)
 
     for i,h in enumerate(samples_histo) : 
-        if h.Integral()>0 and total!=None:
-            h.Scale(data_histo[0].Integral()/total.Integral())
+        #if h.Integral()>0 and total!=None:
+            #h.Scale(data_histo[0].Integral()/total.Integral())
         stack.Add(h)
-    if total!=None and total.Integral()>0: 
-    #if total!=None: 
-        total.Scale(data_histo[0].Integral()/total.Integral())
+    #if total!=None and total.Integral()>0: 
+    #    total.Scale(data_histo[0].Integral()/total.Integral())
 
     # For legend
     leg = r.TLegend(0.45,.77,.9,.92) 
@@ -174,16 +168,13 @@ def plot(plot_var = "photonIsoChrgLowSieie_EB_photonLoose" ):
     leg.SetFillColor(0)
     leg.SetLineColor(r.kWhite)
 
-
-    if signal_samples[0]=="VBFG_1000": sig = "VBFG 1000"
-    else: sig = "ggFG 1000"
     if data_histo:
        leg.AddEntry(data_histo[-1],"data","p") 
        #leg.AddEntry(data_histo[-1],"MET 2016","p") 
     for i in range(len(samples_histo)):
         leg.AddEntry(samples_histo[i],samples_labels[i],"f")
     for i in range(len(signal_histo)):
-        leg.AddEntry(signal_histo[i],sig,"f")
+        leg.AddEntry(signal_histo[i],"VBFG 1000","f")
         #leg.AddEntry(signal_histo[i],signal_labels[i],"f")
 
 

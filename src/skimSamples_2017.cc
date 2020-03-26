@@ -205,6 +205,18 @@ public :
         fileNames["ggFRad_7500"] = "tree_ggFRad_mRad7500_v14_MC2017.root";
         fileNames["ggFRad_8000"] = "tree_ggFRad_mRad8000_v14_MC2017.root";
 
+        fileNames["ggFWp_1000"] = "tree_ggFWp_mWp1000_v3_MC2016.root";
+        fileNames["ggFWp_1200"] = "tree_ggFWp_mWp1200_v3_MC2016.root";
+        fileNames["ggFWp_1400"] = "tree_ggFWp_mWp1400_v3_MC2016.root";
+        fileNames["ggFWp_1600"] = "tree_ggFWp_mWp1600_v3_MC2016.root";
+        //fileNames["ggFWp_1800"] = "tree_ggFWp_mWp1800_v3_MC2016.root";
+        fileNames["ggFWp_2000"] = "tree_ggFWp_mWp2000_v3_MC2016.root";
+        fileNames["ggFWp_2500"] = "tree_ggFWp_mWp2500_v3_MC2016.root";
+        fileNames["ggFWp_3000"] = "tree_ggFWp_mWp3000_v3_MC2016.root";
+        fileNames["ggFWp_3500"] = "tree_ggFWp_mWp3500_v3_MC2016.root";
+        fileNames["ggFWp_4000"] = "tree_ggFWp_mWp4000_v3_MC2016.root";
+        fileNames["ggFWp_4500"] = "tree_ggFWp_mWp4500_v3_MC2016.root";
+
 	for( auto name : backgrounds ){
 
 	  if( fileNames.find(name) != fileNames.end() ){

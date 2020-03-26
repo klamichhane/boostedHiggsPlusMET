@@ -3,8 +3,11 @@ import os
 from sys import argv
 
 #norm = "Norm"
-#norm = "NoNorm"
-norm = "SR"
+norm = "NoNorm"
+#norm = "SR"
+
+#norm = "Alpha"
+
 
 #year = "2018"
 year = str(argv[1])
@@ -21,6 +24,10 @@ elif norm == "NoNorm":
     cat = ["ZSBHPVBF","ZSBHPVBFfail","ZSBFPVBF","ZSBFPVBFfail"] #for NoNorm
     filetorun = "NoNorm_prettyPlot_137fb.py"
 
+elif norm == "Alpha":
+    cat = ["ZAlphaSBHPVBF","ZAlphaSBHPVBFfail","ZAlphaSBFPVBF","ZAlphaSBFPVBFfail","ZAlphaSBHPLooseVBF","ZAlphaSBHPLooseVBFfail",
+           "ZAlphaSRHPVBF","ZAlphaSRHPVBFfail","ZAlphaSRFPVBF","ZAlphaSRFPVBFfail","ZAlphaSRHPLooseVBF","ZAlphaSRHPLooseVBFfail"] #for NoNorm
+    filetorun = "prettyPlot_Alpha.py"
 
 for i in range(len(cat)):
     print" "

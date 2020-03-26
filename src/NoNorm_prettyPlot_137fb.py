@@ -17,9 +17,16 @@ cat = argv[2]
 
 norm = "NoNorm"
 
-plot_dir="AN_v1_plots/{2}/{0}/{1}".format(cat,year,norm)
-input_file_name = "AN_v1_files/{0}/{1}_AN_v1_{0}.root".format(year,cat)
-output_file_name= "AN_v1_files/{0}/Output_{2}/{1}_AN_v1_{0}_Output_{2}.root".format(year,cat,norm)
+NLO = "nlo"
+if NLO=="nlo": location = "AN_v1_NLO_"
+elif NLO=="lo": location = "AN_v1_"
+
+#NLOdir = "AN_v1_NLO_"
+#Origdir = "AN_v1_"
+
+plot_dir        = location+"plots/{2}/{0}/{1}".format(cat,year,norm)
+input_file_name = location+"files/{0}/{1}_AN_v1_{0}.root".format(year,cat)
+output_file_name= location+"files/{0}/Output_{2}/{1}_AN_v1_{0}_Output_{2}.root".format(year,cat,norm)
 
 if year == "2016": lumi="35.8/fb"
 elif year == "2017": lumi="41.5/fb"

@@ -62,7 +62,7 @@ backgroundSamples=[#"QCD_200to300",
                    "Other_TTZToQQ",
 ]
 
-signalSamples=[#"ggFG_1000",
+signalSamples=["ggFG_1000",
                "VBFG_1000", 
                #"VBFG_1200", 
                #"VBFG_1400", 
@@ -121,10 +121,10 @@ print "processed {0} {2} at: {1}".format(cat,end-start,year)
 print""
 #time.sleep(20)
 print "hadding "+cat
-os.system("hadd -f AN_v1_files/{1}/{0}_AN_v1_{1}.root AN_v1_files/{1}/plotObs_{0}_*.root".format(cat,year))
+os.system("hadd -f AN_v1_NLO_files/{1}/{0}_AN_v1_{1}.root AN_v1_NLO_files/{1}/plotObs_{0}_*.root".format(cat,year))
 #time.sleep(20)
-print "removing files for "+cat
-os.system("rm AN_v1_files/{1}/plotObs_{0}_*.root".format(cat,year))
+#print "removing files for "+cat
+#os.system("rm AN_v1_files/{1}/plotObs_{0}_*.root".format(cat,year))
 #time.sleep(20)
 
 
