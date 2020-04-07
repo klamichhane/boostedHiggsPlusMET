@@ -16,8 +16,7 @@ print "If running 2016 & 2018: set tau21 HP value to: 0.35"
 
 #os.system('make plotObs_baseline')
 
-backgroundSamples=[#"QCD_200to300",
-                   "ZJets_100to200",
+backgroundSamples=["ZJets_100to200",
                    "ZJets_200to400",
                    "ZJets_400to600",
                    "ZJets_600to800",
@@ -61,7 +60,7 @@ backgroundSamples=[#"QCD_200to300",
                    "Other_TTZToQQ",
 ]
 
-signalSamples=[#"ggFG_1000",
+signalSamples=["ggFG_1000",
                "VBFG_1000", 
                #"VBFG_1200", 
                #"VBFG_1400", 
@@ -76,14 +75,9 @@ signalSamples=[#"ggFG_1000",
                #"ggFG_4500", 
               ]
 
-dataSamples=["MET_2016B",
-             "MET_2016C",
-             "MET_2016D",
-             "MET_2016E",
-             "MET_2016F",
-             "MET_2016G",
-             "MET_2016H",
-             ]
+if "ZSR" in cat or cat=="Baseline":
+    dataSamples=[]
+else: dataSamples=["MET_2016B","MET_2016C","MET_2016D","MET_2016E","MET_2016F","MET_2016G","MET_2016H"]
 
 def runPlotObsBaseline(sel,bkg,sig,data):
     print '../bin/plotObs_baseline "{0}" "{1}" "{2}" "{3}"'.format(sel,bkg,sig,data)
@@ -118,18 +112,12 @@ for p in processes :
 
 end = datetime.now()
 
-print "started {0} {2} at: {1}".format(cat,start,year)
-print "ended {0} {2} at: {1}".format(cat,end,year)
-print "processed {0} {2} at: {1}".format(cat,end-start,year)
-
 print""
 #time.sleep(20)
 print "hadding "+cat
-os.system("hadd -f AN_v1_files/{1}/{0}_AN_v1_{1}.root AN_v1_files/{1}/plotObs_{0}_*.root".format(cat,year))
-#time.sleep(20)
+os.system("hadd -f AN_v1_NLO_files/{1}/{0}_AN_v1_{1}.root AN_v1_NLO_files/{1}/plotObs_{0}_*.root".format(cat,year))
 print "removing files for "+cat
-os.system("rm AN_v1_files/{1}/plotObs_{0}_*.root".format(cat,year))
-#time.sleep(20)
+os.system("rm AN_v1_NLO_files/{1}/plotObs_{0}_*.root".format(cat,year))
 
 
 2    

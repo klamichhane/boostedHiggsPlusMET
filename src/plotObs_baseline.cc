@@ -12,13 +12,13 @@
 #include <cassert>
 #include "plotterUtils.cc"
 //#include "skimSamples_2016.cc"
-//#include "skimSamples_2017.cc"
-#include "skimSamples_2018.cc"
+#include "skimSamples_2017.cc"
+//#include "skimSamples_2018.cc"
 #include "definitions.h"
 #include "RA2bTree.cc"
 #include "TriggerEfficiencySextet.cc"
 
-string year = "2018"; 
+string year = "2017"; 
 double lum = 0.0;
 double p0, p1, p2;
 
@@ -152,6 +152,7 @@ void process(string selection_label,
   plot MET1plot(*fillMET<RA2bTree>,"MET1_"+selection_label,"MET [GeV]",20,200.,1200.);//50 GeV bin
   plot MET2plot(*fillMET<RA2bTree>,"MET2_"+selection_label,"MET [GeV]",24,200.,800.);//25 GeV bin
   plot HTplot(*fillHT<RA2bTree>,"HT_"+selection_label,"H_{T} [GeV]",75,300,3300.); // 100 GeV bin
+  //plot NgenZsplot(*getNumGenZs<RA2bTree>,"NgenZs_"+selection_label,"n_{genZs}",5,-0.5,4.5); // N genZs from tree
   plot NJetsplot(*fillNJets<RA2bTree>,"NJets_"+selection_label,"n_{jets}",10,0.5,10.5); // Nj from tree
   plot NJets1plot(*fillNJets1<RA2bTree>,"NJets1_"+selection_label,"n_{jets}",10,0.5,10.5); // cent Nj(from tree) w/ pt > 30
   plot NJets2plot(*fillNJets2<RA2bTree>,"NJets2_"+selection_label,"n_{jets}",10,0.5,10.5); // jsize w/ pt>30
@@ -381,6 +382,7 @@ void process(string selection_label,
   plots.push_back(MET1plot);
   plots.push_back(MET2plot);
   plots.push_back(HTplot);
+  //plots.push_back(NgenZsplot);
   plots.push_back(NJetsplot);
   plots.push_back(NJets1plot);
   plots.push_back(NJets2plot);
@@ -610,10 +612,13 @@ void process(string selection_label,
         // HEM Veto
         if(! selectionFunc(ntuple) ) continue;
         if (filename.Contains("MC2018")){
-            if ( ntuple->EvtNum % 1000 < 1000*21.0/59.6) continue;
-            if(! passHEMjetVeto(ntuple, 30) ) continue;
+            if((ntuple->EvtNum % 1000 > 1000*21.0/59.6) && (! passHEMjetVeto(ntuple, 30)))continue;
         }
-        
+        // to avoid the peak at MT with Wjets 200-400 for 2018
+        if (filename.Contains("WJetsToLNu_HT-200to400_MC2018") && selection_label == "ZSRHPVBF"){
+            std::cout<<"Remember, there is a hack in 2018 Wjets 200-400 sample; removing the one spike at high MT tail."<<std::endl;
+            if(fillZMT(ntuple) > 1900.)continue;
+        }
         //trig wt
         trigwt = (TMath::Erf((ntuple->MET - p0) / p1) + 1) / 2. * p2;        
         weight = ntuple->Weight*lum*trigwt;
@@ -622,36 +627,23 @@ void process(string selection_label,
         if (filename.Contains("MC2016") || filename.Contains("MC2017")){
             weight = ntuple->Weight*lum*ntuple->NonPrefiringProb*trigwt; 
         }
-        /*
-        if (getNumGenZs(ntuple) == 0){    
-            std::cout<<"Num 0 Zs count"<<endl;
-            for ( int i=0 ; i < ntuple->GenParticles->size() ; i++ ){
-                std::cout<<" pid for numZs=0: "<<ntuple->GenParticles_PdgId->at(i)<<endl;
-            }
+        
+        //NLO wt for WJets and ZJets Sample, 2017 & 2018 from BU group.
+        if ( (year=="2016") && filename.Contains("_ZJetsTo")){        
+             //weight *= ZJetsNLOWeights(ntuple);
+             weight *= ZJetsNLOWeightsEwk16(ntuple); //Ewk in 2016 is QCD+Ewk
         }
-        */
-        //NLO wt for WJets and ZJets Sample
+        if ( (year=="2016") && filename.Contains("_WJetsTo")){        
+             //weight *= WJetsNLOWeights(ntuple);
+             weight *= WJetsNLOWeightsEwk16(ntuple);
+        }
         if ( (year=="2017" || year=="2018") && filename.Contains("_ZJetsTo")){        
-             //std::cout<<endl;
-             //std::cout<<"before Z nlo wt: "<<weight<<endl;
              weight *= ZJetsNLOWeightsQCD1718(ntuple);
-             //std::cout<<"after Z nlo QCD wt: "<<weight<<endl;
-
              weight *= ZJetsNLOWeightsEwk1718(ntuple);
-
-             //std::cout<<"after Z nlo EWK wt: "<<weight<<endl;
-             //std::cout<<endl;
         }
         if ( (year=="2017" || year == "2018") && filename.Contains("_WJetsTo")){        
-             //std::cout<<endl;
-             //std::cout<<"before W nlo wt: "<<weight<<endl;
              weight *= WJetsNLOWeightsQCD1718(ntuple);
-             //std::cout<<"after W nlo QCD wt: "<<weight<<endl;
-
              weight *= WJetsNLOWeightsEwk1718(ntuple);
-
-             //std::cout<<"after W nlo EWK wt: "<<weight<<endl;
-             //std::cout<<endl;
         }
       // ------------ end weights -------------
 
@@ -692,16 +684,13 @@ void process(string selection_label,
       filename = ntuple->fChain->GetFile()->GetName();
       
       if(! selectionFunc(ntuple) ) continue;
-
-      if (filename.Contains("VBFG") || filename.Contains("ggFG") || filename.Contains("VBFRad") || filename.Contains("ggFRad")) {
-            if(!genZmatched(ntuple)) continue; }
-      if (filename.Contains("VBFWp") || filename.Contains("ggFWp")) {
-            if(!genWpmatched(ntuple)) continue; }
-
+      /*  
+      if (filename.Contains("VBFG") || filename.Contains("ggFG") || filename.Contains("VBFRad") || filename.Contains("ggFRad")) {if(!genZmatched(ntuple)) continue; }
+      if (filename.Contains("VBFWp") || filename.Contains("ggFWp")) {if(!genWpmatched(ntuple)) continue; }
+      */  
       // HEM Veto  
       if(year=="2018"){  
-        if ((ntuple->EvtNum % 1000) < (1000*21.0/59.6)) continue;
-        if(!passHEMjetVeto(ntuple,30)) continue;  
+            if((ntuple->EvtNum % 1000 > 1000*21.0/59.6) && (! passHEMjetVeto(ntuple, 30)))continue;
       }          
 
       // trig wt  
@@ -765,7 +754,7 @@ void process(string selection_label,
 	    if ((sig_sample=="ggFWp_1200") ) plots[iPlot].fillSignal(ntuple,lum*1*1e-05*trigwt); 
 	    if ((sig_sample=="ggFWp_1400") ) plots[iPlot].fillSignal(ntuple,lum*1*1e-05*trigwt); 
 	    if ((sig_sample=="ggFWp_1600") ) plots[iPlot].fillSignal(ntuple,lum*1*1e-05*trigwt); 
-	    //if ((sig_sample=="ggFWp_1800") ) plots[iPlot].fillSignal(ntuple,lum*1*1e-05*trigwt); 
+	   //if ((sig_sample=="ggFWp_1800")) plots[iPlot].fillSignal(ntuple,lum*1*1e-05*trigwt); 
 	    if ((sig_sample=="ggFWp_2000") ) plots[iPlot].fillSignal(ntuple,lum*1*1e-05*trigwt); 
 	    if ((sig_sample=="ggFWp_2500") ) plots[iPlot].fillSignal(ntuple,lum*1*1e-05*trigwt); 
 	    if ((sig_sample=="ggFWp_3000") ) plots[iPlot].fillSignal(ntuple,lum*1*1e-05*trigwt); 
@@ -785,6 +774,7 @@ void process(string selection_label,
 
   // Data samples
   for( int iSample = 0 ; iSample < skims.dataNtuple.size() ; iSample++){
+    isMC_ = false;
     RA2bTree* ntuple = skims.dataNtuple[iSample];
     //TFile* outputFile = new TFile("plotObs_"+selection_label+"_baseline_"+skims.dataSampleName[iSample]+".root","RECREATE");
     TFile* outputFile = new TFile("AN_v1_NLO_files/"+year+"/plotObs_"+selection_label+"_"+skims.dataSampleName[iSample]+".root","RECREATE");
@@ -803,12 +793,13 @@ void process(string selection_label,
         if( iEvt % 100000 == 0 ) cout << "data_MET: " << iEvt << "/" << min(MAX_EVENTS,numEvents) << endl;
 
         if(! selectionFunc(ntuple) ) continue;
+        if( !signalTriggerCut(ntuple) ) continue;
         //HEM Veto
         filename = ntuple->fChain->GetFile()->GetName();
+        
         if(filename.Contains("MET_2018")){
             if(!passHEMjetVeto(ntuple,30)) continue;
         }
-        if( !signalTriggerCut(ntuple) ) continue;
       
         for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
 	        plots[iPlot].fillData(ntuple);

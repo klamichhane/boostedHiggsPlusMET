@@ -81,10 +81,10 @@ def plot(plot_var = "photonIsoChrgLowSieie_EB_photonLoose" ):
               "ZJets_2500toInf"]
              ]
 
-    #signal_samples=["VBFG_1000",
-    #                "ggFG_1000"]
-    signal_samples=["VBFG_1000"
-                   ]
+    if "VBFfail" in cat: signal_samples=["ggFG_1000"]; sig = "ggFG 1000 (1 pb)"
+    else: signal_samples=["VBFG_1000"]; sig = "VBFG 1000 (1 pb)"
+    #signal_samples=["VBFG_1000"]
+
 
     if year=="2016": data_samples=["MET_2016B","MET_2016C","MET_2016D","MET_2016E","MET_2016F","MET_2016G","MET_2016H"]
     if year=="2017": data_samples=["MET_2017B","MET_2017C","MET_2017D","MET_2017E","MET_2017F"]
@@ -159,13 +159,11 @@ def plot(plot_var = "photonIsoChrgLowSieie_EB_photonLoose" ):
             total.Add(h)
 
     for i,h in enumerate(samples_histo) : 
-        #print h.GetTitle(),"before",h.Integral()
         #if h.Integral()>0 and total!=None:
             #h.Scale(data_histo[0].Integral()/total.Integral())
         stack.Add(h)
     #if total!=None and total.Integral()>0: 
     #    total.Scale(data_histo[0].Integral()/total.Integral())
-        #print total.GetTitle()," afterII total, data: ",total.Integral(0,total.GetNbinsX()+1), data_histo[0].Integral(0,data_histo[0].GetNbinsX()+1)
 
     # For legend
     leg = r.TLegend(0.45,.77,.9,.92) 
@@ -179,8 +177,8 @@ def plot(plot_var = "photonIsoChrgLowSieie_EB_photonLoose" ):
     for i in range(len(samples_histo)):
         leg.AddEntry(samples_histo[i],samples_labels[i],"f")
     for i in range(len(signal_histo)):
-        leg.AddEntry(signal_histo[i],"VBFG 1000","f")
-        #leg.AddEntry(signal_histo[i],signal_labels[i],"f")
+        leg.AddEntry(signal_histo[i],sig,"f")
+        #leg.AddEntry(signal_histo[i],"VBFG 1000","f")
 
 
     can = r.TCanvas("can","can",500,500)

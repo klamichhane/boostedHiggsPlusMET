@@ -26,6 +26,8 @@ TH1F* WJets_LO = (TH1F*) NLOWeightFile->Get("WJets_LO/inv_pt");
 TH1F* ZJets_NLO = (TH1F*) NLOWeightFile->Get("ZJets_01j_NLO/nominal");
 TH1F* ZJets_LO = (TH1F*) NLOWeightFile->Get("ZJets_LO/inv_pt");
 
+TH1F* ZJets_Ewk16 = (TH1F*) NLOWeightFile->Get("EWKcorr/Z");
+TH1F* WJets_Ewk16 = (TH1F*) NLOWeightFile->Get("EWKcorr/W");
 // - - - - - - W and ZJets EWK NLO kfactor from Boston group - - - - - - 
 TFile* EwkZNLOFile = new TFile("../data/merged_kfactors_zjets_fromBU.root");
 TFile* EwkWNLOFile = new TFile("../data/merged_kfactors_wjets_fromBU.root");
@@ -123,6 +125,7 @@ template<typename ntupleType>void ntupleBranchStatus(ntupleType* ntuple){
   ntuple->fChain->SetBranchStatus("NonPrefiringProbUp",1);
   ntuple->fChain->SetBranchStatus("NonPrefiringProbDn",1);
   ntuple->fChain->SetBranchStatus("HTRatioDPhiFilter",1);
+  ntuple->fChain->SetBranchStatus("HTRatioDPhiTightFilter",1);
     
 }
 
@@ -228,14 +231,15 @@ template<typename ntupleType> int getNumGenHiggses(ntupleType* ntuple){
     return numHiggses;
 }
 
-template<typename ntupleType> int getNumGenZs(ntupleType* ntuple){
+//template<typename ntupleType> int getNumGenZs(ntupleType* ntuple){
+template<typename ntupleType> double getNumGenZs(ntupleType* ntuple){
     int numZs=0;
     for( int i=0 ; i < ntuple->GenParticles->size() ; i++ ){
         if( (ntuple->GenParticles_PdgId->at(i) == 23) && (ntuple->GenParticles_Status->at(i) == 62)){ 
             numZs++;
         }    
     }
-    std::cout<<"num zs: "<< numZs<<std::endl;
+    //std::cout<<"num zs: "<< numZs<<std::endl;
     return numZs;
 }
 
@@ -288,9 +292,13 @@ template<typename ntupleType> double WJetsNLOWeights(ntupleType* ntuple){
         if( abs(ntuple->GenParticles_PdgId->at(p)) == 24 )
             Wpt = ntuple->GenParticles->at(p).Pt();
     }
-    if( Wpt>150. ){
+    if( Wpt>150. && Wpt<1250.){
         double LO = WJets_LO->GetBinContent( WJets_LO->FindBin(Wpt) );
         double NLO = WJets_NLO->GetBinContent( WJets_NLO->FindBin(Wpt) );
+        return (LO==0?0.:NLO/LO/1.21);
+    }else if( Wpt >= 1250.){
+        double LO =  WJets_LO->GetBinContent(  WJets_LO->GetNbinsX() );
+        double NLO = WJets_NLO->GetBinContent( WJets_NLO->GetNbinsX());
         return (LO==0?0.:NLO/LO/1.21);
     }else
         return WJets_NLO->GetBinContent(1)/WJets_LO->GetBinContent(1)/1.21;
@@ -302,14 +310,55 @@ template<typename ntupleType> double ZJetsNLOWeights(ntupleType* ntuple){
         if( abs(ntuple->GenParticles_PdgId->at(p)) == 23 )
             Zpt = ntuple->GenParticles->at(p).Pt();
     }
-    if( Zpt>150. ){
+    if( Zpt>150. && Zpt < 1250.){
         double LO = ZJets_LO->GetBinContent( ZJets_LO->FindBin(Zpt) );
         double NLO = ZJets_NLO->GetBinContent( ZJets_NLO->FindBin(Zpt) );
+        return (LO==0?0.:NLO/LO/1.23);
+    }else if( Zpt >= 1250.){
+        double LO = ZJets_LO->GetBinContent( ZJets_LO->GetNbinsX());
+        double NLO = ZJets_NLO->GetBinContent( ZJets_NLO->GetNbinsX());
         return (LO==0?0.:NLO/LO/1.23);
     }else
         return ZJets_NLO->GetBinContent(1)/ZJets_LO->GetBinContent(1)/1.23;
 }
 
+template<typename ntupleType> double ZJetsNLOWeightsEwk16(ntupleType* ntuple){
+    double Zpt=-999.;
+    for( unsigned int p = 0 ; p < ntuple->GenParticles->size() ; p++ ){
+        if( abs(ntuple->GenParticles_PdgId->at(p)) == 23 )
+            Zpt = ntuple->GenParticles->at(p).Pt();
+    }
+    // k-factor histogram goes from 150 to 1250 GeV, and has 24 bins
+    if( Zpt > 150. && Zpt < 1250.){
+        double LO = ZJets_LO->GetBinContent( ZJets_LO->FindBin(Zpt) );
+        double NLO = ZJets_Ewk16->GetBinContent( ZJets_Ewk16->FindBin(Zpt) );
+        return (LO==0?0.:NLO/LO/1.23);
+    }else if( Zpt >= 1250.){
+        double LO = ZJets_LO->GetBinContent( ZJets_LO->GetNbinsX());
+        double NLO = ZJets_Ewk16->GetBinContent( ZJets_Ewk16->GetNbinsX());
+        return (LO==0?0.:NLO/LO/1.23);
+    }else
+        return ZJets_Ewk16->GetBinContent(1)/ZJets_LO->GetBinContent(1)/1.23;
+}
+
+template<typename ntupleType> double WJetsNLOWeightsEwk16(ntupleType* ntuple){
+    double Wpt=-999.;
+    for( unsigned int p = 0 ; p < ntuple->GenParticles->size() ; p++ ){
+        if( abs(ntuple->GenParticles_PdgId->at(p)) == 24 )
+            Wpt = ntuple->GenParticles->at(p).Pt();
+    }
+    // k-factor histogram goes from 150 to 1250 GeV, and has 24 bins
+    if( Wpt > 150. && Wpt < 1250.){
+        double LO = WJets_LO->GetBinContent( WJets_LO->FindBin(Wpt) );
+        double NLO = WJets_Ewk16->GetBinContent( WJets_Ewk16->FindBin(Wpt) );
+        return (LO==0?0.:NLO/LO/1.21);
+    }else if( Wpt >= 1250.){
+        double LO = WJets_LO->GetBinContent( WJets_LO->GetNbinsX() );
+        double NLO = WJets_Ewk16->GetBinContent( WJets_Ewk16->GetNbinsX() );
+        return (LO==0?0.:NLO/LO/1.21);
+    }else
+        return WJets_Ewk16->GetBinContent(1)/WJets_Ewk16->GetBinContent(1)/1.21;
+}
 // New NLO weights from Boston group:
 // https://github.com/bu-cms/bucoffea/blob/master/bucoffea/monojet/definitions.py#L606-L626
 // https://github.com/bu-cms/bucoffea/tree/master/bucoffea/data/sf/theory
@@ -321,7 +370,7 @@ double NLOfitfun( double vpt, double a , double b, double c){
 }
 
 template<typename ntupleType> double ZJetsNLOWeightsQCD1718(ntupleType* ntuple){
-    double Zpt=-999.;
+    double Zpt=1.0;
     double Z_kfactor = 1.0;
 
     for( unsigned int p = 0 ; p < ntuple->GenParticles->size() ; p++ ){
@@ -334,12 +383,13 @@ template<typename ntupleType> double ZJetsNLOWeightsQCD1718(ntupleType* ntuple){
     if( Zpt>150. ){
         Z_kfactor = NLOfitfun(Zpt,1.434,2.210e-3,0.443); //fitfun(gen_v_pt, 1.434, 2.210e-3, 0.443)
         return (Z_kfactor);
+        //return (Z_kfactor/1.23);
     }else
-        return (1.0);
+        return 1.0;
 }
 
 template<typename ntupleType> double WJetsNLOWeightsQCD1718(ntupleType* ntuple){
-    double Wpt=-999.;
+    double Wpt=1.0;
     double W_kfactor = 1.0;
     for( unsigned int p = 0 ; p < ntuple->GenParticles->size() ; p++ ){
         if( abs(ntuple->GenParticles_PdgId->at(p)) == 24 )
@@ -347,9 +397,10 @@ template<typename ntupleType> double WJetsNLOWeightsQCD1718(ntupleType* ntuple){
     }
     if( Wpt>150. ){
         W_kfactor = NLOfitfun(Wpt,1.053, 3.163e-3, 0.746); //fitfun(gen_v_pt, 1.053, 3.163e-3, 0.746)
-        return (W_kfactor);
+        return W_kfactor;
+        //return (W_kfactor/1.21);
     }else
-        return (1.0);
+        return 1.0;
 }
 
 template<typename ntupleType> double ZJetsNLOWeightsEwk1718(ntupleType* ntuple){
@@ -1424,15 +1475,15 @@ template<typename ntupleType> bool HEMRunFilterCut(ntupleType* ntuple, bool MC_H
  bool passHEMjetVeto(RA2bTree* ntuple, double ptThresh = 30) {
     if (!isMC_ && ntuple->RunNum < StartHEM) return true;
     METPhi = ntuple->METPhi;
+    //METPhi = ntuple->MHTPhi;
 
    for (int p = 0; p < ntuple->Jets->size(); p++){
        JetPhi = ntuple->Jets->at(p).Phi();
-       //DeltaPhi = deltaPhi(JetPhi,MHTPhi);
        DeltaPhi = CalcdPhi(JetPhi,METPhi);
-   if (-3.2 <= ntuple->Jets->at(p).Eta() && ntuple->Jets->at(p).Eta() <= -1.2 &&
-      -1.77 <= ntuple->Jets->at(p).Phi() && ntuple->Jets->at(p).Phi() <= -0.67 &&
-       ntuple->Jets->at(p).Pt() > ptThresh && abs(DeltaPhi) < 0.5)
-        return false;
+       if (-3.2 <= ntuple->Jets->at(p).Eta() && ntuple->Jets->at(p).Eta() <= -1.2 &&
+           -1.77 <= ntuple->Jets->at(p).Phi() && ntuple->Jets->at(p).Phi() <= -0.67 &&
+           ntuple->Jets->at(p).Pt() > ptThresh && abs(DeltaPhi) < 0.5)
+            return false;
     }
     return true;
 };

@@ -9,23 +9,15 @@ r.gROOT.ProcessLine("setTDRStyle()")
 year = argv[1]
 cat = argv[2]
 
-#year = "2016"
-#year = "2017"
-#year = "2018"
-#year = "137fb"
-#cat = "ZSR"
-#cat = "ZSRHP"
-#cat = "ZSRHPVBF"
-#cat = "ZSRHPVBFfail"
-#cat = "ZSRFPVBF"
-#cat = "ZSRFPVBFfail"
-
 norm = "NoNorm"
 
+NLO = "nlo"
+if NLO=="nlo": location = "AN_v1_NLO_"
+elif NLO=="lo": location = "AN_v1_"
 
-plot_dir="AN_v1_plots/{2}/{0}/{1}".format(cat,year,norm)
-input_file_name = "AN_v1_files/{0}/{1}_AN_v1_{0}.root".format(year,cat)
-output_file_name= "AN_v1_files/{0}/Output_{2}/{1}_AN_v1_{0}_Output_{2}.root".format(year,cat,norm)
+plot_dir         = location+"plots/{2}/{0}/{1}".format(cat,year,norm)
+input_file_name  = location+"files/{0}/{1}_AN_v1_{0}.root".format(year,cat)
+output_file_name = location+"files/{0}/Output_{2}/{1}_AN_v1_{0}_Output_{2}.root".format(year,cat,norm)
 
 if year == "2016": lumi="35.8/fb"
 elif year == "2017": lumi="41.5/fb"
@@ -83,8 +75,8 @@ def plot(plot_var = "photonIsoChrgLowSieie_EB_photonLoose" ):
               "ZJets_2500toInf"]
              ]
 
-    signal_samples=["VBFG_1000"]#, 
-                    #"ggFG_1000"]
+    if "VBFfail" in cat: signal_samples=["ggFG_1000"];signal_labels = ["ggFG 1000 (1 pb)"]
+    else: signal_samples=["VBFG_1000"];signal_labels = ["VBFG 1000 (1 pb)"]
 
     data_samples=["MET_2016H",#]
                 "MET_2016G",
@@ -95,10 +87,7 @@ def plot(plot_var = "photonIsoChrgLowSieie_EB_photonLoose" ):
                 "MET_2016B"]
 
     samples_labels = ["SnglT","TT","Other","WJets","ZJets"]
-    signal_labels = ["VBFG_1000"]
-    #signal_labels = ["VBFG_1000","ggFG_1000"]
     signal_line_color = [2]
-    #signal_line_color = [2,46]
     samples_fill_color = [r.kOrange,r.kCyan,r.kOrange+3,r.kBlue,r.kGreen+1]
     samples_line_color = [1,1,1,1,1]
     
@@ -233,9 +222,6 @@ def plot(plot_var = "photonIsoChrgLowSieie_EB_photonLoose" ):
     SIMtext.SetTextSize(0.04)
     SIMtext.Draw()
     
-    #LUMItext = r.TText(.45,.95,"13 TeV (38.6/fb : Post-HEM)")
-    #LUMItext = r.TText(.60,.95,"(14/fb : Pre-HEM)") # RunA
-    #LUMItext = r.TText(.60,.95,"(38.6/fb : Post-HEM)") # Run D
     #LUMItext = r.TText(.65,.95,"13 TeV (20.9/fb : Pre-HEM)")
     LUMItext = r.TText(.60,.95,"13 TeV ({0})".format(lumi))
     LUMItext.SetNDC()

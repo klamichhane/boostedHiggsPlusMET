@@ -77,11 +77,9 @@ signalSamples=["ggFG_1000",
                #"ggFG_4500", 
               ]
 
-dataSamples=["MET_2018A",
-             "MET_2018B",
-             "MET_2018C",
-             "MET_2018D",
-             ]
+if "ZSR" in cat or cat=="Baseline":
+    dataSamples=[]
+else: dataSamples=["MET_2018A","MET_2018B","MET_2018C","MET_2018D"]
 
 def runPlotObsBaseline(sel,bkg,sig,data):
     print '../bin/plotObs_baseline "{0}" "{1}" "{2}" "{3}"'.format(sel,bkg,sig,data)
@@ -114,18 +112,13 @@ for p in processes :
 
 end = datetime.now()
 
-print "started {0} {2} at: {1}".format(cat,start,year)
-print "ended {0} {2} at: {1}".format(cat,end,year)
-print "processed {0} {2} at: {1}".format(cat,end-start,year)
 
 print""
 #time.sleep(20)
 print "hadding "+cat
 os.system("hadd -f AN_v1_NLO_files/{1}/{0}_AN_v1_{1}.root AN_v1_NLO_files/{1}/plotObs_{0}_*.root".format(cat,year))
-#time.sleep(20)
-#print "removing files for "+cat
-#os.system("rm AN_v1_files/{1}/plotObs_{0}_*.root".format(cat,year))
-#time.sleep(20)
+print "removing files for "+cat
+os.system("rm AN_v1_NLO_files/{1}/plotObs_{0}_*.root".format(cat,year))
 
 
 2    

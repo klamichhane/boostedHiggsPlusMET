@@ -1,0 +1,22 @@
+imax 2  number of channels
+jmax 2  number of backgrounds
+kmax *  number of nuisance parameters (sources of systematic uncertainties)
+#S: signal region, C: control region or sideband, number is bin number
+bin         S15                      C15                      
+observation 0.000000999999997        0.000000999999997        
+bin         S15                      S15                      S15                      C15                      C15                      C15                      
+process     sig                      bkg                      rare                     sig                      bkg                      rare                     
+process     0                        1                        2                        0                        1                        2                        
+rate        0.094856080160522        0.223781600594521        0.000000999999997        0.002710172386479        1.934782981872559        0.048724647611380        
+#--------------------------
+flat_15 lnU - 100 - - 100 -
+bkgPdfUnc lnN - 1.02699995041 - - 1.02699995041 -
+bkgScaleUnc lnN - 0.980000019073 - - 0.980000019073 -
+rareUnc_15 lnN - - 1.2 - - 1.2
+sigUnc_15 lnN 1.2 - - 1.2 - -
+SigSR_stat_VBF_15 lnN 1.16903076785 - - - - -
+BkgSR_stat_VBF_15 lnN - 1.26925196281 - - - -
+RareSR_stat_VBF_15 lnN - - 34356.3103488 - - -
+SigSB_stat_VBF_15 lnN - - - 2.0 - -
+BkgSB_stat_VBF_15 lnN - - - - 1.10465313911 -
+RareSB_stat_VBF_15 lnN - - - - - 1.83400153432

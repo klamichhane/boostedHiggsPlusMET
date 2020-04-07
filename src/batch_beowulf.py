@@ -7,16 +7,11 @@ import time
 print "If running SB category, change the number of events for data"
 #year = "2017"
 year = sys.argv[1]
-#que = ["AlphaSBHPNoVBF","AlphaSRHPNoVBF","AlphaSBHPVBF","AlphaSRHPVBF"]
-#que = ["ZSBHPVBF","ZSBHPVBFfail","ZSBFPVBF","ZSBFPVBFfail"]
-#que =  ["ZSRHPVBF","ZSRHPVBFfail","ZSRFPVBF","ZSRFPVBFfail"]
-#que = ["AlphaSBFPVBFfail","AlphaSRFPVBFfail","AlphaSBHPVBFfail","AlphaSRHPVBFfail"]
-#que = ["Baseline","ZSR","ZSRHP","ZSRHPVBFfail"]
-#que = ["Baseline","ZSR","ZSRHP","ZSRHPVBF"]
-que = ["ZSB"]
-#que = ["ZSRHPVBFfail","ZSBHPVBFfail"]
-#que = ["ZAlphaSRHPVBF","ZAlphaSBHPVBFfail","ZAlphaSRHPVBFfail"]
-#que = ["ZAlphaSBFPVBF","ZAlphaSRFPVBF","ZAlphaSBFPVBFfail","ZAlphaSRFPVBFfail"]
+#que = ["Baseline"]
+#que = ["ZSB","ZSBHP","ZSBHPVBF","ZSBHPVBFfail","ZSR","ZSRHP","ZSRHPVBF","ZSRHPVBFfail"]
+que = ["ZSBHPVBF","ZSBHPVBFfail","ZSRHPVBF","ZSRHPVBFfail"]
+#que = ["ZSBHPVBF","ZSBHPVBFfail"]
+#que = ["ZAlphaSBHPVBF","ZAlphaSRHPVBF","ZAlphaSBHPVBFfail","ZAlphaSRHPVBFfail"]
 #que = ["ZAlphaSBHPLooseVBF","ZAlphaSRHPLooseVBF","ZAlphaSBHPLooseVBFfail","ZAlphaSRHPLooseVBFfail"]
 
 for i in range(len(que)):

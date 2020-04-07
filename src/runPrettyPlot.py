@@ -3,30 +3,33 @@ import os
 from sys import argv
 
 #norm = "Norm"
-norm = "NoNorm"
-#norm = "SR"
+#norm = "NoNorm"
+norm = "SR"
 
 #norm = "Alpha"
 
-
-#year = "2018"
 year = str(argv[1])
 
 filetorun = ""
 
 if norm == "SR":
-    cat = ["ZSR","ZSRHP","ZSRHPVBF","ZSRHPVBFfail","ZSRFPVBF","ZSRFPVBFfail"] # for SR
+    #cat = ["ZSR","ZSRHP","ZSRHPVBF","ZSRHPVBFfail","ZSRFPVBF","ZSRFPVBFfail"] # for SR
+    cat = ["ZSR","ZSRHP","ZSRHPVBF","ZSRHPVBFfail"] # for SR
+    #cat = ["ZSRHPVBF","ZSRHPVBFfail"]
+    #cat = ["ZSRHP"]
     filetorun = "prettyPlot_NoRatio_137fb.py"
 elif norm == "Norm":
     cat = ["ZSB","ZSBHP","ZSBHPVBF","ZSBHPVBFfail","ZSBFPVBF","ZSBFPVBFfail"] #for Norm
     filetorun = "prettyPlot_137fb.py"
 elif norm == "NoNorm":
-    cat = ["ZSBHPVBF","ZSBHPVBFfail","ZSBFPVBF","ZSBFPVBFfail"] #for NoNorm
+    #cat = ["ZSBHPVBF","ZSBHPVBFfail","ZSBFPVBF","ZSBFPVBFfail"] #for NoNorm
+    cat = ["ZSB","ZSBHP","ZSBHPVBF","ZSBHPVBFfail"] #for NoNorm
     filetorun = "NoNorm_prettyPlot_137fb.py"
 
 elif norm == "Alpha":
-    cat = ["ZAlphaSBHPVBF","ZAlphaSBHPVBFfail","ZAlphaSBFPVBF","ZAlphaSBFPVBFfail","ZAlphaSBHPLooseVBF","ZAlphaSBHPLooseVBFfail",
-           "ZAlphaSRHPVBF","ZAlphaSRHPVBFfail","ZAlphaSRFPVBF","ZAlphaSRFPVBFfail","ZAlphaSRHPLooseVBF","ZAlphaSRHPLooseVBFfail"] #for NoNorm
+    cat = ["ZAlphaSBHPVBF","ZAlphaSBHPVBFfail","ZAlphaSRHPVBF","ZAlphaSRHPVBFfail"] #for NoNorm
+    #cat = ["ZAlphaSBHPVBF","ZAlphaSBHPVBFfail","ZAlphaSBFPVBF","ZAlphaSBFPVBFfail","ZAlphaSBHPLooseVBF","ZAlphaSBHPLooseVBFfail",
+    #       "ZAlphaSRHPVBF","ZAlphaSRHPVBFfail","ZAlphaSRFPVBF","ZAlphaSRFPVBFfail","ZAlphaSRHPLooseVBF","ZAlphaSRHPLooseVBFfail"] #for NoNorm
     filetorun = "prettyPlot_Alpha.py"
 
 for i in range(len(cat)):
