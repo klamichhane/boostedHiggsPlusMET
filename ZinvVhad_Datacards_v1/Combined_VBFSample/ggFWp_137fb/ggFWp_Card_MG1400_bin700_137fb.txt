@@ -1,0 +1,21 @@
+imax 2  number of channels
+jmax 2  number of backgrounds
+kmax *  number of nuisance parameters (sources of systematic uncertainties)
+bin         sR_ggF_4                 cR_ggF_4                 
+observation 3996.784179687500000     2343.000000000000000     
+bin         sR_ggF_4                 sR_ggF_4                 sR_ggF_4                 cR_ggF_4                 cR_ggF_4                 cR_ggF_4                 
+process     sig                      bkg                      rare                     sig                      bkg                      rare                     
+process     0                        1                        2                        0                        1                        2                        
+rate        0.219459681738281        3120.556640625000000     496.803649902343750      0.051491489683914        2003.336669921875000     96.080528259277344       
+#--------------------------
+flat_4 lnU - 100 - - 100 -
+bkgPdfUnc lnN - 1.01300001144 - - 1.01300001144 -
+bkgScaleUnc lnN - 0.980000019073 - - 0.980000019073 -
+rareUnc_4 lnN - - 1.2 - - 1.2
+sigUnc_4 lnN 1.2 - - 1.2 - -
+SigSR_stat_VBFfail_4 lnN 1.1111111808 - - - - -
+BkgSR_stat_VBFfail_4 lnN - 1.00888563226 - - - -
+RareSR_stat_VBFfail_4 lnN - - 1.02812875562 - - -
+SigSB_stat_VBFfail_4 lnN - - - 1.22941573473 - -
+BkgSB_stat_VBFfail_4 lnN - - - - 1.00991806731 -
+RareSB_stat_VBFfail_4 lnN - - - - - 1.06669459618
