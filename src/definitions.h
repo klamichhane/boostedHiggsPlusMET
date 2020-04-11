@@ -1798,15 +1798,12 @@ template<typename ntupleType> double fillVBF_j2CHEF(ntupleType* ntuple){
 
 template<typename ntupleType> double fillVBF_Mjj(ntupleType* ntuple){
     vector<TLorentzVector> vbf_jets = cleanedVBFjets(ntuple,0);
-    //if( vbf_jets.size() < 2 ) return -9999.;
         TLorentzVector temp(vbf_jets[0]);
         temp+=vbf_jets[1];
-    //return (temp.M()); 
-    
     if (vbf_jets[0].Pt()>30.0 && vbf_jets[1].Pt()>30.0) 
         return temp.M();
     else
-        return -999.;
+        return 0.;
 }
 
 template<typename ntupleType> double fillVBF_Ptjj(ntupleType* ntuple){
@@ -1814,7 +1811,6 @@ template<typename ntupleType> double fillVBF_Ptjj(ntupleType* ntuple){
     //if( vbf_jets.size() < 2 ) return -1.;
     TLorentzVector temp(vbf_jets[0]);
     temp+=vbf_jets[1];
-    //return temp.Pt(); 
     if (vbf_jets[0].Pt()>30.0 && vbf_jets[1].Pt()>30.0) 
         return temp.Pt();
     else
@@ -1828,7 +1824,7 @@ template<typename ntupleType> double fillVBF_dEta(ntupleType* ntuple){
     if (vbf_jets[0].Pt()>30.0 && vbf_jets[1].Pt()>30.0) 
         return  fabs(vbf_jets[0].Eta()-vbf_jets[1].Eta());
     else
-        return -999.;
+        return 0.;
 }
 
 template<typename ntupleType> double fillVBF_dPhi(ntupleType* ntuple){
@@ -1838,7 +1834,7 @@ template<typename ntupleType> double fillVBF_dPhi(ntupleType* ntuple){
     if (vbf_jets[0].Pt()>30.0 && vbf_jets[1].Pt()>30.0) 
         return CalcdPhi(vbf_jets[0].Phi(), vbf_jets[1].Phi());
     else
-        return -999.;
+        return -1.;
 }
 
 template<typename ntupleType> double fillVBF_j1Eta(ntupleType* ntuple){
