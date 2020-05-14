@@ -14,7 +14,8 @@
 
 using namespace std;
 
-double lumi=59546.381; // 2018
+double lumi=1.0; 
+//double lumi=59546.381; // 2018
 //double lumi=41486.136;   // 2017
 //double lumi=35815.165; // 2016
 

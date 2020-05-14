@@ -78,6 +78,7 @@ signalSamples=["ggFG_1000",
 if "ZSR" in cat or cat=="Baseline":
     dataSamples=[]
 else: dataSamples=["MET_2016B","MET_2016C","MET_2016D","MET_2016E","MET_2016F","MET_2016G","MET_2016H"]
+#else: dataSamples=[]
 
 def runPlotObsBaseline(sel,bkg,sig,data):
     print '../bin/plotObs_baseline "{0}" "{1}" "{2}" "{3}"'.format(sel,bkg,sig,data)

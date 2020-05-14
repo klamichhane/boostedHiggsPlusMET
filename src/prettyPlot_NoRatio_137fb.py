@@ -10,14 +10,15 @@ year = argv[1]
 cat = argv[2]
 
 norm = "NoNorm"
+test = "-PUwt"
 
 NLO = "nlo"
 if NLO=="nlo": location = "AN_v1_NLO_"
 elif NLO=="lo": location = "AN_v1_"
 
-plot_dir         = location+"plots/{2}/{0}/{1}".format(cat,year,norm)
-input_file_name  = location+"files/{0}/{1}_AN_v1_{0}.root".format(year,cat)
-output_file_name = location+"files/{0}/Output_{2}/{1}_AN_v1_{0}_Output_{2}.root".format(year,cat,norm)
+plot_dir         = location+"plots/{2}{3}/{0}/{1}".format(cat,year,norm,test)
+input_file_name  = location+"files/{0}{2}/{1}_AN_v1_{0}.root".format(year,cat,test)
+output_file_name = location+"files/{0}{3}/Output_{2}/{1}_AN_v1_{0}_Output_{2}.root".format(year,cat,norm,test)
 
 if year == "2016": lumi="35.8/fb"
 elif year == "2017": lumi="41.5/fb"

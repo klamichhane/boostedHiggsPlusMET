@@ -9,27 +9,16 @@ r.gROOT.ProcessLine("setTDRStyle()")
 year = argv[1]
 cat = argv[2]
 
-#year = "137fb"
-#cat = "ZSBHPVBF"
-#cat = "ZSBHPVBFfail"
-#cat = "ZSBFPVBF"
-#cat = "ZSBFPVBFfail"
-
 norm = "NoNorm"
 #test = "-PUwt"
 #test = "-PUwtCentral"
 test = "-MjCorr"
 
-NLO = "nlo"
-if NLO=="nlo": location = "AN_v1_NLO_"
-elif NLO=="lo": location = "AN_v1_"
+location = "AN_v1_NLO_"
 
-#NLOdir = "AN_v1_NLO_"
-#Origdir = "AN_v1_"
-
-plot_dir        = location+"plots/{2}{3}/{0}/{1}".format(cat,year,norm,test)
-input_file_name = location+"files/{0}{2}/{1}_AN_v1_{0}.root".format(year,cat,test)
-output_file_name= location+"files/{0}{3}/Output_{2}/{1}_AN_v1_{0}_Output_{2}.root".format(year,cat,norm,test)
+plot_dir         = location+"plots/{2}{3}/{0}/{1}".format(cat,year,norm,test)
+input_file_name  = location+"files/{0}{2}/{1}_AN_v1_{0}.root".format(year,cat,test)
+output_file_name = location+"files/{0}{3}/Output_{2}/{1}_AN_v1_{0}_Output_{2}.root".format(year,cat,norm,test)
 
 if year == "2016": lumi="35.8/fb"
 elif year == "2017": lumi="41.5/fb"
@@ -40,49 +29,28 @@ elif year == "137fb": lumi="137/fb"
 input_file = r.TFile(input_file_name,"READ")    
 
 def plot(plot_var = "photonIsoChrgLowSieie_EB_photonLoose" ):
+    zjets = ["ZJets_100to200", "ZJets_200to400", "ZJets_400to600", "ZJets_600to800",
+             "ZJets_800to1200", "ZJets_1200to2500", "ZJets_2500toInf"]
+    wjets = ["WJets_100to200", "WJets_200to400", "WJets_400to600", "WJets_600to800",
+             "WJets_800to1200", "WJets_1200to2500", "WJets_2500toInf"]
+    tt = ["TT_600to800", "TT_800to1200", "TT_1200to2500", "TT_2500toInf",
+          "TT_1LFromT", "TT_1LFromTbar", "TT_2L"]
 
-    samples=[#["QCD_200to300",
-             ["ST_s-channel",
-              "ST_t-channel_antitop",
-              "ST_t-channel_top",
-              "ST_tW_antitop",
-              "ST_tW_top"],
-             ["TT_600to800",
-              "TT_800to1200",
-              "TT_1200to2500",
-              "TT_2500toInf",
-              "TT_1LFromT",
-              "TT_1LFromTbar",
-              "TT_2L"],
-             ["Other_WWTo1L1Nu2Q",
-              "Other_WWZ",
-              "Other_WZTo1L1Nu2Q",
-              "Other_WZTo1L3Nu",
-              "Other_WZZ",
-              "Other_ZZTo2L2Q",
-              "Other_ZZTo2Q2Nu",
-              "Other_ZZZ",
-              "Other_TTTT",
-              "Other_TTWJetsToLNu",
-              "Other_TTWJetsToQQ",
-              "Other_TTGJets",
-              "Other_TTZToLLNuNu",
-              "Other_TTZToQQ"],
-             ["WJets_100to200",
-              "WJets_200to400",
-              "WJets_400to600",
-              "WJets_600to800",
-              "WJets_800to1200",
-              "WJets_1200to2500",
-              "WJets_2500toInf"],
-             ["ZJets_100to200",
-              "ZJets_200to400",
-              "ZJets_400to600",
-              "ZJets_600to800",
-              "ZJets_800to1200",
-              "ZJets_1200to2500",
-              "ZJets_2500toInf"]
-             ]
+    if year == "2018": 
+        snglt = ["ST_s-channel", "ST_tW_antitop", "ST_tW_top"] 
+        other = ["Other_WWTo1L1Nu2Q", "Other_WZTo1L3Nu", "Other_ZZTo2L2Q", "Other_TTWJetsToLNu",
+                  "Other_TTWJetsToQQ", "Other_TTGJets", "Other_TTZToLLNuNu", "Other_TTZToQQ"]
+    elif year == "2017":
+          other = ["Other_WWTo1L1Nu2Q", "Other_WZTo1L1Nu2Q", "Other_WZTo1L3Nu", "Other_WZZ",
+                   "Other_ZZTo2L2Q", "Other_ZZZ", "Other_TTTT", "Other_TTWJetsToLNu",
+                   "Other_TTWJetsToQQ", "Other_TTGJets", "Other_TTZToLLNuNu", "Other_TTZToQQ"]
+    else: 
+        snglt = ["ST_s-channel", "ST_t-channel_antitop", "ST_t-channel_top", "ST_tW_antitop", "ST_tW_top"] 
+        other = ["Other_WWTo1L1Nu2Q", "Other_WWZ", "Other_WZTo1L1Nu2Q", "Other_WZTo1L3Nu", "Other_WZZ",
+                   "Other_ZZTo2L2Q", "Other_ZZTo2Q2Nu", "Other_ZZZ", "Other_TTTT", "Other_TTWJetsToLNu",
+                   "Other_TTWJetsToQQ", "Other_TTGJets", "Other_TTZToLLNuNu", "Other_TTZToQQ"]
+
+    samples=[snglt, tt, other, wjets, zjets]
 
     if "VBFfail" in cat: signal_samples=["ggFG_1000"]; sig = "ggFG 1000 (1 pb)"
     else: signal_samples=["VBFG_1000"]; sig = "VBFG 1000 (1 pb)"

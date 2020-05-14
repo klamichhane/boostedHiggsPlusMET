@@ -12,13 +12,13 @@
 #include <cassert>
 #include "plotterUtils.cc"
 //#include "skimSamples_2016.cc"
-#include "skimSamples_2017.cc"
+//#include "skimSamples_2017.cc"
 //#include "skimSamples_2018.cc"
 #include "definitions.h"
 #include "RA2bTree.cc"
 #include "TriggerEfficiencySextet.cc"
 
-string year = "2017"; 
+//string year = "2016"; 
 double lum = 0.0;
 double p0, p1, p2;
 
@@ -155,7 +155,6 @@ void process(string selection_label,
   //plot NgenZsplot(*getNumGenZs<RA2bTree>,"NgenZs_"+selection_label,"n_{genZs}",5,-0.5,4.5); // N genZs from tree
   plot NJetsplot(*fillNJets<RA2bTree>,"NJets_"+selection_label,"n_{jets}",10,0.5,10.5); // Nj from tree
   plot NJets1plot(*fillNJets1<RA2bTree>,"NJets1_"+selection_label,"n_{jets}",10,0.5,10.5); // cent Nj(from tree) w/ pt > 30
-  plot NJets2plot(*fillNJets2<RA2bTree>,"NJets2_"+selection_label,"n_{jets}",10,0.5,10.5); // jsize w/ pt>30
   plot NJets3plot(*fillCentralNJets<RA2bTree>,"NJetsCent_"+selection_label,"n_{jets}",10,0.5,10.5); // cent jsize w/ pt>30
   plot NAK8Jetsplot(*fillNAK8Jets<RA2bTree>,"NAK8Jets_"+selection_label,"nAK8_{jets}",10,0.5,10.5);
   plot NAK8Jets1plot(*fillNAK8Jets<RA2bTree>,"NAK8Jets1_"+selection_label,"nAK8_{jets}",4,0.5,4.5);
@@ -278,15 +277,20 @@ void process(string selection_label,
   plot DeltaPhi4plot(*fillDeltaPhi4<RA2bTree>,"DeltaPhi4_"+selection_label,"#Delta#Phi_{4}",20,0,3.1415);
   plot DeltaPhiAK8JMETplot(*fillDeltaPhiAK8JMET<RA2bTree>,"DeltaPhiAK8JMET_"+selection_label,"#Delta#Phi(AK8J1,MET)",20,0,3.1415);
 
-  plot J1pt_Massplot(*fillLeadingJetMass<RA2bTree>,"J1pt_Mass_"+selection_label,"m_{J} [GeV]",54,30.,300.);//5 Gev bin
-  plot J1_SDMassplot(*fillLeadingJetSDMass<RA2bTree>,"J1_SDMass_"+selection_label,"AK8 J1 SoftDrop Mass [GeV]",54,30.,300.);//5 Gev bin
-  plot J1_SDMass1plot(*fillLeadingJetSDMass<RA2bTree>,"J1_SDMass1_"+selection_label,"AK8 J1 SoftDrop Mass [GeV]",34,30.,200.);//5 Gev bin
-  plot J1_SDMass2plot(*fillLeadingJetSDMass<RA2bTree>,"J1_SDMass2_"+selection_label,"AK8 J1 SoftDrop Mass [GeV]",8,65.,105.);//5 Gev bin
-  plot J1_SDMass3plot(*fillLeadingJetSDMass<RA2bTree>,"J1_SDMass3_"+selection_label,"AK8 J1 SoftDrop Mass [GeV]",40,30,1030);//5 Gev bin
-  plot J1_SDMass4plot(*fillLeadingJetSDMass<RA2bTree>,"J1_SDMass4_"+selection_label,"AK8 J1 SoftDrop Mass [GeV]",36,30,1830);//5 Gev bin
+  plot AK8SDmassvsPtplot(*fillLeadingJetPt<RA2bTree>,*AK8PUPPISoftdropCorrMass<RA2bTree>,"AK8SDmassvsPt_"+selection_label,"AK8 Leading jet pT [GeV]","AK8 Leading jet mass [GeV]",16,200.,1000.,120,60.,120.);
+  plot AK8SDmassvsPt1plot(*fillLeadingJetPt<RA2bTree>,*AK8PUPPISoftdropCorrMass<RA2bTree>,"AK8SDmassvsPt1_"+selection_label,"AK8 Leading jet pT [GeV]","AK8 Leading jet mass [GeV]",12,200.,600.,40,80.,100.);
+  plot AK8SDmassvsPtCentplot(*fillLeadingJetPtCent<RA2bTree>,*AK8PUPPISoftdropCorrMassCent<RA2bTree>,"AK8SDmassvsPtCent_"+selection_label,"AK8 Leading jet pT [GeV]","AK8 Leading jet mass [GeV]",16,200.,1000.,120,60.,120.);
+  plot AK8SDmassvsPt1Centplot(*fillLeadingJetPtCent<RA2bTree>,*AK8PUPPISoftdropCorrMassCent<RA2bTree>,"AK8SDmassvsPt1Cent_"+selection_label,"AK8 Leading jet pT [GeV]","AK8 Leading jet mass [GeV]",12,200.,600.,40,80.,100.);
+  plot AK8SDmassvsPtFwdplot(*fillLeadingJetPtFwd<RA2bTree>,*AK8PUPPISoftdropCorrMassFwd<RA2bTree>,"AK8SDmassvsPtFwd_"+selection_label,"AK8 Leading jet pT [GeV]","AK8 Leading jet mass [GeV]",16,200.,1000.,120,60.,120.);
+  plot AK8SDmassvsPt1Fwdplot(*fillLeadingJetPtFwd<RA2bTree>,*AK8PUPPISoftdropCorrMassFwd<RA2bTree>,"AK8SDmassvsPt1Fwd_"+selection_label,"AK8 Leading jet pT [GeV]","AK8 Leading jet mass [GeV]",12,200.,600.,40,80.,100.);
+  plot J1_SDMassCorrplot(*AK8PUPPISoftdropCorrMass<RA2bTree>,"J1_SDMassCorr_"+selection_label,"AK8 J1 SoftDrop Mass Corr [GeV]",135,30.,300.);//2 Gev bin
+  plot J1_SDMassUnCorrplot(*fillLeadingJetSDMass<RA2bTree>,"J1_SDMassUnCorr_"+selection_label,"AK8 J1 SoftDrop Mass UnCorr [GeV]",135,30.,300.);//2 Gev bin
+  plot J1_SDMassplot(*AK8PUPPISoftdropCorrMass<RA2bTree>,"J1_SDMass_"+selection_label,"AK8 J1 SoftDrop Mass [GeV]",54,30.,300.);//5 Gev bin
+  plot J1_SDMass1plot(*AK8PUPPISoftdropCorrMass<RA2bTree>,"J1_SDMass1_"+selection_label,"AK8 J1 SoftDrop Mass [GeV]",34,30.,200.);//5 Gev bin
+  plot J1_SDMass2plot(*AK8PUPPISoftdropCorrMass<RA2bTree>,"J1_SDMass2_"+selection_label,"AK8 J1 SoftDrop Mass [GeV]",8,65.,105.);//5 Gev bin
+  plot J1_SDMass3plot(*AK8PUPPISoftdropCorrMass<RA2bTree>,"J1_SDMass3_"+selection_label,"AK8 J1 SoftDrop Mass [GeV]",40,30,1030);//5 Gev bin
+  plot J1_SDMass4plot(*AK8PUPPISoftdropCorrMass<RA2bTree>,"J1_SDMass4_"+selection_label,"AK8 J1 SoftDrop Mass [GeV]",36,30,1830);//5 Gev bin
   // Turn on the line below for SR only
-  plot BTagDeepCSVplot(*fillBTagsCSV<RA2bTree>,"BTagDeepCSV_"+selection_label,"BTag Deep CSV",20,0.,1.);//5 Gev bin
-  plot J1pt_Mass1plot(*fillLeadingJetMass<RA2bTree>,"J1pt_Mass1_"+selection_label,"m_{J} [GeV]",14,50.,120.);//5 Gev bin
   plot J1pt_Tau21plot(*fillLeadingTau21<RA2bTree>,"J1pt_Tau21_"+selection_label,"AK8 J1 #tau_{21}",20,0.,1.); //0.05
   plot J1pt_Tau212plot(*fillLeadingTau21<RA2bTree>,"J1pt_Tau212_"+selection_label,"AK8 J1 #tau_{21}",1000,0.,1.); //0.04
   plot DDT_Tau21plot(*fillDDT<RA2bTree>,"DDT_Tau21_"+selection_label,"AK8 J1 DDT #tau_{21}",30,0.,1.2); //0.04
@@ -385,7 +389,6 @@ void process(string selection_label,
   //plots.push_back(NgenZsplot);
   plots.push_back(NJetsplot);
   plots.push_back(NJets1plot);
-  plots.push_back(NJets2plot);
   plots.push_back(NJets3plot);
   plots.push_back(NAK8Jetsplot); 
   plots.push_back(NAK8Jets1plot); 
@@ -503,13 +506,19 @@ void process(string selection_label,
   plots.push_back(DeltaPhi4plot);
   plots.push_back(DeltaPhiAK8JMETplot);
 
-  plots.push_back(J1pt_Massplot);
+  plots.push_back(AK8SDmassvsPtplot);
+  plots.push_back(AK8SDmassvsPtCentplot);
+  plots.push_back(AK8SDmassvsPtFwdplot);
+  plots.push_back(AK8SDmassvsPt1plot);
+  plots.push_back(AK8SDmassvsPt1Centplot);
+  plots.push_back(AK8SDmassvsPt1Fwdplot);
+  plots.push_back(J1_SDMassCorrplot);
+  plots.push_back(J1_SDMassUnCorrplot);
   plots.push_back(J1_SDMassplot);
   plots.push_back(J1_SDMass1plot);
   plots.push_back(J1_SDMass2plot);
   plots.push_back(J1_SDMass3plot);
   plots.push_back(J1_SDMass4plot);
-  plots.push_back(J1pt_Mass1plot);
   plots.push_back(J1pt_Tau21plot);
   plots.push_back(J1pt_Tau212plot);
   plots.push_back(DDT_Tau21plot);
@@ -623,9 +632,13 @@ void process(string selection_label,
         trigwt = (TMath::Erf((ntuple->MET - p0) / p1) + 1) / 2. * p2;        
         weight = ntuple->Weight*lum*trigwt;
 
+        //Pile-Up weights
+        weight *= customPUweights(ntuple);
+        
         // Prefiring wt for 2016 & 2017 only
         if (filename.Contains("MC2016") || filename.Contains("MC2017")){
-            weight = ntuple->Weight*lum*ntuple->NonPrefiringProb*trigwt; 
+            weight *= ntuple->NonPrefiringProb; 
+            //weight = ntuple->Weight*lum*ntuple->NonPrefiringProb*trigwt; 
         }
         
         //NLO wt for WJets and ZJets Sample, 2017 & 2018 from BU group.
@@ -676,6 +689,7 @@ void process(string selection_label,
     ntupleBranchStatus<RA2bTree>(ntuple);
     TString filename;
     double trigwt = 0.;
+    //double weight = 0.;
 
     for( int iEvt = 0 ; iEvt < min(MAX_EVENTS,numEvents) ; iEvt++ ){
     //for( int iEvt = 0 ; iEvt < min(100,numEvents) ; iEvt++ ){
@@ -696,102 +710,61 @@ void process(string selection_label,
       // trig wt  
       trigwt = (TMath::Erf((ntuple->MET - p0) / p1) + 1) / 2. * p2;  
          
+      //Pile-Up weights
+      //trigwt *= ntuple->NonPrefiringProb;
+      //trigwt *= customPUweights(ntuple);
         
       for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
         TString sig_sample = skims.signalSampleName[iSample];    
 
         // based on 2018 samples for VBF
-	    if ((sig_sample=="VBFG_800") || (sig_sample=="VBFWp_800") || (sig_sample=="VBFRad_800"))    //plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
-	        plots[iPlot].fillSignal(ntuple,1); 
-	    if ((sig_sample=="VBFG_1000") || (sig_sample=="VBFWp_1000") || (sig_sample=="VBFRad_1000")) //plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); // wt for 48300 evts: 1pb/#evts
-	        plots[iPlot].fillSignal(ntuple,1); 
-	    if ((sig_sample=="VBFG_1200") || (sig_sample=="VBFWp_1200") || (sig_sample=="VBFRad_1200")) //plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
-	        plots[iPlot].fillSignal(ntuple,1); 
-	    if ((sig_sample=="VBFG_1400") || (sig_sample=="VBFWp_1400") || (sig_sample=="VBFRad_1400")) //plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
-	        plots[iPlot].fillSignal(ntuple,1); 
-	    if ((sig_sample=="VBFG_1600") || (sig_sample=="VBFWp_1600") || (sig_sample=="VBFRad_1600")) //plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
-	        plots[iPlot].fillSignal(ntuple,1); 
-	    if ((sig_sample=="VBFG_1800") || (sig_sample=="VBFWp_1800") || (sig_sample=="VBFRad_1800")) //plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
-	        plots[iPlot].fillSignal(ntuple,1); 
-	    if ((sig_sample=="VBFG_2000") || (sig_sample=="VBFWp_2000") || (sig_sample=="VBFRad_2000")) //plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
-	        plots[iPlot].fillSignal(ntuple,1); 
-	    if ((sig_sample=="VBFG_2500") || (sig_sample=="VBFWp_2500") || (sig_sample=="VBFRad_2500")) //plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
-	        plots[iPlot].fillSignal(ntuple,1); 
-	    if ((sig_sample=="VBFG_3000") || (sig_sample=="VBFWp_3000") || (sig_sample=="VBFRad_3000")) //plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
-	        plots[iPlot].fillSignal(ntuple,1); 
-	    if ((sig_sample=="VBFG_3500") || (sig_sample=="VBFWp_3500") || (sig_sample=="VBFRad_3500")) //plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
-	        plots[iPlot].fillSignal(ntuple,1); 
-	    if ((sig_sample=="VBFG_4000") || (sig_sample=="VBFWp_4000") || (sig_sample=="VBFRad_4000")) //plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
-	        plots[iPlot].fillSignal(ntuple,1); 
-	    if ((sig_sample=="VBFG_4500") || (sig_sample=="VBFWp_4500") || (sig_sample=="VBFRad_4500")) //plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
-	        plots[iPlot].fillSignal(ntuple,1); 
-	    if ((sig_sample=="VBFG_5000") || (sig_sample=="VBFWp_5000") || (sig_sample=="VBFRad_5000")) //plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
-	        plots[iPlot].fillSignal(ntuple,1); 
-	    if ((sig_sample=="VBFG_5500") || (sig_sample=="VBFRad_5500")) //plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
-	        plots[iPlot].fillSignal(ntuple,1); 
-	    if (sig_sample=="VBFWp_5500") //plots[iPlot].fillSignal(ntuple,lum*1*2.08333e-05*trigwt); 
-	        plots[iPlot].fillSignal(ntuple,1); 
-	    if ((sig_sample=="VBFG_6000") || (sig_sample=="VBFWp_6000") || (sig_sample=="VBFRad_6000")) //plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
-	        plots[iPlot].fillSignal(ntuple,1); 
-	    if ((sig_sample=="VBFG_6500") || (sig_sample=="VBFWp_6500") || (sig_sample=="VBFRad_6500")) //plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
-	        plots[iPlot].fillSignal(ntuple,1); 
-	    if ((sig_sample=="VBFG_7000") || (sig_sample=="VBFWp_7000")) //plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
-	        plots[iPlot].fillSignal(ntuple,1); 
-	    if (sig_sample=="VBFRad_7000") //plots[iPlot].fillSignal(ntuple,lum*1*2.08333e-05*trigwt); 
-	        plots[iPlot].fillSignal(ntuple,1); 
-	    if ((sig_sample=="VBFG_7500") || (sig_sample=="VBFWp_7500") || (sig_sample=="VBFRad_7500")) //plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
-	        plots[iPlot].fillSignal(ntuple,1); 
-	    if (sig_sample=="VBFG_8000") //plots[iPlot].fillSignal(ntuple,lum*1*2.222222e-05*trigwt); 
-	        plots[iPlot].fillSignal(ntuple,1); 
-	    if ((sig_sample=="VBFWp_8000") || (sig_sample=="VBFRad_8000")) //plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
-	        plots[iPlot].fillSignal(ntuple,1); 
+	    if ((sig_sample=="VBFG_800") || (sig_sample=="VBFWp_800") || (sig_sample=="VBFRad_800"))    plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
+	    if ((sig_sample=="VBFG_1000") || (sig_sample=="VBFWp_1000") || (sig_sample=="VBFRad_1000")) plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); // wt for 48300 evts: 1pb/#evts
+	    if ((sig_sample=="VBFG_1200") || (sig_sample=="VBFWp_1200") || (sig_sample=="VBFRad_1200")) plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
+	    if ((sig_sample=="VBFG_1400") || (sig_sample=="VBFWp_1400") || (sig_sample=="VBFRad_1400")) plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
+	    if ((sig_sample=="VBFG_1600") || (sig_sample=="VBFWp_1600") || (sig_sample=="VBFRad_1600")) plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
+	    if ((sig_sample=="VBFG_1800") || (sig_sample=="VBFWp_1800") || (sig_sample=="VBFRad_1800")) plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
+	    if ((sig_sample=="VBFG_2000") || (sig_sample=="VBFWp_2000") || (sig_sample=="VBFRad_2000")) plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
+	    if ((sig_sample=="VBFG_2500") || (sig_sample=="VBFWp_2500") || (sig_sample=="VBFRad_2500")) plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
+	    if ((sig_sample=="VBFG_3000") || (sig_sample=="VBFWp_3000") || (sig_sample=="VBFRad_3000")) plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
+	    if ((sig_sample=="VBFG_3500") || (sig_sample=="VBFWp_3500") || (sig_sample=="VBFRad_3500")) plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
+	    if ((sig_sample=="VBFG_4000") || (sig_sample=="VBFWp_4000") || (sig_sample=="VBFRad_4000")) plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
+	    if ((sig_sample=="VBFG_4500") || (sig_sample=="VBFWp_4500") || (sig_sample=="VBFRad_4500")) plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
+	    if ((sig_sample=="VBFG_5000") || (sig_sample=="VBFWp_5000") || (sig_sample=="VBFRad_5000")) plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
+	    if ((sig_sample=="VBFG_5500") || (sig_sample=="VBFRad_5500")) plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
+	    if (sig_sample=="VBFWp_5500") plots[iPlot].fillSignal(ntuple,lum*1*2.08333e-05*trigwt); 
+	    if ((sig_sample=="VBFG_6000") || (sig_sample=="VBFWp_6000") || (sig_sample=="VBFRad_6000")) plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
+	    if ((sig_sample=="VBFG_6500") || (sig_sample=="VBFWp_6500") || (sig_sample=="VBFRad_6500")) plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
+	    if ((sig_sample=="VBFG_7000") || (sig_sample=="VBFWp_7000")) plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
+	    if (sig_sample=="VBFRad_7000") plots[iPlot].fillSignal(ntuple,lum*1*2.08333e-05*trigwt); 
+	    if ((sig_sample=="VBFG_7500") || (sig_sample=="VBFWp_7500") || (sig_sample=="VBFRad_7500")) plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
+	    if (sig_sample=="VBFG_8000") plots[iPlot].fillSignal(ntuple,lum*1*2.222222e-05*trigwt); 
+	    if ((sig_sample=="VBFWp_8000") || (sig_sample=="VBFRad_8000")) plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
 
         // based on 2017 samples for ggFG and ggFRad, for ggFWp it is based on 2016
 	        //plots[iPlot].fillSignal(ntuple,1); 
-	    if ((sig_sample=="ggFG_800") || (sig_sample=="ggFRad_800"))   //plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
-	        plots[iPlot].fillSignal(ntuple,1); 
-	    if ((sig_sample=="ggFG_1000") || (sig_sample=="ggFRad_1000")) //plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); // wt for 48300 evts: 1pb/#evts
-	        plots[iPlot].fillSignal(ntuple,1); 
-	    if ((sig_sample=="ggFG_1200") || (sig_sample=="ggFRad_1200")) //plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
-	        plots[iPlot].fillSignal(ntuple,1); 
-	    if ((sig_sample=="ggFG_1400") || (sig_sample=="ggFRad_1400")) //plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
-	        plots[iPlot].fillSignal(ntuple,1); 
-	    if ((sig_sample=="ggFG_1600") || (sig_sample=="ggFRad_1600")) //plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
-	        plots[iPlot].fillSignal(ntuple,1); 
-	    if ((sig_sample=="ggFG_1800") || (sig_sample=="ggFRad_1800")) //plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
-	        plots[iPlot].fillSignal(ntuple,1); 
-	    if ((sig_sample=="ggFG_2000") || (sig_sample=="ggFRad_2000")) //plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
-	        plots[iPlot].fillSignal(ntuple,1); 
-	    if ((sig_sample=="ggFG_2500") || (sig_sample=="ggFRad_2500")) //plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
-	        plots[iPlot].fillSignal(ntuple,1); 
-	    if ((sig_sample=="ggFG_3000") ) //plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
-	        plots[iPlot].fillSignal(ntuple,1); 
-	    if (sig_sample=="ggFRad_3000")  //plots[iPlot].fillSignal(ntuple,lum*1*2.325581395348837e-05*trigwt); 
-	        plots[iPlot].fillSignal(ntuple,1); 
-	    if ((sig_sample=="ggFG_3500") || (sig_sample=="ggFRad_3500")) //plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
-	        plots[iPlot].fillSignal(ntuple,1); 
-	    if ((sig_sample=="ggFG_4000") || (sig_sample=="ggFRad_4000")) //plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
-	        plots[iPlot].fillSignal(ntuple,1); 
-	    if ((sig_sample=="ggFG_4500") || (sig_sample=="ggFRad_4500")) //plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
-	        plots[iPlot].fillSignal(ntuple,1); 
-	    if ((sig_sample=="ggFG_5000") || (sig_sample=="ggFRad_5000")) //plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
-	        plots[iPlot].fillSignal(ntuple,1); 
-	    if ((sig_sample=="ggFG_5500")) //plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
-	        plots[iPlot].fillSignal(ntuple,1); 
-	    if (sig_sample=="ggFRad_5500") //plots[iPlot].fillSignal(ntuple,lum*1*2.08333e-05*trigwt); 
-	        plots[iPlot].fillSignal(ntuple,1); 
-	    if ((sig_sample=="ggFG_6000") || (sig_sample=="ggFRad_6000")) //plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
-	        plots[iPlot].fillSignal(ntuple,1); 
-	    if ((sig_sample=="ggFG_6500") || (sig_sample=="ggFRad_6500")) //plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
-	        plots[iPlot].fillSignal(ntuple,1); 
-	    if ((sig_sample=="ggFG_7000") || (sig_sample=="ggFRad_7000")) //plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
-	        plots[iPlot].fillSignal(ntuple,1); 
-	    if ((sig_sample=="ggFG_7500")) //plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
-	        plots[iPlot].fillSignal(ntuple,1); 
-	    if (sig_sample=="ggFRad_7500") //plots[iPlot].fillSignal(ntuple,lum*1*2.0408163265306123e-05*trigwt); 
-	        plots[iPlot].fillSignal(ntuple,1); 
-	    if ((sig_sample=="ggFG_8000") || (sig_sample=="ggFRad_8000")) //plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
-	        plots[iPlot].fillSignal(ntuple,1); 
+	    if ((sig_sample=="ggFG_800") || (sig_sample=="ggFRad_800"))   plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
+	    if ((sig_sample=="ggFG_1000") || (sig_sample=="ggFRad_1000")) plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); // wt for 48300 evts: 1pb/#evts
+	    if ((sig_sample=="ggFG_1200") || (sig_sample=="ggFRad_1200")) plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
+	    if ((sig_sample=="ggFG_1400") || (sig_sample=="ggFRad_1400")) plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
+	    if ((sig_sample=="ggFG_1600") || (sig_sample=="ggFRad_1600")) plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
+	    if ((sig_sample=="ggFG_1800") || (sig_sample=="ggFRad_1800")) plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
+	    if ((sig_sample=="ggFG_2000") || (sig_sample=="ggFRad_2000")) plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
+	    if ((sig_sample=="ggFG_2500") || (sig_sample=="ggFRad_2500")) plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
+	    if ((sig_sample=="ggFG_3000") ) plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
+	    if (sig_sample=="ggFRad_3000")  plots[iPlot].fillSignal(ntuple,lum*1*2.325581395348837e-05*trigwt); 
+	    if ((sig_sample=="ggFG_3500") || (sig_sample=="ggFRad_3500")) plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
+	    if ((sig_sample=="ggFG_4000") || (sig_sample=="ggFRad_4000")) plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
+	    if ((sig_sample=="ggFG_4500") || (sig_sample=="ggFRad_4500")) plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
+	    if ((sig_sample=="ggFG_5000") || (sig_sample=="ggFRad_5000")) plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
+	    if ((sig_sample=="ggFG_5500")) plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
+	    if (sig_sample=="ggFRad_5500") plots[iPlot].fillSignal(ntuple,lum*1*2.08333e-05*trigwt); 
+	    if ((sig_sample=="ggFG_6000") || (sig_sample=="ggFRad_6000")) plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
+	    if ((sig_sample=="ggFG_6500") || (sig_sample=="ggFRad_6500")) plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
+	    if ((sig_sample=="ggFG_7000") || (sig_sample=="ggFRad_7000")) plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
+	    if ((sig_sample=="ggFG_7500")) plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
+	    if (sig_sample=="ggFRad_7500") plots[iPlot].fillSignal(ntuple,lum*1*2.0408163265306123e-05*trigwt); 
+	    if ((sig_sample=="ggFG_8000") || (sig_sample=="ggFRad_8000")) plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
 
 	    if ((sig_sample=="ggFWp_1000") ) plots[iPlot].fillSignal(ntuple,lum*1*1e-05*trigwt); 
 	    if ((sig_sample=="ggFWp_1200") ) plots[iPlot].fillSignal(ntuple,lum*1*1e-05*trigwt); 
