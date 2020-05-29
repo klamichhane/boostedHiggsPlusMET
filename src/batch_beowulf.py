@@ -7,12 +7,12 @@ import time
 print "If running SB category, change the number of events for data"
 #year = "2017"
 year = sys.argv[1]
-que = ["ZSB"]
+#que = ["ZSB"]
 #que = ["ZSB","ZSBHP","ZSBHPVBF","ZSBHPVBFfail","ZSR","ZSRHP","ZSRHPVBF","ZSRHPVBFfail"]
 #que = ["Baseline","ZSB","ZSBHP","ZSBHPVBF","ZSBHPVBFfail","ZSR","ZSRHP","ZSRHPVBF","ZSRHPVBFfail"]
 #que = ["Baseline","ZSB","ZSBHPVBF","ZSBHPVBFfail","ZSR","ZSRHPVBF","ZSRHPVBFfail"]
-#que = ["ZSRHPVBF","ZSRHPVBFfail"]
-#que = ["ZSBHPVBF","ZSBHPVBFfail"]
+#que = ["ZSBHP"]
+que = ["ZSBHPVBF","ZSBHPVBFfail","ZSRHPVBF","ZSRHPVBFfail"]
 #que = ["ZAlphaSBHPVBF","ZAlphaSRHPVBF","ZAlphaSBHPVBFfail","ZAlphaSRHPVBFfail"]
 #que = ["ZAlphaSBHPLooseVBF","ZAlphaSRHPLooseVBF","ZAlphaSBHPLooseVBFfail","ZAlphaSRHPLooseVBFfail"]
 

@@ -17,7 +17,7 @@ if norm == "SR":
     cat = ["ZSR","ZSRHP","ZSRHPVBF","ZSRHPVBFfail"] # for SR
     #cat = ["ZSRHPVBF","ZSRHPVBFfail"]
     #cat = ["ZSRHP"]
-    filetorun = "prettyPlot_NoRatio_137fb.py"
+    filetorun = "NoRatio_prettyPlot_137fb.py"
 elif norm == "Norm":
     cat = ["ZSB","ZSBHP","ZSBHPVBF","ZSBHPVBFfail","ZSBFPVBF","ZSBFPVBFfail"] #for Norm
     filetorun = "prettyPlot_137fb.py"

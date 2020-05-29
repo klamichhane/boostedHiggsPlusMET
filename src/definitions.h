@@ -12,6 +12,12 @@ std::vector<TLorentzVector> dummy;
 // constants
 // ==============================================
 double bbtagCut = 0.3;
+
+TFile* trigWtRatioFile = new TFile("Systematics/Trigger/Ratio_TriggerEff_SESM.root");
+TH1D* trigWtRatioHist_16 = (TH1D*) trigWtRatioFile->Get("Ratio_eff_16");
+TH1D* trigWtRatioHist_17 = (TH1D*) trigWtRatioFile->Get("Ratio_eff_17");
+TH1D* trigWtRatioHist_18 = (TH1D*) trigWtRatioFile->Get("Ratio_eff_18");
+
 TFile* puWeightFile_16 = new TFile("../data/PileupHistograms_2016_69mb_pm5.root");
 TFile* puWeightFile_17 = new TFile("../data/PileupHistograms_2017_69mb_pm5.root");
 TFile* puWeightFile_18 = new TFile("../data/PileupHistograms_2018_69mb_pm5.root");
@@ -100,7 +106,7 @@ template<typename ntupleType>void ntupleBranchStatus(ntupleType* ntuple){
   ntuple->fChain->SetBranchStatus("HT*",1);
   ntuple->fChain->SetBranchStatus("NJets",1);
   ntuple->fChain->SetBranchStatus("BTags*",1);
-  ntuple->fChain->SetBranchStatus("MET",1);
+  ntuple->fChain->SetBranchStatus("MET*",1);
   ntuple->fChain->SetBranchStatus("METPhi",1);
   ntuple->fChain->SetBranchStatus("HTclean",1);
   ntuple->fChain->SetBranchStatus("NJetsclean",1);
@@ -139,7 +145,7 @@ template<typename ntupleType>void ntupleBranchStatus(ntupleType* ntuple){
   ntuple->fChain->SetBranchStatus("GenParticles*",1);
   ntuple->fChain->SetBranchStatus("NonPrefiringProb",1);
   ntuple->fChain->SetBranchStatus("NonPrefiringProbUp",1);
-  ntuple->fChain->SetBranchStatus("NonPrefiringProbDn",1);
+  ntuple->fChain->SetBranchStatus("NonPrefiringProbDown",1);
   ntuple->fChain->SetBranchStatus("HTRatioDPhiFilter",1);
   ntuple->fChain->SetBranchStatus("HTRatioDPhiTightFilter",1);
     
@@ -426,7 +432,6 @@ float getPUPPIwt2016(float puppipt, float puppieta){
     
     totalWeight = genCorr * recoCorr;
 
-    file->Close();
     return totalWeight;
 }
 
@@ -491,6 +496,62 @@ template<typename ntupleType> double customPUweights(ntupleType* ntuple){
     else if (year == "2017") return puWeightHist_17->GetBinContent(puWeightHist_17->GetXaxis()->FindBin(min(ntuple->TrueNumInteractions,puWeightHist_17->GetBinLowEdge(puWeightHist_17->GetNbinsX()+1))));
     else if (year == "2018") return puWeightHist_18->GetBinContent(puWeightHist_18->GetXaxis()->FindBin(min(ntuple->TrueNumInteractions,puWeightHist_18->GetBinLowEdge(puWeightHist_18->GetNbinsX()+1))));
     else return 1.0;
+}
+
+template<typename ntupleType> double customTrigWeights(ntupleType* ntuple){
+    double p0, p1, p2;
+    if(year=="2016") {p0=1.21277e+02; p1=8.77679e+01; p2=9.94172e-01;}
+    if(year=="2017") {p0=1.61724e+02; p1=6.91644e+01; p2=9.89446e-01;}
+    if(year=="2018") {p0=1.70454e+02; p1=6.64100e+01; p2=9.89298e-01;}
+
+    double trigwt = (TMath::Erf((ntuple->MET - p0) / p1) + 1) / 2. * p2;
+    return trigwt;
+}
+
+template<typename ntupleType> double trigWtRatio(ntupleType* ntuple){
+    double MET = ntuple->MET;
+    double ratio = 1.0;
+    if( MET > 200. && MET < 1000.){
+        if (year == "2016"){ratio = trigWtRatioHist_16->GetBinContent(trigWtRatioHist_16->FindBin(MET) );}
+        if (year == "2017"){ratio = trigWtRatioHist_17->GetBinContent(trigWtRatioHist_17->FindBin(MET) );}
+        if (year == "2018"){ratio = trigWtRatioHist_18->GetBinContent(trigWtRatioHist_18->FindBin(MET) );}
+        return ratio;
+    }else if( MET >= 1000.){
+        if (year == "2016"){ratio = trigWtRatioHist_16->GetBinContent(trigWtRatioHist_16->GetNbinsX());} //setting the last bin content for the bins > 1000.
+        if (year == "2017"){ratio = trigWtRatioHist_17->GetBinContent(trigWtRatioHist_17->GetNbinsX());} 
+        if (year == "2018"){ratio = trigWtRatioHist_18->GetBinContent(trigWtRatioHist_18->GetNbinsX());} 
+        return ratio;
+    }else return 1.0;
+}
+
+template<typename ntupleType> double customTrigWeightsUp(ntupleType* ntuple){
+    double upVar;
+    upVar = customTrigWeights(ntuple) * trigWtRatio(ntuple);
+    if (upVar < 1.0) return upVar; 
+    else return 1.0;
+}
+
+template<typename ntupleType> double customTrigWeightsDown(ntupleType* ntuple){
+    double downVar;
+    downVar = customTrigWeights(ntuple)/trigWtRatio(ntuple);
+    if (downVar < 1.0) return downVar; 
+    else return 1.0;
+}
+
+template<typename ntupleType> double tau21pTExtrapolation(ntupleType* ntuple){
+    if(ntuple->JetsAK8->size()==0) return 1.0;
+    double factor;
+    double pt = (ntuple->JetsAK8->at(0).Pt()) / 200.0;
+    factor = 1 + (0.085 * log(pt));
+    return factor ;
+}
+
+template<typename ntupleType> double customTau21pTExtrapUp(ntupleType* ntuple){
+    return tau21pTExtrapolation(ntuple) ;
+}
+
+template<typename ntupleType> double customTau21pTExtrapDown(ntupleType* ntuple){
+    return (1/tau21pTExtrapolation(ntuple));
 }
 
 enum ISRweightType {kNom,kUp,kDn};
@@ -1651,8 +1712,9 @@ template<typename ntupleType> bool HighPurityCut(ntupleType* ntuple){
 template<typename ntupleType> bool HighPurityCut(ntupleType* ntuple){
     if(ntuple->JetsAK8->size()==0) return false;
     double tau21 = (ntuple->JetsAK8_NsubjettinessTau2->at(0))/(ntuple->JetsAK8_NsubjettinessTau1->at(0));
-    if (year == "2017") return (tau21 < 0.45);
-    else return (tau21 < 0.35);
+    //if (year == "2017") return (tau21 < 0.45);
+    //else return (tau21 < 0.35);
+    return (tau21 < 0.35);
 }
 
 template<typename ntupleType> bool LowPurityCut(ntupleType* ntuple){

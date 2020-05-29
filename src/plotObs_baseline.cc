@@ -10,6 +10,7 @@
 #include <iostream>
 #include <time.h>       /* clock_t, clock, CLOCKS_PER_SEC */
 #include <cassert>
+#include "Sig_Samples_XsecWt.cc"
 #include "plotterUtils.cc"
 //#include "skimSamples_2016.cc"
 //#include "skimSamples_2017.cc"
@@ -30,9 +31,9 @@ void process(string selection_label,
 	     string signalSample,
 	     string dataSample){
     
-    if(year=="2016") {lum=35815.165; p0=1.21277e+02; p1=8.77679e+01;p2=9.94172e-01;}
-    if(year=="2017") {lum=41486.136; p0=1.61724e+02; p1=6.91644e+01; p2=9.89446e-01;}
-    if(year=="2018") {lum=59546.381; p0=1.70454e+02; p1=6.64100e+01; p2=9.89298e-01;}
+    if(year=="2016") {lum=35815.165;} 
+    if(year=="2017") {lum=41486.136;} 
+    if(year=="2018") {lum=59546.381;} 
     cout<<"year: "<<year<<" lumi: "<<lum<<endl;
 
   // set up selectors
@@ -609,7 +610,6 @@ void process(string selection_label,
     ntupleBranchStatus<RA2bTree>(ntuple);
     TString filename;
     double weight = 0.;
-    double trigwt = 0.;
     
     for( int iEvt = 0 ; iEvt < min(MAX_EVENTS,numEvents) ; iEvt++ ){
     //for( int iEvt = 0 ; iEvt < min(100,numEvents) ; iEvt++ ){
@@ -629,16 +629,26 @@ void process(string selection_label,
             if(fillZMT(ntuple) > 1900.)continue;
         }
         //trig wt
-        trigwt = (TMath::Erf((ntuple->MET - p0) / p1) + 1) / 2. * p2;        
+        double trigwt = customTrigWeights(ntuple);
+        //double trigwt = customTrigWeightsUp(ntuple);
+
         weight = ntuple->Weight*lum*trigwt;
 
         //Pile-Up weights
         weight *= customPUweights(ntuple);
         
+        // tau21 pt Extrapolation
+        //double tauwt = customTau21pTExtrapUp(ntuple); 
+        //double tauwt = customTau21pTExtrapDown(ntuple); 
+        //weight *= tauwt; // with tau21 pT Extrapolation
+
+        weight *= ntuple->METUp->at(5); // with Unclustured energy up
+        //weight *= ntuple->METDown->at(5); // with Unclustured energy up
+
         // Prefiring wt for 2016 & 2017 only
         if (filename.Contains("MC2016") || filename.Contains("MC2017")){
             weight *= ntuple->NonPrefiringProb; 
-            //weight = ntuple->Weight*lum*ntuple->NonPrefiringProb*trigwt; 
+            //weight *= ntuple->NonPrefiringProbUp; 
         }
         
         //NLO wt for WJets and ZJets Sample, 2017 & 2018 from BU group.
@@ -688,95 +698,63 @@ void process(string selection_label,
     int numEvents = ntuple->fChain->GetEntries();
     ntupleBranchStatus<RA2bTree>(ntuple);
     TString filename;
-    double trigwt = 0.;
-    //double weight = 0.;
+    double weight = 0.;
+
+    //TFile *Evtprocfile = new TFile(ntuple->fChain->GetFile()->GetName());
+    //TH1F *hEvtProc = (TH1F*)Evtprocfile->Get("nEventProc");
+    //double EvtProcessed = hEvtProc->Integral();
+    //delete Evtprocfile;
+
+    filename = ntuple->fChain->GetFile()->GetName();
+    TString sig_sample = skims.signalSampleName[iSample];    
+    double sigxsecwt;    
+    
+    Sig_Xsec_wt(sig_sample, sigxsecwt);
+    //std::cout<<"sig sample: "<< sig_sample<<" filename: "<<filename<<"       wt: "<<sigxsecwt<<endl;
+    std::cout<<"sig sample: "<< sig_sample<<"       wt: "<<sigxsecwt<<endl;
 
     for( int iEvt = 0 ; iEvt < min(MAX_EVENTS,numEvents) ; iEvt++ ){
     //for( int iEvt = 0 ; iEvt < min(100,numEvents) ; iEvt++ ){
       ntuple->GetEntry(iEvt);
       if( iEvt % 100000 == 0 ) cout << skims.signalSampleName[iSample] << ": " << iEvt << "/" << numEvents << endl;
-      filename = ntuple->fChain->GetFile()->GetName();
       
       if(! selectionFunc(ntuple) ) continue;
-      /*  
-      if (filename.Contains("VBFG") || filename.Contains("ggFG") || filename.Contains("VBFRad") || filename.Contains("ggFRad")) {if(!genZmatched(ntuple)) continue; }
-      if (filename.Contains("VBFWp") || filename.Contains("ggFWp")) {if(!genWpmatched(ntuple)) continue; }
-      */  
+
+      //if (filename.Contains("VBFG") || filename.Contains("ggFG") || filename.Contains("VBFRad") || filename.Contains("ggFRad")) {if(!genZmatched(ntuple)) continue; }
+      //if (filename.Contains("VBFWp") || filename.Contains("ggFWp")) {if(!genWpmatched(ntuple)) continue; }
+
       // HEM Veto  
       if(year=="2018"){  
             if((ntuple->EvtNum % 1000 > 1000*21.0/59.6) && (! passHEMjetVeto(ntuple, 30)))continue;
       }          
 
       // trig wt  
-      trigwt = (TMath::Erf((ntuple->MET - p0) / p1) + 1) / 2. * p2;  
-         
+      double trigwt = customTrigWeights(ntuple); 
+      //double trigwt = customTrigWeightsUp(ntuple); 
+
+      weight = lum * trigwt * sigxsecwt;  
+
+      // tau21 pt Extrapolation
+      //double tauwt = customTau21pTExtrapUp(ntuple); 
+      //double tauwt = customTau21pTExtrapDown(ntuple); 
+      //weight *= tauwt; // with tau21 pt Extrapolation  
+
+      weight *= ntuple->METUp->at(5); // with Unclustured energy up
+      //weight *= ntuple->METDown->at(5); // with Unclustured energy up
+
+      std::cout<<"MET: "<<ntuple->MET<<"   unclustured up: "<< ntuple->METUp->at(5) << endl;  
+    
       //Pile-Up weights
-      //trigwt *= ntuple->NonPrefiringProb;
-      //trigwt *= customPUweights(ntuple);
+      weight *= customPUweights(ntuple);
+      //Pre-firing weights
+      if (year=="2016" || year=="2017"){ 
+        weight *= ntuple->NonPrefiringProb;
+        //weight *= ntuple->NonPrefiringProbUp;
+      }
         
       for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
-        TString sig_sample = skims.signalSampleName[iSample];    
-
-        // based on 2018 samples for VBF
-	    if ((sig_sample=="VBFG_800") || (sig_sample=="VBFWp_800") || (sig_sample=="VBFRad_800"))    plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
-	    if ((sig_sample=="VBFG_1000") || (sig_sample=="VBFWp_1000") || (sig_sample=="VBFRad_1000")) plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); // wt for 48300 evts: 1pb/#evts
-	    if ((sig_sample=="VBFG_1200") || (sig_sample=="VBFWp_1200") || (sig_sample=="VBFRad_1200")) plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
-	    if ((sig_sample=="VBFG_1400") || (sig_sample=="VBFWp_1400") || (sig_sample=="VBFRad_1400")) plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
-	    if ((sig_sample=="VBFG_1600") || (sig_sample=="VBFWp_1600") || (sig_sample=="VBFRad_1600")) plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
-	    if ((sig_sample=="VBFG_1800") || (sig_sample=="VBFWp_1800") || (sig_sample=="VBFRad_1800")) plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
-	    if ((sig_sample=="VBFG_2000") || (sig_sample=="VBFWp_2000") || (sig_sample=="VBFRad_2000")) plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
-	    if ((sig_sample=="VBFG_2500") || (sig_sample=="VBFWp_2500") || (sig_sample=="VBFRad_2500")) plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
-	    if ((sig_sample=="VBFG_3000") || (sig_sample=="VBFWp_3000") || (sig_sample=="VBFRad_3000")) plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
-	    if ((sig_sample=="VBFG_3500") || (sig_sample=="VBFWp_3500") || (sig_sample=="VBFRad_3500")) plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
-	    if ((sig_sample=="VBFG_4000") || (sig_sample=="VBFWp_4000") || (sig_sample=="VBFRad_4000")) plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
-	    if ((sig_sample=="VBFG_4500") || (sig_sample=="VBFWp_4500") || (sig_sample=="VBFRad_4500")) plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
-	    if ((sig_sample=="VBFG_5000") || (sig_sample=="VBFWp_5000") || (sig_sample=="VBFRad_5000")) plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
-	    if ((sig_sample=="VBFG_5500") || (sig_sample=="VBFRad_5500")) plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
-	    if (sig_sample=="VBFWp_5500") plots[iPlot].fillSignal(ntuple,lum*1*2.08333e-05*trigwt); 
-	    if ((sig_sample=="VBFG_6000") || (sig_sample=="VBFWp_6000") || (sig_sample=="VBFRad_6000")) plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
-	    if ((sig_sample=="VBFG_6500") || (sig_sample=="VBFWp_6500") || (sig_sample=="VBFRad_6500")) plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
-	    if ((sig_sample=="VBFG_7000") || (sig_sample=="VBFWp_7000")) plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
-	    if (sig_sample=="VBFRad_7000") plots[iPlot].fillSignal(ntuple,lum*1*2.08333e-05*trigwt); 
-	    if ((sig_sample=="VBFG_7500") || (sig_sample=="VBFWp_7500") || (sig_sample=="VBFRad_7500")) plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
-	    if (sig_sample=="VBFG_8000") plots[iPlot].fillSignal(ntuple,lum*1*2.222222e-05*trigwt); 
-	    if ((sig_sample=="VBFWp_8000") || (sig_sample=="VBFRad_8000")) plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
-
-        // based on 2017 samples for ggFG and ggFRad, for ggFWp it is based on 2016
-	        //plots[iPlot].fillSignal(ntuple,1); 
-	    if ((sig_sample=="ggFG_800") || (sig_sample=="ggFRad_800"))   plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
-	    if ((sig_sample=="ggFG_1000") || (sig_sample=="ggFRad_1000")) plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); // wt for 48300 evts: 1pb/#evts
-	    if ((sig_sample=="ggFG_1200") || (sig_sample=="ggFRad_1200")) plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
-	    if ((sig_sample=="ggFG_1400") || (sig_sample=="ggFRad_1400")) plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
-	    if ((sig_sample=="ggFG_1600") || (sig_sample=="ggFRad_1600")) plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
-	    if ((sig_sample=="ggFG_1800") || (sig_sample=="ggFRad_1800")) plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
-	    if ((sig_sample=="ggFG_2000") || (sig_sample=="ggFRad_2000")) plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
-	    if ((sig_sample=="ggFG_2500") || (sig_sample=="ggFRad_2500")) plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
-	    if ((sig_sample=="ggFG_3000") ) plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
-	    if (sig_sample=="ggFRad_3000")  plots[iPlot].fillSignal(ntuple,lum*1*2.325581395348837e-05*trigwt); 
-	    if ((sig_sample=="ggFG_3500") || (sig_sample=="ggFRad_3500")) plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
-	    if ((sig_sample=="ggFG_4000") || (sig_sample=="ggFRad_4000")) plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
-	    if ((sig_sample=="ggFG_4500") || (sig_sample=="ggFRad_4500")) plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
-	    if ((sig_sample=="ggFG_5000") || (sig_sample=="ggFRad_5000")) plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
-	    if ((sig_sample=="ggFG_5500")) plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
-	    if (sig_sample=="ggFRad_5500") plots[iPlot].fillSignal(ntuple,lum*1*2.08333e-05*trigwt); 
-	    if ((sig_sample=="ggFG_6000") || (sig_sample=="ggFRad_6000")) plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
-	    if ((sig_sample=="ggFG_6500") || (sig_sample=="ggFRad_6500")) plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
-	    if ((sig_sample=="ggFG_7000") || (sig_sample=="ggFRad_7000")) plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
-	    if ((sig_sample=="ggFG_7500")) plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
-	    if (sig_sample=="ggFRad_7500") plots[iPlot].fillSignal(ntuple,lum*1*2.0408163265306123e-05*trigwt); 
-	    if ((sig_sample=="ggFG_8000") || (sig_sample=="ggFRad_8000")) plots[iPlot].fillSignal(ntuple,lum*1*2e-05*trigwt); 
-
-	    if ((sig_sample=="ggFWp_1000") ) plots[iPlot].fillSignal(ntuple,lum*1*1e-05*trigwt); 
-	    if ((sig_sample=="ggFWp_1200") ) plots[iPlot].fillSignal(ntuple,lum*1*1e-05*trigwt); 
-	    if ((sig_sample=="ggFWp_1400") ) plots[iPlot].fillSignal(ntuple,lum*1*1e-05*trigwt); 
-	    if ((sig_sample=="ggFWp_1600") ) plots[iPlot].fillSignal(ntuple,lum*1*1e-05*trigwt); 
-	   //if ((sig_sample=="ggFWp_1800")) plots[iPlot].fillSignal(ntuple,lum*1*1e-05*trigwt); 
-	    if ((sig_sample=="ggFWp_2000") ) plots[iPlot].fillSignal(ntuple,lum*1*1e-05*trigwt); 
-	    if ((sig_sample=="ggFWp_2500") ) plots[iPlot].fillSignal(ntuple,lum*1*1e-05*trigwt); 
-	    if ((sig_sample=="ggFWp_3000") ) plots[iPlot].fillSignal(ntuple,lum*1*1e-05*trigwt); 
-	    if ((sig_sample=="ggFWp_3500") ) plots[iPlot].fillSignal(ntuple,lum*1*1.0482e-05*trigwt); //1/95400 evts 
-	    if ((sig_sample=="ggFWp_4000") ) plots[iPlot].fillSignal(ntuple,lum*1*1e-05*trigwt); 
-	    if ((sig_sample=="ggFWp_4500") ) plots[iPlot].fillSignal(ntuple,lum*1*1e-05*trigwt); 
+        if (filename.Contains("VBF") || filename.Contains("ggFG") ) plots[iPlot].fillSignal(ntuple,weight); 
+	    //if ((sig_sample=="ggFWp_1000") ) plots[iPlot].fillSignal(ntuple,lum*1*1e-05*trigwt); 
         }
     }
 

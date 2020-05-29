@@ -60,34 +60,31 @@ backgroundSamples=[#"QCD_200to300",
                    "Other_TTZToQQ",
 ]
 
-sig = "ggFRad"
-
-signalSamples=["VBFG_1000",
-               "ggFG_1000", 
-               #"VBFG_800", 
-               #"VBFG_1000", 
-               #"VBFG_1200", 
-               #"VBFG_1400", 
-               #"VBFG_1600", 
-               #"VBFG_1800", 
-               #"VBFG_2000", 
-               #"VBFG_2500", 
-               #"VBFG_3000", 
-               #"VBFG_3500", 
-               #"VBFG_4000", 
-               #"VBFG_4500", 
-               #"VBFG_5000", 
-               #"VBFG_5500", 
-               #"VBFG_6000", 
-               #"VBFG_6500", 
-               #"VBFG_7000", 
-               #"VBFG_7500", 
-               #"VBFG_8000", 
+signalSamples=["VBFG_1000_MC2017",
+               "ggFG_1000_MC2017", 
+               #"VBFG_800_MC2017", 
+               #"VBFG_1000_MC2017", 
+               #"VBFG_1200_MC2017", 
+               #"VBFG_1400_MC2017", 
+               #"VBFG_1600_MC2017", 
+               #"VBFG_1800_MC2017", 
+               #"VBFG_2000_MC2017", 
+               #"VBFG_2500_MC2017", 
+               #"VBFG_3000_MC2017", 
+               #"VBFG_3500_MC2017", 
+               #"VBFG_4000_MC2017", 
+               #"VBFG_4500_MC2017", 
+               #"VBFG_5000_MC2017", 
+               #"VBFG_5500_MC2017", 
+               #"VBFG_6000_MC2017", 
+               #"VBFG_6500_MC2017", 
+               #"VBFG_7000_MC2017", 
+               #"VBFG_7500_MC2017", 
+               #"VBFG_8000_MC2017", 
               ]
 
 #dataSamples=[]
-if "ZSR" in cat or cat=="Baseline":
-    dataSamples=[]
+if "ZSR" in cat or cat=="Baseline": dataSamples=[]
 else: dataSamples=["MET_2017B","MET_2017C","MET_2017D","MET_2017E","MET_2017F"]
 
 def runPlotObsBaseline(sel,bkg,sig,data):
@@ -121,10 +118,6 @@ for p in processes :
 
 #end = datetime.now()
 
-#print "started {0} 2017 at: {1}".format(cat,start)
-#print "ended {0} 2017 at: {1}".format(cat,end)
-#print "processed {0} 2017 at: {1}".format(cat,end-start)
-
 print""
 ##time.sleep(20)
 print "hadding "+cat
@@ -136,7 +129,7 @@ os.system("rm AN_v1_NLO_files/{1}/plotObs_{0}_*.root".format(cat,year))
 #print "hadding "+cat
 #os.system("hadd -f AN_v1_NLO_files/{1}/Sig_{2}_{0}_{1}_Unweighted.root AN_v1_NLO_files/{1}/plotObs_{0}_*.root".format(cat,year,sig))
 #print "removing files for "+cat
-#os.system("rm AN_v1_files/{1}/plotObs_{0}_*.root".format(cat,year))
+#os.system("rm AN_v1_NLO_files/{1}/plotObs_{0}_*.root".format(cat,year))
 #print ""
 2    
     
