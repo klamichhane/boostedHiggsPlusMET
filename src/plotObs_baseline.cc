@@ -163,10 +163,10 @@ void process(string selection_label,
   plot madHT(*fillMadHT<RA2bTree>,"madHT_"+selection_label,"Madgraph HT",19,100,2000);  
   plot madHT1(*fillMadHT<RA2bTree>,"madHT1_"+selection_label,"Madgraph HT",120,100,3100);  
   plot MHTRatio(*fillMHTRatio<RA2bTree>,"MHT_HTRatio_"+selection_label,"MHT/HT",40,0,2);  
-  plot MHTdPhivsHTRatioplot(*fillDeltaPhiMHT<RA2bTree>,*fillHTRatio<RA2bTree>,"HTRatiovsMHTdPhi_"+selection_label,"#Delta #phi(j1, MHT)","HT5/HT",35,0.,3.5,20,1.,3.);//0.1 bin
-  plot MHTdPhi2vsHTRatioplot(*fillDeltaPhi2MHT<RA2bTree>,*fillHTRatio<RA2bTree>,"HTRatiovsMHTdPhi2_"+selection_label,"#Delta #phi(j2, MHT)","HT5/HT",35,0.,3.5,20,1.,3.);//0.1 bin
-  plot MHTdPhi3vsHTRatioplot(*fillDeltaPhi3MHT<RA2bTree>,*fillHTRatio<RA2bTree>,"HTRatiovsMHTdPhi3_"+selection_label,"#Delta #phi(j3, MHT)","HT5/HT",35,0.,3.5,20,1.,3.);//0.1 bin
-  plot MHTdPhi4vsHTRatioplot(*fillDeltaPhi4MHT<RA2bTree>,*fillHTRatio<RA2bTree>,"HTRatiovsMHTdPhi4_"+selection_label,"#Delta #phi(j4, MHT)","HT5/HT",35,0.,3.5,20,1.,3.);//0.1 bin
+  plot MHTdPhivsHTRatioplot(*fillDeltaPhi1<RA2bTree>,*fillHTRatio<RA2bTree>,"HTRatiovsMHTdPhi_"+selection_label,"#Delta #phi(j1, MET)","HT5/HT",35,0.,3.5,20,1.,3.);//0.1 bin
+  plot MHTdPhi2vsHTRatioplot(*fillDeltaPhi2<RA2bTree>,*fillHTRatio<RA2bTree>,"HTRatiovsMHTdPhi2_"+selection_label,"#Delta #phi(j2, MET)","HT5/HT",35,0.,3.5,20,1.,3.);//0.1 bin
+  plot MHTdPhi3vsHTRatioplot(*fillDeltaPhi3<RA2bTree>,*fillHTRatio<RA2bTree>,"HTRatiovsMHTdPhi3_"+selection_label,"#Delta #phi(j3, MET)","HT5/HT",35,0.,3.5,20,1.,3.);//0.1 bin
+  plot MHTdPhi4vsHTRatioplot(*fillDeltaPhi4<RA2bTree>,*fillHTRatio<RA2bTree>,"HTRatiovsMHTdPhi4_"+selection_label,"#Delta #phi(j4, MET)","HT5/HT",35,0.,3.5,20,1.,3.);//0.1 bin
   plot METvsAK8Ptplot(*fillLeadingJetPt<RA2bTree>,*fillMET<RA2bTree>,"METvsAK8Pt_"+selection_label,"AK8 L1J p_{T} [GeV]","MET [GeV]",20,200.,1200.,20,200.,1200.);//50 GeV bin
   plot METvsAK4j1Ptplot(*fillJetPt1<RA2bTree>,*fillMET<RA2bTree>,"METvsAK4j1Pt_"+selection_label,"pt_{j1}^{AK4} [GeV]","MET [GeV]",25,0.,1000.,25,0.,1000.);
   plot METvsAK4j2Ptplot(*fillJetPt2<RA2bTree>,*fillMET<RA2bTree>,"METvsAK4j2Pt_"+selection_label,"pt_{j2}^{AK4} [GeV]","MET [GeV]",25,0.,1000.,25,0.,1000.);
@@ -609,6 +609,12 @@ void process(string selection_label,
     int numEvents = ntuple->fChain->GetEntries();
     ntupleBranchStatus<RA2bTree>(ntuple);
     TString filename;
+    TString bkg_sample = skims.sampleName[iSample];    
+
+    std::cout<<endl;
+    std::cout<<"bkg sample name: "<<bkg_sample<<endl;    
+    std::cout<<endl;
+
     double weight = 0.;
     
     for( int iEvt = 0 ; iEvt < min(MAX_EVENTS,numEvents) ; iEvt++ ){
@@ -628,27 +634,18 @@ void process(string selection_label,
             std::cout<<"Remember, there is a hack in 2018 Wjets 200-400 sample; removing the one spike at high MT tail."<<std::endl;
             if(fillZMT(ntuple) > 1900.)continue;
         }
-        //trig wt
-        double trigwt = customTrigWeights(ntuple);
-        //double trigwt = customTrigWeightsUp(ntuple);
 
-        weight = ntuple->Weight*lum*trigwt;
-
-        //Pile-Up weights
-        weight *= customPUweights(ntuple);
+        //weight = ntuple->Weight*lum*trigwt*PUwt;
+        weight = ntuple->Weight * lum * customTrigWeights(ntuple) * customPUweights(ntuple);
         
-        // tau21 pt Extrapolation
-        //double tauwt = customTau21pTExtrapUp(ntuple); 
-        //double tauwt = customTau21pTExtrapDown(ntuple); 
-        //weight *= tauwt; // with tau21 pT Extrapolation
-
-        weight *= ntuple->METUp->at(5); // with Unclustured energy up
-        //weight *= ntuple->METDown->at(5); // with Unclustured energy up
+        // tau21 sf
+        if ( bkg_sample.Contains("TT")  || bkg_sample.Contains("Other") || bkg_sample.Contains("ST") ){        
+             weight *= tau21ScaleFactor(ntuple);
+        }
 
         // Prefiring wt for 2016 & 2017 only
         if (filename.Contains("MC2016") || filename.Contains("MC2017")){
             weight *= ntuple->NonPrefiringProb; 
-            //weight *= ntuple->NonPrefiringProbUp; 
         }
         
         //NLO wt for WJets and ZJets Sample, 2017 & 2018 from BU group.
@@ -724,33 +721,13 @@ void process(string selection_label,
       //if (filename.Contains("VBFWp") || filename.Contains("ggFWp")) {if(!genWpmatched(ntuple)) continue; }
 
       // HEM Veto  
-      if(year=="2018"){  
-            if((ntuple->EvtNum % 1000 > 1000*21.0/59.6) && (! passHEMjetVeto(ntuple, 30)))continue;
-      }          
+      if(year=="2018"){ if((ntuple->EvtNum % 1000 > 1000*21.0/59.6) && (! passHEMjetVeto(ntuple, 30)))continue;}          
 
-      // trig wt  
-      double trigwt = customTrigWeights(ntuple); 
-      //double trigwt = customTrigWeightsUp(ntuple); 
+      //weight = lum * sigxsecwt * trigwt * PUwt * tau21SF;  
+      weight = lum * sigxsecwt * customTrigWeights(ntuple) * customPUweights(ntuple) * tau21ScaleFactor(ntuple);  
 
-      weight = lum * trigwt * sigxsecwt;  
-
-      // tau21 pt Extrapolation
-      //double tauwt = customTau21pTExtrapUp(ntuple); 
-      //double tauwt = customTau21pTExtrapDown(ntuple); 
-      //weight *= tauwt; // with tau21 pt Extrapolation  
-
-      weight *= ntuple->METUp->at(5); // with Unclustured energy up
-      //weight *= ntuple->METDown->at(5); // with Unclustured energy up
-
-      std::cout<<"MET: "<<ntuple->MET<<"   unclustured up: "<< ntuple->METUp->at(5) << endl;  
-    
-      //Pile-Up weights
-      weight *= customPUweights(ntuple);
       //Pre-firing weights
-      if (year=="2016" || year=="2017"){ 
-        weight *= ntuple->NonPrefiringProb;
-        //weight *= ntuple->NonPrefiringProbUp;
-      }
+      if (year=="2016" || year=="2017"){ weight *= ntuple->NonPrefiringProb;}
         
       for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
         if (filename.Contains("VBF") || filename.Contains("ggFG") ) plots[iPlot].fillSignal(ntuple,weight); 
@@ -788,12 +765,10 @@ void process(string selection_label,
 
         if(! selectionFunc(ntuple) ) continue;
         if( !signalTriggerCut(ntuple) ) continue;
+
         //HEM Veto
         filename = ntuple->fChain->GetFile()->GetName();
-        
-        if(filename.Contains("MET_2018")){
-            if(!passHEMjetVeto(ntuple,30)) continue;
-        }
+        if(filename.Contains("MET_2018")){if(!passHEMjetVeto(ntuple,30)) continue;}
       
         for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
 	        plots[iPlot].fillData(ntuple);
@@ -801,7 +776,6 @@ void process(string selection_label,
     }
 
     for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
-        //if (plots[iPlot].is2Dhist) continue;
         plots[iPlot].Write();
     }// end loop over plots
     

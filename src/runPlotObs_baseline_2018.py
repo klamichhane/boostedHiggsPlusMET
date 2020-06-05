@@ -18,52 +18,52 @@ print "If running 2016 & 2018: set tau21 HP value to: 0.35"
 #os.system('make plotObs_baseline')
 
 backgroundSamples=[#"QCD_200to300",
-                   "ZJets_100to200",
-                   "ZJets_200to400",
-                   "ZJets_400to600",
-                   "ZJets_600to800",
-                   "ZJets_800to1200",
-                   "ZJets_1200to2500",
-                   "ZJets_2500toInf",
-                   "WJets_100to200",
-                   "WJets_200to400",
-                   "WJets_400to600",
-                   "WJets_600to800",
-                   "WJets_800to1200",
-                   "WJets_1200to2500",
-                   "WJets_2500toInf",
-                   "TT_600to800",
-                   "TT_800to1200",
-                   "TT_1200to2500",
-                   "TT_2500toInf",
-                   "TT_1LFromT", #KL
-                   "TT_1LFromTbar", #KL
-                   "TT_2L",   #KL
-                   "ST_s-channel",
-                   "ST_t-channel_antitop", # remove for 2018
-                   "ST_t-channel_top", # remove for 2018
-                   "ST_tW_antitop",
-                   "ST_tW_top",
+                   #"ZJets_100to200",
+                   #"ZJets_200to400",
+                   #"ZJets_400to600",
+                   #"ZJets_600to800",
+                   #"ZJets_800to1200",
+                   #"ZJets_1200to2500",
+                   #"ZJets_2500toInf",
+                   #"WJets_100to200",
+                   #"WJets_200to400",
+                   #"WJets_400to600",
+                   #"WJets_600to800",
+                   #"WJets_800to1200",
+                   #"WJets_1200to2500",
+                   #"WJets_2500toInf",
+                   #"TT_600to800",
+                   #"TT_800to1200",
+                   #"TT_1200to2500",
+                   #"TT_2500toInf",
+                   #"TT_1LFromT", #KL
+                   #"TT_1LFromTbar", #KL
+                   #"TT_2L",   #KL
+                   #"ST_s-channel",
+                   #"ST_t-channel_antitop", # remove for 2018
+                   #"ST_t-channel_top", # remove for 2018
+                   #"ST_tW_antitop",
+                   #"ST_tW_top",
 
-                   #"Other_WWTo2L2Nu", #remove for all years
-                   "Other_WWTo1L1Nu2Q",
-                   "Other_WWZ", #remove for 2017 n 18
-                   "Other_WZTo1L1Nu2Q", #remove for 2018
-                   "Other_WZTo1L3Nu",
-                   "Other_WZZ", #remove for 2018
-                   "Other_ZZTo2L2Q",
-                   "Other_ZZTo2Q2Nu", #remove for 2017 n 18
-                   "Other_ZZZ", #remove for 2018
-                   "Other_TTTT", #remove for 2018
-                   "Other_TTWJetsToLNu",
-                   "Other_TTWJetsToQQ",
-                   "Other_TTGJets",
-                   "Other_TTZToLLNuNu",
-                   "Other_TTZToQQ",
+                   ##"Other_WWTo2L2Nu", #remove for all years
+                   #"Other_WWTo1L1Nu2Q",
+                   #"Other_WWZ", #remove for 2017 n 18
+                   #"Other_WZTo1L1Nu2Q", #remove for 2018
+                   #"Other_WZTo1L3Nu",
+                   #"Other_WZZ", #remove for 2018
+                   #"Other_ZZTo2L2Q",
+                   #"Other_ZZTo2Q2Nu", #remove for 2017 n 18
+                   #"Other_ZZZ", #remove for 2018
+                   #"Other_TTTT", #remove for 2018
+                   #"Other_TTWJetsToLNu",
+                   #"Other_TTWJetsToQQ",
+                   #"Other_TTGJets",
+                   #"Other_TTZToLLNuNu",
+                   #"Other_TTZToQQ",
 ]
 
-signalSamples=["ggFG_1000_MC2018",
-               "VBFG_1000_MC2018", 
+signalSamples=[#"ggFG_1000_MC2018",
+               #"VBFG_1000_MC2018", 
                #"VBFG_1200_MC2018", 
                #"VBFG_1400_MC2018", 
                #"VBFG_1600_MC2018", 
@@ -80,6 +80,7 @@ signalSamples=["ggFG_1000_MC2018",
 if "ZSR" in cat or cat=="Baseline":
     dataSamples=[]
 else: dataSamples=["MET_2018A","MET_2018B","MET_2018C","MET_2018D"]
+#else: dataSamples=[]
 
 def runPlotObsBaseline(sel,bkg,sig,data):
     print '../bin/plotObs_baseline "{0}" "{1}" "{2}" "{3}"'.format(sel,bkg,sig,data)

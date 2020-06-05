@@ -8,12 +8,15 @@ year = str(argv[1])
 
 filetorun = ""
 
-if norm == "SR":
-    cat = ["ZSRHPVBF","ZSRHPVBFfail"]
-    filetorun = "NoRatio_prettyPlot_137fb-PUtest.py"
-elif norm == "SB":
-    cat = ["ZSBHPVBF","ZSBHPVBFfail"] 
-    filetorun = "NoNorm_prettyPlot_137fb-PUtest.py"
+#if norm == "SR":
+#    cat = ["ZSRHPVBF","ZSRHPVBFfail"]
+#    filetorun = "NoRatio_prettyPlot_137fb-PUtest.py"
+#elif norm == "SB":
+#    cat = ["ZSBHPVBF","ZSBHPVBFfail"] 
+#    filetorun = "NoNorm_prettyPlot_137fb-PUtest.py"
+
+filetorun = "NoRatio_prettyPlot_137fb-PUtest.py"
+cat = ["ZSBHPVBF","ZSBHPVBFfail","ZSRHPVBF","ZSRHPVBFfail"] 
 
 for i in range(len(cat)):
     print" "

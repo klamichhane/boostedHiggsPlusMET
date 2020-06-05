@@ -11,7 +11,7 @@ cat = argv[2]
 
 norm = "NoNorm"
 #test = "-PUwtCentral"
-test = "-TauDown"
+test = "-UnclustDown"
 
 location = "AN_v1_NLO_"
 

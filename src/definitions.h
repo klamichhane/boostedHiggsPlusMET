@@ -554,6 +554,16 @@ template<typename ntupleType> double customTau21pTExtrapDown(ntupleType* ntuple)
     return (1/tau21pTExtrapolation(ntuple));
 }
 
+//https://twiki.cern.ch/twiki/bin/viewauth/CMS/JetWtagging#tau21_0_35_HP_0_35_tau21_0_75_LP
+template<typename ntupleType> double tau21ScaleFactor(ntupleType* ntuple){
+    double sf; // for HP working points of 0.35
+    if(year=="2016") {sf = 0.99;}
+    if(year=="2017") {sf = 0.957;}
+    if(year=="2018") {sf = 0.964;}
+
+    return sf;
+}
+
 enum ISRweightType {kNom,kUp,kDn};
 template<typename ntupleType> double ISRweights(ntupleType* ntuple, ISRweightType wType = kNom ){
 
@@ -1069,6 +1079,7 @@ template<typename ntupleType> double fillMHT(ntupleType* ntuple){
 
 template<typename ntupleType> double fillMET(ntupleType* ntuple){
   return ntuple->MET;
+  //return ntuple->METUp->at(5);
 }
 
 template<typename ntupleType> double fillOne(ntupleType* ntuple){
@@ -1210,6 +1221,7 @@ template<typename ntupleType> bool FiltersCut(ntupleType* ntuple){
             ntuple->EcalDeadCellTriggerPrimitiveFilter == 1 && 
             ntuple->NVtx>0 && 
             ntuple->MET/ntuple->CaloMET < 5. &&
+            //ntuple->METUp->at(5)/ntuple->CaloMET < 5. &&
             //ntuple->PFCaloMETRatio < 5. &&
             ntuple->BadPFMuonFilter == 1 &&
             ntuple->BadChargedCandidateFilter == 1 &&
@@ -1320,6 +1332,7 @@ template<typename ntupleType> bool AK8JetPtCut(ntupleType* ntuple){
 
 template<typename ntupleType> bool METCut(ntupleType* ntuple){
   return ( ntuple->MET > 200.);
+  //return ( ntuple->METUp->at(5) > 200.);
 }
 template<typename ntupleType> bool DeltaPhiAK8JMETCut(ntupleType* ntuple){
   if( ntuple->JetsAK8->size() == 0 ) return false;    
@@ -1348,6 +1361,7 @@ template<typename ntupleType> double fillZMT(ntupleType* ntuple){
      double AK8Pt = ntuple->JetsAK8->at(0).Pt();
      double AK8Phi = ntuple->JetsAK8->at(0).Phi();
      double MET = ntuple->MET;
+     //double MET = ntuple->METUp->at(5);
      double METPhi = ntuple->METPhi;
      return ZMT(AK8Pt, AK8Phi, MET, METPhi);
      //return sqrt( 2*AK8Pt*MET * ( 1 - cos( DeltaPhiAK8JMETCut(ntuple)) ) );

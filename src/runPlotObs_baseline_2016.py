@@ -16,24 +16,24 @@ print "If running 2016 & 2018: set tau21 HP value to: 0.35"
 
 #os.system('make plotObs_baseline')
 
-backgroundSamples=[#"ZJets_100to200", "ZJets_200to400", "ZJets_400to600", "ZJets_600to800",
-                   #"ZJets_800to1200", "ZJets_1200to2500", "ZJets_2500toInf",
-                   #"WJets_100to200", "WJets_200to400", "WJets_400to600", "WJets_600to800",
-                   #"WJets_800to1200", "WJets_1200to2500", "WJets_2500toInf",
-                   #"TT_600to800", "TT_800to1200", "TT_1200to2500", "TT_2500toInf",
-                   #"TT_1LFromT", "TT_1LFromTbar", "TT_2L",   #KL
-                   #"ST_s-channel", "ST_t-channel_antitop", "ST_t-channel_top", # remove for 2018
-                   #"ST_tW_antitop", "ST_tW_top",
+backgroundSamples=["ZJets_100to200", "ZJets_200to400", "ZJets_400to600", "ZJets_600to800",
+                   "ZJets_800to1200", "ZJets_1200to2500", "ZJets_2500toInf",
+                   "WJets_100to200", "WJets_200to400", "WJets_400to600", "WJets_600to800",
+                   "WJets_800to1200", "WJets_1200to2500", "WJets_2500toInf",
+                   "TT_600to800", "TT_800to1200", "TT_1200to2500", "TT_2500toInf",
+                   "TT_1LFromT", "TT_1LFromTbar", "TT_2L",   #KL
+                   "ST_s-channel", "ST_t-channel_antitop", "ST_t-channel_top", # remove for 2018
+                   "ST_tW_antitop", "ST_tW_top",
 
-                   ##"Other_WWTo2L2Nu", #remove for all years
-                   #"Other_WWTo1L1Nu2Q", "Other_WZTo1L3Nu", "Other_ZZTo2L2Q",
-                   #"Other_WWZ", "Other_ZZTo2Q2Nu", #remove for 2017 n 18
-                   #"Other_WZTo1L1Nu2Q", "Other_WZZ", "Other_ZZZ", "Other_TTTT", #remove for 2018
-                   #"Other_TTWJetsToLNu", "Other_TTWJetsToQQ", "Other_TTGJets", "Other_TTZToLLNuNu",
-                   #"Other_TTZToQQ",
+                   #"Other_WWTo2L2Nu", #remove for all years
+                   "Other_WWTo1L1Nu2Q", "Other_WZTo1L3Nu", "Other_ZZTo2L2Q",
+                   "Other_WWZ", "Other_ZZTo2Q2Nu", #remove for 2017 n 18
+                   "Other_WZTo1L1Nu2Q", "Other_WZZ", "Other_ZZZ", "Other_TTTT", #remove for 2018
+                   "Other_TTWJetsToLNu", "Other_TTWJetsToQQ", "Other_TTGJets", "Other_TTZToLLNuNu",
+                   "Other_TTZToQQ",
 ]
 
-signalSamples=[#"ggFG_1000_MC2016",
+signalSamples=["ggFG_1000_MC2016",
                "VBFG_1000_MC2016", 
                #"VBFG_800_MC2016", 
                #"VBFG_1000_MC2016", 
@@ -90,17 +90,17 @@ end = datetime.now()
 
 print""
 #time.sleep(20)
-#print "hadding "+cat
-#os.system("hadd -f AN_v1_NLO_files/{1}/{0}_AN_v1_{1}.root AN_v1_NLO_files/{1}/plotObs_{0}_*.root".format(cat,year))
-#print "removing files for "+cat
-#os.system("rm AN_v1_NLO_files/{1}/plotObs_{0}_*.root".format(cat,year))
-
-##for signal:
 print "hadding "+cat
-#os.system("hadd -f AN_v1_NLO_files/{1}/Sig_{0}_{1}_Trigwt.root AN_v1_NLO_files/{1}/plotObs_{0}_*.root".format(cat,year))
-os.system("hadd -f AN_v1_NLO_files/{1}/Sig_{0}_{1}.root AN_v1_NLO_files/{1}/plotObs_{0}_*.root".format(cat,year))
+os.system("hadd -f AN_v1_NLO_files/{1}/{0}_AN_v1_{1}.root AN_v1_NLO_files/{1}/plotObs_{0}_*.root".format(cat,year))
 print "removing files for "+cat
 os.system("rm AN_v1_NLO_files/{1}/plotObs_{0}_*.root".format(cat,year))
+
+##for signal:
+#print "hadding "+cat
+##os.system("hadd -f AN_v1_NLO_files/{1}/Sig_{0}_{1}_Trigwt.root AN_v1_NLO_files/{1}/plotObs_{0}_*.root".format(cat,year))
+#os.system("hadd -f AN_v1_NLO_files/{1}/Sig_{0}_{1}.root AN_v1_NLO_files/{1}/plotObs_{0}_*.root".format(cat,year))
+#print "removing files for "+cat
+#os.system("rm AN_v1_NLO_files/{1}/plotObs_{0}_*.root".format(cat,year))
 
 
 2    

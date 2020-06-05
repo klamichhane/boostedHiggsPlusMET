@@ -61,7 +61,7 @@ backgroundSamples=[#"QCD_200to300",
 ]
 
 signalSamples=["VBFG_1000_MC2017",
-               "ggFG_1000_MC2017", 
+               #"ggFG_1000_MC2017", 
                #"VBFG_800_MC2017", 
                #"VBFG_1000_MC2017", 
                #"VBFG_1200_MC2017", 
