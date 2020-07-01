@@ -1,0 +1,41 @@
+Combination of /uscms_data/d3/kxlpp1/SUSY/SUSY_OCT2018/Limit-Combine-Tool/CMSSW_10_2_13/src/HiggsAnalysis/CombinedLimit/B2G-ZV/Individual_Datacards_AllSyst/VBFRad_137fb/VBFRad_Card_M1000_bin2400_137fb.txt
+imax 2 number of bins
+jmax 2 number of processes minus 1
+kmax 26 number of nuisance parameters
+----------------------------------------------------------------------------------------------------------------------------------
+bin          ch1_S20        ch1_C20      
+observation  0.002252       0            
+----------------------------------------------------------------------------------------------------------------------------------
+bin                                      ch1_S20        ch1_S20        ch1_S20        ch1_C20        ch1_C20        ch1_C20      
+process                                  sig            rare           bkg            sig            rare           bkg          
+process                                  0              1              2              0              1              2            
+rate                                     0              0.002248       0.175981       0              1e-06          0.752307     
+----------------------------------------------------------------------------------------------------------------------------------
+BkgSB_stat_VBF_20       lnN              -              -              -              -              -              1.1727       
+BkgSR_stat_VBF_20       lnN              -              -              1.3231         -              -              -            
+JEC                     lnN              1.07/0.89      1.1346         -              1.04/0.862     1.1346         -            
+JECdom_VBF              lnN              -              -              1.03           -              -              -            
+JER                     lnN              1.0235         1.1288         -              1.0685         1.1288         -            
+JERdom_VBF              lnN              -              -              1.03           -              -              -            
+JMR                     lnN              1.0322         1.0117         -              1.0688         1.0594         -            
+JMS                     lnN              0.9932/1.0086  0.9949/1.0026  -              0.9736/1.0242  0.9912/1.0179  -            
+Lumi                    lnN              1.0244         1.0244         -              1.0244         1.0244         -            
+PDFdom                  lnN              -              -              1.027          -              -              -            
+PDFnormRare_VBF_CR      lnN              -              -              -              -              1.05           -            
+PDFnormRare_VBF_SR      lnN              -              1.05           -              -              -              -            
+PDFshapeRare_VBF_CR     lnN              -              -              -              -              1.04           -            
+PDFshapeRare_VBF_SR     lnN              -              1.04           -              -              -              -            
+Pileup                  lnN              1.0024         1.0389         -              1.0068         1.0198         -            
+Prefiring               lnN              1.0101         1.0065         -              1.0104         1.0081         -            
+RareSB_stat_VBF_20      gmN  0           -              -              -              -              0.0219         -            
+RareSR_stat_VBF_20      lnN              -              2.0            -              -              -              -            
+SclDom                  lnN              -              -              0.98           -              -              -            
+SclNormRare             lnN              -              1.15           -              -              1.15           -            
+SclShapeRare            lnN              -              0.9            -              -              0.96           -            
+Trigger                 lnN              0.9923/1.0136  0.9862/1.0102  -              0.9921/1.0137  0.9863/1.0084  -            
+Unclusturedenergy       lnN              1.001          1.0244         -              1.001          1.0176         -            
+Vtag_pt_extrap          lnN              0.937/1.0588   1.0302         -              0.9515/1.0452  1.0443         -            
+Vtag_tau21_sf           lnN              1.0726         1.0726         -              1.0726         1.0726         -            
+bveto                   lnN              1.0131         1.0244         -              1.0141         1.0351         -            
+rateparam_20  rateParam ch1_C20 bkg 1 [1e-5,10] 
+rateparam_20  rateParam ch1_S20 bkg 1 [1e-5,10] 
