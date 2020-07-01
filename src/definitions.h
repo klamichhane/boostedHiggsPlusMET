@@ -4,10 +4,9 @@
 #include "TString.h"
 #include <iostream>
 #include "paramTest.cc"
+//#include "../btag/BTagCorrector.h"
 
 std::vector<TLorentzVector> dummy;
-
-//string year = "2016"; 
 
 // constants
 // ==============================================
@@ -115,7 +114,7 @@ template<typename ntupleType>void ntupleBranchStatus(ntupleType* ntuple){
   ntuple->fChain->SetBranchStatus("METclean",1);
   ntuple->fChain->SetBranchStatus("METPhiclean",1);
   ntuple->fChain->SetBranchStatus("JetsAK8*",1);
-  ntuple->fChain->SetBranchStatus("Jets",1);
+  ntuple->fChain->SetBranchStatus("Jets*",1);
   ntuple->fChain->SetBranchStatus("JetsAK8_neutralEmEnergyFraction",1);
   ntuple->fChain->SetBranchStatus("JetsAK8_chargedHadronEnergyFraction",1);
   ntuple->fChain->SetBranchStatus("JetsAK8_neutralHadronEnergyFraction",1);
@@ -410,6 +409,43 @@ template<typename ntupleType> double WJetsNLOWeightsEwk1718(ntupleType* ntuple){
         return (WJets_Ewk->GetBinContent(1));
 }
 
+// Jet Mass Resolution smearing factor
+template<typename ntupleType> double JetMassResolution(ntupleType* ntuple){
+    if (ntuple->smearmJ >= 0) return ntuple->smearmJ;
+    double sf = 1.0; //resolution SF
+    double sigmaJMR = 0.0;
+    //double mass = 0.0;
+    //double mass = 90.87;
+    double mass = 80.81;
+
+    //TString fname;
+    //fname = ntuple->fChain->GetFile()->GetName();
+    //if (fname.Contains("ggFWp") || fname.Contains("VBFWp")) mass = 80.81; // mean from baselineHP VBFWp 2 TeV
+    //if (fname.Contains("ggFG") || fname.Contains("VBFG") || fname.Contains("ggFRad") || fname.Contains("VBFRad")) mass = 90.87; // mean from baselineHP VBFG 2 TeV
+    TRandom3 rand(0); //settting the seed = 0. 
+      
+    if (year == "2016") {
+        sf = 1.0; 
+        //sf = 1.2; // up variation 
+        sigmaJMR = 10.1/mass; 
+        //sigmaJMR = (10.131 - 1.0)/90.87; // used from avg rms/mean of mJ from VBFG 2 TeV sample. 
+    };
+    if (year == "2017") {
+        sf = 1.0376; //0.99 + 0.0476; 
+        //sf = 0.99; 
+        sigmaJMR = 9.935/mass; 
+    };
+    if (year == "2018") {
+        sf = 1.1487; // 1.108+0.0407
+        //sf = 1.108; 
+        sigmaJMR = 8.221/mass; 
+    };
+    double gausSmear = 1 + ( (rand.Gaus(0, sigmaJMR)) * sqrt( std::max((sf * sf -1.0),0.0)));
+    //std::cout<< "file name: "<<fname<<" mass: "<<mass<<" smear factor: "<< gausSmear<<endl;        
+    ntuple->smearmJ = gausSmear;
+    return gausSmear;
+}
+
 //////////// Puppi SoftDrop Mass Correction //////////////////////////////////////////////////////
 // https://twiki.cern.ch/twiki/bin/viewauth/CMS/JetWtagging#PUPPI_softdrop_mass_corrections
 // 2016: https://twiki.cern.ch/twiki/bin/viewauth/CMS/JetWtagging#PUPPI_softdrop_mass_corrections
@@ -435,7 +471,6 @@ float getPUPPIwt2016(float puppipt, float puppieta){
     return totalWeight;
 }
 
-
 template<typename ntupleType> double AK8PUPPISoftdropCorrMass(ntupleType* ntuple){
     if(ntuple->JetsAK8->size()==0 || (ntuple->JetsAK8_subjets->at(0)).size()==0) return -99999.;
 
@@ -451,9 +486,30 @@ template<typename ntupleType> double AK8PUPPISoftdropCorrMass(ntupleType* ntuple
     float AK8jetEta = ntuple->JetsAK8->at(0).Eta();
     float puppiCorr = getPUPPIwt2016(AK8jetPt, AK8jetEta);
     double Corrected_Mass = puppi_softdrop.M() * puppiCorr;
-    return (Corrected_Mass);
-}
 
+    // with JMS
+    //if (year == "2016") Corrected_Mass *= 1.0;
+    //if (year == "2017") Corrected_Mass *= 1.014;
+    //if (year == "2018") Corrected_Mass *= 0.999;
+
+    // with JMS Up
+    //if (year == "2016") Corrected_Mass *= 1.0   * 1.0094; // JMS SF * unc
+    //if (year == "2017") Corrected_Mass *= 1.014 * 1.0044;
+    //if (year == "2018") Corrected_Mass *= 0.999 * 1.0037;
+
+    // with JMS Down
+    //if (year == "2016") Corrected_Mass *= 1.0   * (1 - 0.0094); // JMS SF * unc
+    //if (year == "2017") Corrected_Mass *= 1.014 * (1 - 0.0044);
+    //if (year == "2018") Corrected_Mass *= 0.999 * (1 - 0.0037);
+
+    // with JMR
+    //std::cout<< "mJ before JMR: "<<Corrected_Mass<<endl;        
+    //Corrected_Mass *= JetMassResolution(ntuple);
+    //std::cout<< "mJ after JMR: "<<Corrected_Mass<<endl;        
+    //std::cout<< endl;        
+
+    return Corrected_Mass;
+}
 
 template<typename ntupleType> double AK8PUPPISoftdropCorrMassCent(ntupleType* ntuple){
   if(ntuple->JetsAK8->size()==0) return -99999.;
@@ -469,6 +525,26 @@ template<typename ntupleType> double AK8PUPPISoftdropCorrMassFwd(ntupleType* ntu
        return AK8PUPPISoftdropCorrMass(ntuple);
    else
        return -999.; 
+}
+
+template<typename ntupleType> double JetMassScale(ntupleType* ntuple){
+  if (ntuple->JetsAK8->size()==0) return -99999.;
+  double mJ = AK8PUPPISoftdropCorrMass(ntuple);
+  double scale;
+  if (year == "2016") scale = mJ * 1.0;
+  if (year == "2017") scale = mJ * 1.014;
+  if (year == "2018") scale = mJ * 0.999;
+  return scale;
+}
+
+template<typename ntupleType> double JetMassScaleUp(ntupleType* ntuple){
+  if (ntuple->JetsAK8->size()==0) return -99999.;
+  double mJ = JetMassScale(ntuple);
+  double scalevar;
+  if (year == "2016") scalevar = mJ * 1.0 * 1.0094;
+  if (year == "2017") scalevar = mJ * 1.014 * 1.0044; 
+  if (year == "2018") scalevar = mJ * 0.999 * 1.0037;
+  return scalevar;
 }
 
 template<typename ntupleType> double fillLeadingJetPtCent(ntupleType* ntuple){
@@ -1674,16 +1750,20 @@ template<typename ntupleType> bool VBFdEtaDebugCuts(ntupleType* ntuple){
 
 template<typename ntupleType> bool AK8JetSideBandCut(ntupleType* ntuple){
     if(ntuple->JetsAK8->size()==0) return false;
-    //double mJ = ntuple->JetsAK8_softDropMass->at(0);
     double mJ = AK8PUPPISoftdropCorrMass(ntuple);
     return ( ( mJ > 30. && mJ < 65.) || ( mJ > 135. && mJ < 300.) );
+}
+
+template<typename ntupleType> bool AK8JetSRCut(ntupleType* ntuple){
+    if(ntuple->JetsAK8->size()==0) return false;
+    double mJ = AK8PUPPISoftdropCorrMass(ntuple);
+    return (  mJ > 65. && mJ < 105.);
 }
 
 template<typename ntupleType> bool AlphaSideBandCut(ntupleType* ntuple){
     if(ntuple->JetsAK8->size()==0) return false;
     //double mJ = ntuple->JetsAK8_softDropMass->at(0);
     double mJ = AK8PUPPISoftdropCorrMass(ntuple);
-    //return ( (mJ > 30. && mJ < 55.) || (mJ > 135. && mJ < 150.));
     return ( (mJ > 30. && mJ < 55.) || (mJ > 135. && mJ < 300.));
 }
 
@@ -1692,13 +1772,6 @@ template<typename ntupleType> bool AlphaSRCut(ntupleType* ntuple){
     //double mJ = ntuple->JetsAK8_softDropMass->at(0);
     double mJ = AK8PUPPISoftdropCorrMass(ntuple);
     return (mJ > 55. && mJ < 65.);
-}
-
-template<typename ntupleType> bool AK8JetSRCut(ntupleType* ntuple){
-    if(ntuple->JetsAK8->size()==0) return false;
-    //double mJ = ntuple->JetsAK8_softDropMass->at(0);
-    double mJ = AK8PUPPISoftdropCorrMass(ntuple);
-    return (  mJ > 65. && mJ < 105.);
 }
 
 template<typename ntupleType> bool LowTau21DebugCut(ntupleType* ntuple){
@@ -1773,6 +1846,12 @@ template<typename ntupleType> bool baselineCut(ntupleType* ntuple){
          );
 }
     
+// 2) Baseline + HP cut: to study the JMR in whole mJ window.  
+template<typename ntupleType> bool baselineHPCut(ntupleType* ntuple ){
+  return (baselineCut(ntuple) && 
+          HighPurityCut(ntuple)); 
+}
+
 // 2) SR Baseline i.e. Puppi SD Mass [65,105] GeV  
 template<typename ntupleType> bool ZSRCut(ntupleType* ntuple ){
   return (baselineCut(ntuple) && 

@@ -10,8 +10,7 @@ year = argv[1]
 cat = argv[2]
 
 norm = "NoNorm"
-#test = "-PUwtCentral"
-test = "-UnclustDown"
+test = "-PUwt"
 
 location = "AN_v1_NLO_"
 
@@ -52,21 +51,26 @@ def plot(plot_var = "photonIsoChrgLowSieie_EB_photonLoose" ):
                    "Other_ZZTo2L2Q", "Other_ZZZ", "Other_TTTT", "Other_TTWJetsToLNu",
                    "Other_TTWJetsToQQ", "Other_TTGJets", "Other_TTZToLLNuNu", "Other_TTZToQQ"]
 
-    samples=[snglt, tt, other, wjets, zjets]
+    #samples=[snglt, tt, other, wjets, zjets]
+    samples=[snglt, tt, other]
 
     #if "VBFfail" in cat: signal_samples=["ggFG_1000"];signal_labels = ["ggFG 1000 (1 pb)"]
     #else: signal_samples=["VBFG_1000"];signal_labels = ["VBFG 1000 (1 pb)"]
-    if year == "2016": signal_samples=["VBFG_1000_MC2016"]
-    if year == "2017": signal_samples=["VBFG_1000_MC2017"]
-    if year == "2018": signal_samples=["VBFG_1000_MC2018"]
+    signal_samples=["VBFG_1000"]
+    #if year == "2016": signal_samples=["VBFG_1000_MC2016"]
+    #if year == "2017": signal_samples=["VBFG_1000_MC2017"]
+    #if year == "2018": signal_samples=["VBFG_1000_MC2018"]
     signal_labels = ["VBFG 1000 (1 pb)"]
 
     data_samples=["MET_2016H","MET_2016G","MET_2016F","MET_2016E","MET_2016D","MET_2016C","MET_2016B"]
 
-    samples_labels = ["SnglT","TT","Other","WJets","ZJets"]
+    #samples_labels = ["SnglT","TT","Other","WJets","ZJets"]
+    samples_labels = ["SnglT","TT","Other"]
     signal_line_color = [2]
-    samples_fill_color = [r.kOrange,r.kCyan,r.kOrange+3,r.kBlue,r.kGreen+1]
-    samples_line_color = [1,1,1,1,1]
+    #samples_fill_color = [r.kOrange,r.kCyan,r.kOrange+3,r.kBlue,r.kGreen+1]
+    samples_fill_color = [r.kOrange,r.kCyan,r.kOrange+3]
+    #samples_line_color = [1,1,1,1,1]
+    samples_line_color = [1,1,1]
     
     samples_histo=[]
     
@@ -206,9 +210,7 @@ def plot(plot_var = "photonIsoChrgLowSieie_EB_photonLoose" ):
     LUMItext.SetTextSize(0.04) # was 0.08
     LUMItext.Draw()
 
-    #can.SaveAs("../plots_NewSkim_v1/"+plot_dir+"/"+plot_var+".png")
-    can.SaveAs(plot_dir+"/"+plot_var+".pdf")
-    # for space between legend and plot 
+    #can.SaveAs(plot_dir+"/"+plot_var+".pdf")
     can.SetLogy()
     if total!=None:
         #stack.SetMaximum(20.0*max(total.GetMaximum(),samples_histo[0].GetMaximum()))
@@ -216,7 +218,7 @@ def plot(plot_var = "photonIsoChrgLowSieie_EB_photonLoose" ):
     else :
         stack.SetMaximum(200.0*samples_histo[0].GetMaximum())
     stack.SetMinimum(0.1)
-    can.SaveAs(plot_dir+"/"+plot_var+"_LogY.pdf")
+    #can.SaveAs(plot_dir+"/"+plot_var+"_LogY.pdf")
 
     output_file.cd()
     for h in samples_histo :
@@ -237,10 +239,12 @@ while(key != None ) :
     obj = key.ReadObj();
     if obj.InheritsFrom("TH1") and not obj.InheritsFrom("TH2"):
         name = r.TString(obj.GetName())
-        if name.Contains("_ZJets_100to200") : 
+        #if name.Contains("_ZJets_100to200") : 
+        if name.Contains("_TT_600to800") : 
             #print name
             #print "integral:",obj.Integral()
-            vars.append(name.ReplaceAll("_ZJets_100to200","").Data())
+            vars.append(name.ReplaceAll("_TT_600to800","").Data())
+            #vars.append(name.ReplaceAll("_ZJets_100to200","").Data())
     else :
         print obj.Print()
     key = next()

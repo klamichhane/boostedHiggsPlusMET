@@ -169,6 +169,7 @@ public :
         fileNames["VBFWp_7500_MC2018"] = "tree_VBFWp_mWp7500_v15_MC2018.root";
         fileNames["VBFWp_8000_MC2018"] = "tree_VBFWp_mWp8000_v15_MC2018.root";
 
+        fileNames["ggFG_800_MC2018"] = "tree_ggFG_mG800_v14_MC2017.root";
         fileNames["ggFG_1000_MC2018"] = "tree_ggFG_mG1000_v14_MC2017.root";
         fileNames["ggFG_1200_MC2018"] = "tree_ggFG_mG1200_v14_MC2017.root";
         fileNames["ggFG_1400_MC2018"] = "tree_ggFG_mG1400_v14_MC2017.root";
@@ -181,6 +182,7 @@ public :
         fileNames["ggFG_4000_MC2018"] = "tree_ggFG_mG4000_v14_MC2017.root";
         fileNames["ggFG_4500_MC2018"] = "tree_ggFG_mG4500_v14_MC2017.root";
 
+        fileNames["ggFWp_800_MC2018"]  = "tree_ggFWp_mWp800_v3_MC2016.root";
         fileNames["ggFWp_1000_MC2018"] = "tree_ggFWp_mWp1000_v3_MC2016.root";
         fileNames["ggFWp_1200_MC2018"] = "tree_ggFWp_mWp1200_v3_MC2016.root";
         fileNames["ggFWp_1400_MC2018"] = "tree_ggFWp_mWp1400_v3_MC2016.root";
@@ -196,25 +198,25 @@ public :
         //fileNames["ggFRad_1000_MC2018"] = "tree_ggFRad_mRad1000_v15_MC2018.root";
         //fileNames["ggFRad_4500_MC2018"] = "tree_ggFRad_mRad4500_v15_MC2018.root";
 
-        fileNames["ggFRad_800_MC2018"] = "tree_ggFRad_mRad800_v14_MC2017.root";
-        fileNames["ggFRad_1000_MC2018"] = "tree_ggFRad_mRad1000_v14_MC2017.root";
-        fileNames["ggFRad_1200_MC2018"] = "tree_ggFRad_mRad1200_v14_MC2017.root";
-        fileNames["ggFRad_1400_MC2018"] = "tree_ggFRad_mRad1400_v14_MC2017.root";
-        fileNames["ggFRad_1600_MC2018"] = "tree_ggFRad_mRad1600_v14_MC2017.root";
-        fileNames["ggFRad_1800_MC2018"] = "tree_ggFRad_mRad1800_v14_MC2017.root";
-        fileNames["ggFRad_2000_MC2018"] = "tree_ggFRad_mRad2000_v14_MC2017.root";
-        fileNames["ggFRad_2500_MC2018"] = "tree_ggFRad_mRad2500_v14_MC2017.root";
-        fileNames["ggFRad_3000_MC2018"] = "tree_ggFRad_mRad3000_v14_MC2017.root";
-        fileNames["ggFRad_3500_MC2018"] = "tree_ggFRad_mRad3500_v14_MC2017.root";
-        fileNames["ggFRad_4000_MC2018"] = "tree_ggFRad_mRad4000_v14_MC2017.root";
-        fileNames["ggFRad_4500_MC2018"] = "tree_ggFRad_mRad4500_v14_MC2017.root";
-        fileNames["ggFRad_5000_MC2018"] = "tree_ggFRad_mRad5000_v14_MC2017.root";
-        fileNames["ggFRad_5500_MC2018"] = "tree_ggFRad_mRad5500_v14_MC2017.root";
-        fileNames["ggFRad_6000_MC2018"] = "tree_ggFRad_mRad6000_v14_MC2017.root";
-        fileNames["ggFRad_6500_MC2018"] = "tree_ggFRad_mRad6500_v14_MC2017.root";
-        fileNames["ggFRad_7000_MC2018"] = "tree_ggFRad_mRad7000_v14_MC2017.root";
-        fileNames["ggFRad_7500_MC2018"] = "tree_ggFRad_mRad7500_v14_MC2017.root";
-        fileNames["ggFRad_8000_MC2018"] = "tree_ggFRad_mRad8000_v14_MC2017.root";
+        fileNames["ggFRad_800_MC2018"]  = "tree_ggFRad_mRad800_v15_MC2018.root";
+        fileNames["ggFRad_1000_MC2018"] = "tree_ggFRad_mRad1000_v15_MC2018.root";
+        fileNames["ggFRad_1200_MC2018"] = "tree_ggFRad_mRad1200_v15_MC2018.root";
+        fileNames["ggFRad_1400_MC2018"] = "tree_ggFRad_mRad1400_v15_MC2018.root";
+        fileNames["ggFRad_1600_MC2018"] = "tree_ggFRad_mRad1600_v15_MC2018.root";
+        fileNames["ggFRad_1800_MC2018"] = "tree_ggFRad_mRad1800_v15_MC2018.root";
+        fileNames["ggFRad_2000_MC2018"] = "tree_ggFRad_mRad2000_v15_MC2018.root";
+        fileNames["ggFRad_2500_MC2018"] = "tree_ggFRad_mRad2500_v15_MC2018.root";
+        fileNames["ggFRad_3000_MC2018"] = "tree_ggFRad_mRad3000_v15_MC2018.root";
+        fileNames["ggFRad_3500_MC2018"] = "tree_ggFRad_mRad3500_v15_MC2018.root";
+        fileNames["ggFRad_4000_MC2018"] = "tree_ggFRad_mRad4000_v15_MC2018.root";
+        fileNames["ggFRad_4500_MC2018"] = "tree_ggFRad_mRad4500_v15_MC2018.root";
+        fileNames["ggFRad_5000_MC2018"] = "tree_ggFRad_mRad5000_v15_MC2018.root";
+        fileNames["ggFRad_5500_MC2018"] = "tree_ggFRad_mRad5500_v15_MC2018.root";
+        fileNames["ggFRad_6000_MC2018"] = "tree_ggFRad_mRad6000_v15_MC2018.root";
+        fileNames["ggFRad_6500_MC2018"] = "tree_ggFRad_mRad6500_v15_MC2018.root";
+        fileNames["ggFRad_7000_MC2018"] = "tree_ggFRad_mRad7000_v15_MC2018.root";
+        fileNames["ggFRad_7500_MC2018"] = "tree_ggFRad_mRad7500_v15_MC2018.root";
+        fileNames["ggFRad_8000_MC2018"] = "tree_ggFRad_mRad8000_v15_MC2018.root";
 
 
 	for( auto name : backgrounds ){

@@ -20,7 +20,7 @@ class RA2bTree {
 public :
    TChain          *fChain;   //!pointer to the analyzed TTree or TChain
    Int_t           fCurrent; //!current Tree number in a TChain
-
+   double smearmJ; 
 // Fixed size dimensions of array or collections stored in the TTree if any.
 
    // Declaration of leaf types
@@ -829,6 +829,7 @@ RA2bTree::~RA2bTree()
 Int_t RA2bTree::GetEntry(Long64_t entry)
 {
 // Read contents of entry.
+   smearmJ = -1.0; 
    if (!fChain) return 0;
    return fChain->GetEntry(entry);
 }

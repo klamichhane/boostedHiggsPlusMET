@@ -173,6 +173,7 @@ public :
         fileNames["VBFWp_7500_MC2017"] = "tree_VBFWp_mWp7500_v14_MC2017.root";
         fileNames["VBFWp_8000_MC2017"] = "tree_VBFWp_mWp8000_v14_MC2017.root";
 
+        fileNames["ggFG_800_MC2017"] = "tree_ggFG_mG800_v14_MC2017.root";
         fileNames["ggFG_1000_MC2017"] = "tree_ggFG_mG1000_v14_MC2017.root";
         fileNames["ggFG_1200_MC2017"] = "tree_ggFG_mG1200_v14_MC2017.root";
         fileNames["ggFG_1400_MC2017"] = "tree_ggFG_mG1400_v14_MC2017.root";
@@ -205,6 +206,7 @@ public :
         fileNames["ggFRad_7500_MC2017"] = "tree_ggFRad_mRad7500_v14_MC2017.root";
         fileNames["ggFRad_8000_MC2017"] = "tree_ggFRad_mRad8000_v14_MC2017.root";
 
+        fileNames["ggFWp_800_MC2017"] =  "tree_ggFWp_mWp800_v3_MC2016.root";
         fileNames["ggFWp_1000_MC2017"] = "tree_ggFWp_mWp1000_v3_MC2016.root";
         fileNames["ggFWp_1200_MC2017"] = "tree_ggFWp_mWp1200_v3_MC2016.root";
         fileNames["ggFWp_1400_MC2017"] = "tree_ggFWp_mWp1400_v3_MC2016.root";

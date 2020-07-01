@@ -4,7 +4,6 @@ from sys import argv
 from datetime import datetime
 import time
 
-print "If running SB category, change the number of events for data"
 #year = "2017"
 year = sys.argv[1]
 #que = ["ZSB"]
@@ -18,13 +17,13 @@ que = ["ZSBHPVBF","ZSBHPVBFfail","ZSRHPVBF","ZSRHPVBFfail"]
 
 for i in range(len(que)):
     start = datetime.now()
-    print "started {0} at: {1}".format(year,start)
     print "running {}".format(i)
     os.system("python runPlotObs_baseline_{0}.py {1} {0}".format(year,que[i]))
     end = datetime.now()
     print "started {0} {2} at: {1}".format(que[i],start,year)
     print "ended {0} {2} at: {1}".format(que[i],end,year)
     print "processed {0} {2} at: {1}".format(que[i],end-start,year)
+    print""
 
 
 print""

@@ -13,11 +13,10 @@
 #include "Sig_Samples_XsecWt.cc"
 #include "plotterUtils.cc"
 //#include "skimSamples_2016.cc"
-//#include "skimSamples_2017.cc"
-//#include "skimSamples_2018.cc"
 #include "definitions.h"
 #include "RA2bTree.cc"
 #include "TriggerEfficiencySextet.cc"
+#include "btag/BTagCorrector.h"
 
 //string year = "2016"; 
 double lum = 0.0;
@@ -40,6 +39,8 @@ void process(string selection_label,
     bool (*selectionFunc)(RA2bTree*);
     if( selection_label == "Baseline"){
         selectionFunc = baselineCut;
+    }else if( selection_label == "BaselineHP"){
+        selectionFunc = baselineHPCut;
     }else if( selection_label == "ZSR"){
         selectionFunc = ZSRCut;
     }else if( selection_label == "ZSRHP"){
@@ -278,13 +279,17 @@ void process(string selection_label,
   plot DeltaPhi4plot(*fillDeltaPhi4<RA2bTree>,"DeltaPhi4_"+selection_label,"#Delta#Phi_{4}",20,0,3.1415);
   plot DeltaPhiAK8JMETplot(*fillDeltaPhiAK8JMET<RA2bTree>,"DeltaPhiAK8JMET_"+selection_label,"#Delta#Phi(AK8J1,MET)",20,0,3.1415);
 
-  plot AK8SDmassvsPtplot(*fillLeadingJetPt<RA2bTree>,*AK8PUPPISoftdropCorrMass<RA2bTree>,"AK8SDmassvsPt_"+selection_label,"AK8 Leading jet pT [GeV]","AK8 Leading jet mass [GeV]",16,200.,1000.,120,60.,120.);
-  plot AK8SDmassvsPt1plot(*fillLeadingJetPt<RA2bTree>,*AK8PUPPISoftdropCorrMass<RA2bTree>,"AK8SDmassvsPt1_"+selection_label,"AK8 Leading jet pT [GeV]","AK8 Leading jet mass [GeV]",12,200.,600.,40,80.,100.);
+  plot AK8SDmassvsPtplot(*fillLeadingJetPt<RA2bTree>,*AK8PUPPISoftdropCorrMass<RA2bTree>,"AK8SDmassvsPt_"+selection_label,"AK8 Leading jet pT [GeV]","AK8 Leading jet mass [GeV]",16,200.,1000.,30,60.,120.);
+  plot AK8SDmassvsPt1plot(*fillLeadingJetPt<RA2bTree>,*AK8PUPPISoftdropCorrMass<RA2bTree>,"AK8SDmassvsPt1_"+selection_label,"AK8 Leading jet pT [GeV]","AK8 Leading jet mass [GeV]",8,200.,600.,40,80.,100.);
+  plot AK8SDmassvsPt2plot(*fillLeadingJetPt<RA2bTree>,*AK8PUPPISoftdropCorrMass<RA2bTree>,"AK8SDmassvsPt2_"+selection_label,"AK8 Leading jet pT [GeV]","AK8 Leading jet mass [GeV]",46,200.,2500.,30,60.,120.);
+  plot AK8SDmassvsPt3plot(*fillLeadingJetPt<RA2bTree>,*AK8PUPPISoftdropCorrMass<RA2bTree>,"AK8SDmassvsPt3_"+selection_label,"AK8 Leading jet pT [GeV]","AK8 Leading jet mass [GeV]",46,200.,2500.,54,30.,300.);
   plot AK8SDmassvsPtCentplot(*fillLeadingJetPtCent<RA2bTree>,*AK8PUPPISoftdropCorrMassCent<RA2bTree>,"AK8SDmassvsPtCent_"+selection_label,"AK8 Leading jet pT [GeV]","AK8 Leading jet mass [GeV]",16,200.,1000.,120,60.,120.);
   plot AK8SDmassvsPt1Centplot(*fillLeadingJetPtCent<RA2bTree>,*AK8PUPPISoftdropCorrMassCent<RA2bTree>,"AK8SDmassvsPt1Cent_"+selection_label,"AK8 Leading jet pT [GeV]","AK8 Leading jet mass [GeV]",12,200.,600.,40,80.,100.);
   plot AK8SDmassvsPtFwdplot(*fillLeadingJetPtFwd<RA2bTree>,*AK8PUPPISoftdropCorrMassFwd<RA2bTree>,"AK8SDmassvsPtFwd_"+selection_label,"AK8 Leading jet pT [GeV]","AK8 Leading jet mass [GeV]",16,200.,1000.,120,60.,120.);
   plot AK8SDmassvsPt1Fwdplot(*fillLeadingJetPtFwd<RA2bTree>,*AK8PUPPISoftdropCorrMassFwd<RA2bTree>,"AK8SDmassvsPt1Fwd_"+selection_label,"AK8 Leading jet pT [GeV]","AK8 Leading jet mass [GeV]",12,200.,600.,40,80.,100.);
+
   plot J1_SDMassCorrplot(*AK8PUPPISoftdropCorrMass<RA2bTree>,"J1_SDMassCorr_"+selection_label,"AK8 J1 SoftDrop Mass Corr [GeV]",135,30.,300.);//2 Gev bin
+  //plot J1_SDMassCorrplot(*JetMassScaleUp<RA2bTree>,"J1_SDMassCorr_"+selection_label,"AK8 J1 SoftDrop Mass Corr [GeV]",135,30.,300.);//2 Gev bin
   plot J1_SDMassUnCorrplot(*fillLeadingJetSDMass<RA2bTree>,"J1_SDMassUnCorr_"+selection_label,"AK8 J1 SoftDrop Mass UnCorr [GeV]",135,30.,300.);//2 Gev bin
   plot J1_SDMassplot(*AK8PUPPISoftdropCorrMass<RA2bTree>,"J1_SDMass_"+selection_label,"AK8 J1 SoftDrop Mass [GeV]",54,30.,300.);//5 Gev bin
   plot J1_SDMass1plot(*AK8PUPPISoftdropCorrMass<RA2bTree>,"J1_SDMass1_"+selection_label,"AK8 J1 SoftDrop Mass [GeV]",34,30.,200.);//5 Gev bin
@@ -511,6 +516,8 @@ void process(string selection_label,
   plots.push_back(AK8SDmassvsPtCentplot);
   plots.push_back(AK8SDmassvsPtFwdplot);
   plots.push_back(AK8SDmassvsPt1plot);
+  plots.push_back(AK8SDmassvsPt2plot);
+  plots.push_back(AK8SDmassvsPt3plot);
   plots.push_back(AK8SDmassvsPt1Centplot);
   plots.push_back(AK8SDmassvsPt1Fwdplot);
   plots.push_back(J1_SDMassCorrplot);
@@ -616,11 +623,15 @@ void process(string selection_label,
     std::cout<<endl;
 
     double weight = 0.;
-    
+    //BTagCorrector btagcorr; // for btag scale factor systematics.    
+    //TFile *currFile;
+    double  deepCSVvalue = 0.0;
+
     for( int iEvt = 0 ; iEvt < min(MAX_EVENTS,numEvents) ; iEvt++ ){
     //for( int iEvt = 0 ; iEvt < min(100,numEvents) ; iEvt++ ){
         ntuple->GetEntry(iEvt);
         if( iEvt % 100000 == 0 ) cout << skims.sampleName[iSample] << ": " << iEvt << "/" << numEvents << endl;
+        //if( iEvt % 10000 == 0 ) cout << skims.sampleName[iSample] << ": " << iEvt << "/" << numEvents << endl;
         filename = ntuple->fChain->GetFile()->GetName();
         if( ( filename.Contains("SingleLept") || filename.Contains("DiLept") ) && ntuple->madHT>600. )continue;
     
@@ -639,9 +650,9 @@ void process(string selection_label,
         weight = ntuple->Weight * lum * customTrigWeights(ntuple) * customPUweights(ntuple);
         
         // tau21 sf
-        if ( bkg_sample.Contains("TT")  || bkg_sample.Contains("Other") || bkg_sample.Contains("ST") ){        
-             weight *= tau21ScaleFactor(ntuple);
-        }
+        //if ( bkg_sample.Contains("TT")  || bkg_sample.Contains("Other") || bkg_sample.Contains("ST") ){        
+        //     weight *= tau21ScaleFactor(ntuple);
+        //}
 
         // Prefiring wt for 2016 & 2017 only
         if (filename.Contains("MC2016") || filename.Contains("MC2017")){
@@ -666,7 +677,32 @@ void process(string selection_label,
              weight *= WJetsNLOWeightsEwk1718(ntuple);
         }
       // ------------ end weights -------------
+        // btag -sf stuffs....
+        /*
+        currFile = ntuple->fChain->GetFile();
+        //btagcorr.SetBtagSFunc(1); // for up variation
+        //btagcorr.SetMistagSFunc(1); // for Mistag up variation
 
+        btagcorr.SetEffs(currFile);
+        if(year == "2016") {
+            btagcorr.SetCalib("btag/DeepCSV_Moriond17_B_H_mod.csv");
+            deepCSVvalue = 0.6321;
+        }
+	    if(year == "2017"){
+            btagcorr.SetCalib("btag/DeepCSV_94XSF_V3_B_F_mod.csv");
+            deepCSVvalue = 0.4941;
+        }
+	    if(year == "2018"){
+            btagcorr.SetCalib("btag/DeepCSV_102XSF_V1_mod.csv");
+            deepCSVvalue = 0.4184;
+        }
+        double corrbtag = 1.0;
+        corrbtag = btagcorr.GetSimpleCorrection(ntuple->Jets,ntuple->Jets_hadronFlavor,ntuple->Jets_HTMask,ntuple->Jets_bJetTagDeepCSVBvsAll,deepCSVvalue);
+
+        weight = weight * corrbtag;
+        */
+      // end of btag-sf for MC bkgs
+  
       //cout << "event passed all selections" << endl;
         for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++ ){
 	        plots[iPlot].fill(ntuple,weight);
@@ -696,11 +732,15 @@ void process(string selection_label,
     ntupleBranchStatus<RA2bTree>(ntuple);
     TString filename;
     double weight = 0.;
+    //BTagCorrector btagcorr; // for btag scale factor systematics.    
+    //TFile *currFile;
+    //double deepCSVvalue = 0.0;
 
-    //TFile *Evtprocfile = new TFile(ntuple->fChain->GetFile()->GetName());
+    //TFile *Evtprocfile = (TFile*)ntuple->fChain->GetFile();
     //TH1F *hEvtProc = (TH1F*)Evtprocfile->Get("nEventProc");
     //double EvtProcessed = hEvtProc->Integral();
     //delete Evtprocfile;
+    //std::cout<< "processed evt for signal: "<< EvtProcessed << endl;
 
     filename = ntuple->fChain->GetFile()->GetName();
     TString sig_sample = skims.signalSampleName[iSample];    
@@ -713,6 +753,7 @@ void process(string selection_label,
     for( int iEvt = 0 ; iEvt < min(MAX_EVENTS,numEvents) ; iEvt++ ){
     //for( int iEvt = 0 ; iEvt < min(100,numEvents) ; iEvt++ ){
       ntuple->GetEntry(iEvt);
+
       if( iEvt % 100000 == 0 ) cout << skims.signalSampleName[iSample] << ": " << iEvt << "/" << numEvents << endl;
       
       if(! selectionFunc(ntuple) ) continue;
@@ -724,13 +765,40 @@ void process(string selection_label,
       if(year=="2018"){ if((ntuple->EvtNum % 1000 > 1000*21.0/59.6) && (! passHEMjetVeto(ntuple, 30)))continue;}          
 
       //weight = lum * sigxsecwt * trigwt * PUwt * tau21SF;  
-      weight = lum * sigxsecwt * customTrigWeights(ntuple) * customPUweights(ntuple) * tau21ScaleFactor(ntuple);  
+      //weight = lum * sigxsecwt * customTrigWeights(ntuple) * customPUweights(ntuple) * tau21ScaleFactor(ntuple);  
+      weight = lum * sigxsecwt * customTrigWeights(ntuple) * customPUweights(ntuple);  
 
       //Pre-firing weights
       if (year=="2016" || year=="2017"){ weight *= ntuple->NonPrefiringProb;}
         
+        // Signal sample btag -sf stuffs....
+       /* 
+        currFile = ntuple->fChain->GetFile();
+        //btagcorr.SetBtagSFunc(1); // for up variation
+        btagcorr.SetMistagSFunc(1); // for Mistag up variation
+
+        btagcorr.SetEffs(currFile);
+        if(year == "2016") {
+            btagcorr.SetCalib("btag/DeepCSV_Moriond17_B_H_mod.csv");
+            deepCSVvalue = 0.6321;
+        }
+        if(year == "2017"){
+            btagcorr.SetCalib("btag/DeepCSV_94XSF_V3_B_F_mod.csv");
+            deepCSVvalue = 0.4941;
+        }
+        if(year == "2018"){
+            btagcorr.SetCalib("btag/DeepCSV_102XSF_V1_mod.csv");
+            deepCSVvalue = 0.4184;
+        }
+        double corrbtag = 1.0;
+        corrbtag = btagcorr.GetSimpleCorrection(ntuple->Jets,ntuple->Jets_hadronFlavor,ntuple->Jets_HTMask,ntuple->Jets_bJetTagDeepCSVBvsAll,deepCSVvalue);
+
+        weight = weight * corrbtag;
+        */
+      // end of btag-sf for MC bkgs
+
       for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
-        if (filename.Contains("VBF") || filename.Contains("ggFG") ) plots[iPlot].fillSignal(ntuple,weight); 
+        if (filename.Contains("VBF") || filename.Contains("ggF") ) plots[iPlot].fillSignal(ntuple,weight); 
 	    //if ((sig_sample=="ggFWp_1000") ) plots[iPlot].fillSignal(ntuple,lum*1*1e-05*trigwt); 
         }
     }

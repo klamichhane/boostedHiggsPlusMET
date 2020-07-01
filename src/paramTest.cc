@@ -2,8 +2,10 @@
 #include <vector>
 #include <map>
 
-#include "skimSamples_2017.cc"
+#include "skimSamples_2018.cc"
 
-string year = "2017";
+string year = "2018";
+
+//int smearmJ;
 
 

@@ -10,8 +10,7 @@ year = argv[1]
 cat = argv[2]
 
 norm = "NoNorm"
-test = "-TauDown"
-#test = "-PUwtCentral"
+test = "-BtagCentral"
 
 location = "AN_v1_NLO_"
 
