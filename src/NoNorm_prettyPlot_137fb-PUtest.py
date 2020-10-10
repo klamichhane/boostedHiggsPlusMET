@@ -10,13 +10,16 @@ year = argv[1]
 cat = argv[2]
 
 norm = "NoNorm"
-test = "-BtagCentral"
+#test = "-PUwtUp"
+test = "-Nominal"
 
-location = "AN_v1_NLO_"
+loc1 = "AN_v1_NLO_plots/Systematics-LowPurity/"
+loc2 = "AN_ORv1_files/Systematics_LP/"
 
-plot_dir         = location+"plots/{2}{3}/{0}/{1}".format(cat,year,norm,test)
-input_file_name  = location+"files/{0}{2}/{1}_AN_v1_{0}.root".format(year,cat,test)
-output_file_name = location+"files/{0}{3}/Output_{2}/{1}_AN_v1_{0}_Output_{2}.root".format(year,cat,norm,test)
+#plot_dir         = loc1+"{2}{3}/{0}/{1}".format(cat,year,norm,test)
+plot_dir         = loc1+"{0}{1}/{2}/{3}/".format(norm,test,cat,year)
+input_file_name  = loc2+"{0}{2}/{1}_AN_v1_{0}.root".format(year,cat,test)
+output_file_name = loc2+"{0}{3}/Output_{2}/{1}_AN_v1_{0}_Output_{2}.root".format(year,cat,norm,test)
 
 if year == "2016": lumi="35.8/fb"
 elif year == "2017": lumi="41.5/fb"
@@ -51,11 +54,11 @@ def plot(plot_var = "photonIsoChrgLowSieie_EB_photonLoose" ):
     samples=[snglt, tt, other, wjets, zjets]
 
     #if "VBFfail" in cat: signal_samples=["ggFG_1000"]; sig = "ggFG 1000 (1 pb)"
-    #else: signal_samples=["VBFG_1000"]; sig = "VBFG 1000 (1 pb)"
-    if year == "2016": signal_samples=["VBFG_1000_MC2016"] 
-    if year == "2017": signal_samples=["VBFG_1000_MC2017"] 
-    if year == "2018": signal_samples=["VBFG_1000_MC2018"] 
-    sig = "VBFG 1000 (1 pb)"
+    signal_samples=["VBFG_1000"]; sig = "VBFG 1000 (1 pb)"
+    #if year == "2016": signal_samples=["VBFG_1000_MC2016"] 
+    #if year == "2017": signal_samples=["VBFG_1000_MC2017"] 
+    #if year == "2018": signal_samples=["VBFG_1000_MC2018"] 
+    #sig = "VBFG 1000 (1 pb)"
 
 
     if year=="2016": data_samples=["MET_2016B","MET_2016C","MET_2016D","MET_2016E","MET_2016F","MET_2016G","MET_2016H"]

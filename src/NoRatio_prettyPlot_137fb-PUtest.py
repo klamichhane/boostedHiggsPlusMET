@@ -10,13 +10,23 @@ year = argv[1]
 cat = argv[2]
 
 norm = "NoNorm"
-test = "-PUwt"
+test = "-UnclustUp"
+#test = "-Nominal"
 
-location = "AN_v1_NLO_"
+#location = "AN_v1_NLO_"
+loc1 = "AN_v1_NLO_plots/Systematics-LowPurity/"
+loc2 = "AN_ORv1_files/Systematics_LP/"
 
-plot_dir         = location+"plots/{2}{3}/{0}/{1}".format(cat,year,norm,test)
-input_file_name  = location+"files/{0}{2}/{1}_AN_v1_{0}.root".format(year,cat,test)
-output_file_name = location+"files/{0}{3}/Output_{2}/{1}_AN_v1_{0}_Output_{2}.root".format(year,cat,norm,test)
+# for HP
+#plot_dir         = location+"plots/{2}{3}/{0}/{1}".format(cat,year,norm,test)
+#input_file_name  = location+"files/{0}{2}/{1}_AN_v1_{0}.root".format(year,cat,test)
+#output_file_name = location+"files/{0}{3}/Output_{2}/{1}_AN_v1_{0}_Output_{2}.root".format(year,cat,norm,test)
+
+#for LP:
+plot_dir         = loc1+"{0}{1}/{2}/{3}/".format(norm,test,cat,year)
+input_file_name  = loc2+"{0}{2}/{1}_AN_v1_{0}.root".format(year,cat,test)
+output_file_name = loc2+"{0}{3}/Output_{2}/{1}_AN_v1_{0}_Output_{2}.root".format(year,cat,norm,test)
+
 
 if year == "2016": lumi="35.8/fb"
 elif year == "2017": lumi="41.5/fb"
@@ -52,7 +62,7 @@ def plot(plot_var = "photonIsoChrgLowSieie_EB_photonLoose" ):
                    "Other_TTWJetsToQQ", "Other_TTGJets", "Other_TTZToLLNuNu", "Other_TTZToQQ"]
 
     #samples=[snglt, tt, other, wjets, zjets]
-    samples=[snglt, tt, other]
+    #samples=[snglt, tt, other]
 
     #if "VBFfail" in cat: signal_samples=["ggFG_1000"];signal_labels = ["ggFG 1000 (1 pb)"]
     #else: signal_samples=["VBFG_1000"];signal_labels = ["VBFG 1000 (1 pb)"]
@@ -64,14 +74,18 @@ def plot(plot_var = "photonIsoChrgLowSieie_EB_photonLoose" ):
 
     data_samples=["MET_2016H","MET_2016G","MET_2016F","MET_2016E","MET_2016D","MET_2016C","MET_2016B"]
 
+    #samples=[snglt, tt, other, wjets, zjets]
     #samples_labels = ["SnglT","TT","Other","WJets","ZJets"]
-    samples_labels = ["SnglT","TT","Other"]
-    signal_line_color = [2]
     #samples_fill_color = [r.kOrange,r.kCyan,r.kOrange+3,r.kBlue,r.kGreen+1]
-    samples_fill_color = [r.kOrange,r.kCyan,r.kOrange+3]
     #samples_line_color = [1,1,1,1,1]
-    samples_line_color = [1,1,1]
     
+    samples=[snglt, tt, other]
+    samples_labels = ["SnglT","TT","Other"]
+    samples_fill_color = [r.kOrange,r.kCyan,r.kOrange+3]
+    samples_line_color = [1,1,1]
+
+    signal_line_color = [2]
+
     samples_histo=[]
     
     total = None

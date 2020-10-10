@@ -9,7 +9,7 @@
 static const TString BASE_DIR_DATA = "/home/whitbeck/raid/temp/SusyRA2Analysis2015/Skims/Run2ProductionV17/";
 static const TString BASE_DIR = "/home/whitbeck/raid/temp/SusyRA2Analysis2015/Skims_TTU_Jul19/Run2ProductionV17/";
 static const TString BASE_DIR_SIG = "/home/whitbeck/raid/temp/SusyRA2Analysis2015/Skims_TTU_Jul19/Run2ProductionV17/Sig_Samples/";
-//static const TString BASE_DIR_SIG = "/home/whitbeck/raid/temp/SusyRA2Analysis2015/Skims/Run2ProductionV16/VBF_G_V2/";
+//static const TString BASE_DIR_SIG = "/home/whitbeck/raid/temp/SusyRA2Analysis2015/Skims_TTU_Jul19/Run2ProductionV17/UnSkim_Sig/2018/";
 static const bool RE_MINIAOD = false;
 
 class skimSamples{
@@ -81,22 +81,23 @@ public :
         fileNames["TT_2L"] = "tree_TTJets_DiLept_MC2018.root";
         
 	    fileNames["ST_s-channel"] = "tree_ST_s-channel_MC2018.root";
-        fileNames["ST_t-channel_antitop"] = "tree_ST_t-channel_antitop_MC2018.root"; // from 2016
-        fileNames["ST_t-channel_top"] = "tree_ST_t-channel_top_MC2018.root"; // from 2016
+        fileNames["ST_t-channel_antitop"] = "tree_ST_t-channel_antitop_MC2018.root"; 
+        fileNames["ST_t-channel_top"] = "tree_ST_t-channel_top_MC2018.root"; 
 	    fileNames["ST_tW_antitop"] = "tree_ST_tW_antitop_MC2018.root";
 	    fileNames["ST_tW_top"] = "tree_ST_tW_top_MC2018.root";
 
         // Some samples are used from 2016+2017:
         //fileNames["Other_WWTo2L2Nu"] = "tree_WWTo2L2Nu_MC2017.root"; //n/a for all years
         fileNames["Other_WWTo1L1Nu2Q"] = "tree_WWTo1L1Nu2Q_MC2018.root";
-        fileNames["Other_WWZ"] = "tree_WWZ_MC2018.root"; //using 2016 sample
-        fileNames["Other_WZTo1L1Nu2Q"] = "tree_WZTo1L1Nu2Q_MC2018.root"; //using 2017 sample
+        fileNames["Other_WWZ"] = "tree_WWZ_MC2018.root"; 
+        fileNames["Other_WZ"] = "tree_WZ_MC2018.root";
+        fileNames["Other_WZTo1L1Nu2Q"] = "tree_WZTo1L1Nu2Q_MC2018.root"; //using 2017 sample #n/a for v17 of 2018.
         fileNames["Other_WZTo1L3Nu"] = "tree_WZTo1L3Nu_MC2018.root";
-        fileNames["Other_WZZ"] = "tree_WZZ_MC2018.root"; // using 2017 sample
+        fileNames["Other_WZZ"] = "tree_WZZ_MC2018.root"; 
         fileNames["Other_ZZTo2L2Q"] = "tree_ZZTo2L2Q_MC2018.root";
-        fileNames["Other_ZZTo2Q2Nu"] = "tree_ZZTo2Q2Nu_MC2018.root"; // using 2016 sample
-        fileNames["Other_ZZZ"] = "tree_ZZZ_MC2018.root"; // using 2017 sample
-        fileNames["Other_TTTT"] = "tree_TTTT_MC2018.root"; //using 2017 sample
+        fileNames["Other_ZZTo2Q2Nu"] = "tree_ZZTo2Q2Nu_MC2018.root"; // using 2016 sample #n/a for v17 of 2017 & 2018.
+        fileNames["Other_ZZZ"] = "tree_ZZZ_MC2018.root"; 
+        fileNames["Other_TTTT"] = "tree_TTTT_MC2018.root"; 
         fileNames["Other_TTWJetsToLNu"] = "tree_TTWJetsToLNu_MC2018.root"; 
         fileNames["Other_TTWJetsToQQ"] = "tree_TTWJetsToQQ_MC2018.root";
         fileNames["Other_TTGJets"] = "tree_TTGJets_MC2018.root";
@@ -109,114 +110,111 @@ public :
 	    fileNames["MET_2018C"] = "tree_MET_2018C.root";
         fileNames["MET_2018D"] = "tree_MET_2018D.root";
 
-        fileNames["VBFG_800_MC2018"] = "tree_VBFG_mG800_v15_MC2018.root";
-        fileNames["VBFG_1000_MC2018"] = "tree_VBFG_mG1000_v15_MC2018.root";
-        fileNames["VBFG_1200_MC2018"] = "tree_VBFG_mG1200_v15_MC2018.root";
-        fileNames["VBFG_1400_MC2018"] = "tree_VBFG_mG1400_v15_MC2018.root";
-        fileNames["VBFG_1600_MC2018"] = "tree_VBFG_mG1600_v15_MC2018.root";
-        fileNames["VBFG_1800_MC2018"] = "tree_VBFG_mG1800_v15_MC2018.root";
-        fileNames["VBFG_2000_MC2018"] = "tree_VBFG_mG2000_v15_MC2018.root";
-        fileNames["VBFG_2500_MC2018"] = "tree_VBFG_mG2500_v15_MC2018.root";
-        fileNames["VBFG_3000_MC2018"] = "tree_VBFG_mG3000_v15_MC2018.root";
-        fileNames["VBFG_3500_MC2018"] = "tree_VBFG_mG3500_v15_MC2018.root";
-        fileNames["VBFG_4000_MC2018"] = "tree_VBFG_mG4000_v15_MC2018.root";
-        fileNames["VBFG_4500_MC2018"] = "tree_VBFG_mG4500_v15_MC2018.root";
-        fileNames["VBFG_5000_MC2018"] = "tree_VBFG_mG5000_v15_MC2018.root";
-        fileNames["VBFG_5500_MC2018"] = "tree_VBFG_mG5500_v15_MC2018.root";
-        fileNames["VBFG_6000_MC2018"] = "tree_VBFG_mG6000_v15_MC2018.root";
-        fileNames["VBFG_6500_MC2018"] = "tree_VBFG_mG6500_v15_MC2018.root";
-        fileNames["VBFG_7000_MC2018"] = "tree_VBFG_mG7000_v15_MC2018.root";
-        fileNames["VBFG_7500_MC2018"] = "tree_VBFG_mG7500_v15_MC2018.root";
-        fileNames["VBFG_8000_MC2018"] = "tree_VBFG_mG8000_v15_MC2018.root";
+        fileNames["VBFG_800"] = "tree_VBFG_mG800_v15_MC2018.root";
+        fileNames["VBFG_1000"] = "tree_VBFG_mG1000_v15_MC2018.root";
+        fileNames["VBFG_1200"] = "tree_VBFG_mG1200_v15_MC2018.root";
+        fileNames["VBFG_1400"] = "tree_VBFG_mG1400_v15_MC2018.root";
+        fileNames["VBFG_1600"] = "tree_VBFG_mG1600_v15_MC2018.root";
+        fileNames["VBFG_1800"] = "tree_VBFG_mG1800_v15_MC2018.root";
+        fileNames["VBFG_2000"] = "tree_VBFG_mG2000_v15_MC2018.root";
+        fileNames["VBFG_2500"] = "tree_VBFG_mG2500_v15_MC2018.root";
+        fileNames["VBFG_3000"] = "tree_VBFG_mG3000_v15_MC2018.root";
+        fileNames["VBFG_3500"] = "tree_VBFG_mG3500_v15_MC2018.root";
+        fileNames["VBFG_4000"] = "tree_VBFG_mG4000_v15_MC2018.root";
+        fileNames["VBFG_4500"] = "tree_VBFG_mG4500_v15_MC2018.root";
+        fileNames["VBFG_5000"] = "tree_VBFG_mG5000_v15_MC2018.root";
+        fileNames["VBFG_5500"] = "tree_VBFG_mG5500_v15_MC2018.root";
+        fileNames["VBFG_6000"] = "tree_VBFG_mG6000_v15_MC2018.root";
+        fileNames["VBFG_6500"] = "tree_VBFG_mG6500_v15_MC2018.root";
+        fileNames["VBFG_7000"] = "tree_VBFG_mG7000_v15_MC2018.root";
+        fileNames["VBFG_7500"] = "tree_VBFG_mG7500_v15_MC2018.root";
+        fileNames["VBFG_8000"] = "tree_VBFG_mG8000_v15_MC2018.root";
 
-        fileNames["VBFRad_800_MC2018"] = "tree_VBFRad_mRad800_v15_MC2018.root";
-        fileNames["VBFRad_1000_MC2018"] = "tree_VBFRad_mRad1000_v15_MC2018.root";
-        fileNames["VBFRad_1200_MC2018"] = "tree_VBFRad_mRad1200_v15_MC2018.root";
-        fileNames["VBFRad_1400_MC2018"] = "tree_VBFRad_mRad1400_v15_MC2018.root";
-        fileNames["VBFRad_1600_MC2018"] = "tree_VBFRad_mRad1600_v15_MC2018.root";
-        fileNames["VBFRad_1800_MC2018"] = "tree_VBFRad_mRad1800_v15_MC2018.root";
-        fileNames["VBFRad_2000_MC2018"] = "tree_VBFRad_mRad2000_v15_MC2018.root";
-        fileNames["VBFRad_2500_MC2018"] = "tree_VBFRad_mRad2500_v15_MC2018.root";
-        fileNames["VBFRad_3000_MC2018"] = "tree_VBFRad_mRad3000_v15_MC2018.root";
-        fileNames["VBFRad_3500_MC2018"] = "tree_VBFRad_mRad3500_v15_MC2018.root";
-        fileNames["VBFRad_4000_MC2018"] = "tree_VBFRad_mRad4000_v15_MC2018.root";
-        fileNames["VBFRad_4500_MC2018"] = "tree_VBFRad_mRad4500_v15_MC2018.root";
-        fileNames["VBFRad_5000_MC2018"] = "tree_VBFRad_mRad5000_v15_MC2018.root";
-        fileNames["VBFRad_5500_MC2018"] = "tree_VBFRad_mRad5500_v15_MC2018.root";
-        fileNames["VBFRad_6000_MC2018"] = "tree_VBFRad_mRad6000_v15_MC2018.root";
-        fileNames["VBFRad_6500_MC2018"] = "tree_VBFRad_mRad6500_v15_MC2018.root";
-        fileNames["VBFRad_7000_MC2018"] = "tree_VBFRad_mRad7000_v15_MC2018.root";
-        fileNames["VBFRad_7500_MC2018"] = "tree_VBFRad_mRad7500_v15_MC2018.root";
-        fileNames["VBFRad_8000_MC2018"] = "tree_VBFRad_mRad8000_v15_MC2018.root";
+        fileNames["VBFRad_800"] = "tree_VBFRad_mRad800_v15_MC2018.root";
+        fileNames["VBFRad_1000"] = "tree_VBFRad_mRad1000_v15_MC2018.root";
+        fileNames["VBFRad_1200"] = "tree_VBFRad_mRad1200_v15_MC2018.root";
+        fileNames["VBFRad_1400"] = "tree_VBFRad_mRad1400_v15_MC2018.root";
+        fileNames["VBFRad_1600"] = "tree_VBFRad_mRad1600_v15_MC2018.root";
+        fileNames["VBFRad_1800"] = "tree_VBFRad_mRad1800_v15_MC2018.root";
+        fileNames["VBFRad_2000"] = "tree_VBFRad_mRad2000_v15_MC2018.root";
+        fileNames["VBFRad_2500"] = "tree_VBFRad_mRad2500_v15_MC2018.root";
+        fileNames["VBFRad_3000"] = "tree_VBFRad_mRad3000_v15_MC2018.root";
+        fileNames["VBFRad_3500"] = "tree_VBFRad_mRad3500_v15_MC2018.root";
+        fileNames["VBFRad_4000"] = "tree_VBFRad_mRad4000_v15_MC2018.root";
+        fileNames["VBFRad_4500"] = "tree_VBFRad_mRad4500_v15_MC2018.root";
+        fileNames["VBFRad_5000"] = "tree_VBFRad_mRad5000_v15_MC2018.root";
+        fileNames["VBFRad_5500"] = "tree_VBFRad_mRad5500_v15_MC2018.root";
+        fileNames["VBFRad_6000"] = "tree_VBFRad_mRad6000_v15_MC2018.root";
+        fileNames["VBFRad_6500"] = "tree_VBFRad_mRad6500_v15_MC2018.root";
+        fileNames["VBFRad_7000"] = "tree_VBFRad_mRad7000_v15_MC2018.root";
+        fileNames["VBFRad_7500"] = "tree_VBFRad_mRad7500_v15_MC2018.root";
+        fileNames["VBFRad_8000"] = "tree_VBFRad_mRad8000_v15_MC2018.root";
 
-        fileNames["VBFWp_800_MC2018"] = "tree_VBFWp_mWp800_v15_MC2018.root";
-        fileNames["VBFWp_1000_MC2018"] = "tree_VBFWp_mWp1000_v15_MC2018.root";
-        fileNames["VBFWp_1200_MC2018"] = "tree_VBFWp_mWp1200_v15_MC2018.root";
-        fileNames["VBFWp_1400_MC2018"] = "tree_VBFWp_mWp1400_v15_MC2018.root";
-        fileNames["VBFWp_1600_MC2018"] = "tree_VBFWp_mWp1600_v15_MC2018.root";
-        fileNames["VBFWp_1800_MC2018"] = "tree_VBFWp_mWp1800_v15_MC2018.root";
-        fileNames["VBFWp_2000_MC2018"] = "tree_VBFWp_mWp2000_v15_MC2018.root";
-        fileNames["VBFWp_2500_MC2018"] = "tree_VBFWp_mWp2500_v15_MC2018.root";
-        fileNames["VBFWp_3000_MC2018"] = "tree_VBFWp_mWp3000_v15_MC2018.root";
-        fileNames["VBFWp_3500_MC2018"] = "tree_VBFWp_mWp3500_v15_MC2018.root";
-        fileNames["VBFWp_4000_MC2018"] = "tree_VBFWp_mWp4000_v15_MC2018.root";
-        fileNames["VBFWp_4500_MC2018"] = "tree_VBFWp_mWp4500_v15_MC2018.root";
-        fileNames["VBFWp_5000_MC2018"] = "tree_VBFWp_mWp5000_v15_MC2018.root";
-        fileNames["VBFWp_5500_MC2018"] = "tree_VBFWp_mWp5500_v15_MC2018.root";
-        fileNames["VBFWp_6000_MC2018"] = "tree_VBFWp_mWp6000_v15_MC2018.root";
-        fileNames["VBFWp_6500_MC2018"] = "tree_VBFWp_mWp6500_v15_MC2018.root";
-        fileNames["VBFWp_7000_MC2018"] = "tree_VBFWp_mWp7000_v15_MC2018.root";
-        fileNames["VBFWp_7500_MC2018"] = "tree_VBFWp_mWp7500_v15_MC2018.root";
-        fileNames["VBFWp_8000_MC2018"] = "tree_VBFWp_mWp8000_v15_MC2018.root";
+        fileNames["VBFWp_800"] = "tree_VBFWp_mWp800_v15_MC2018.root";
+        fileNames["VBFWp_1000"] = "tree_VBFWp_mWp1000_v15_MC2018.root";
+        fileNames["VBFWp_1200"] = "tree_VBFWp_mWp1200_v15_MC2018.root";
+        fileNames["VBFWp_1400"] = "tree_VBFWp_mWp1400_v15_MC2018.root";
+        fileNames["VBFWp_1600"] = "tree_VBFWp_mWp1600_v15_MC2018.root";
+        fileNames["VBFWp_1800"] = "tree_VBFWp_mWp1800_v15_MC2018.root";
+        fileNames["VBFWp_2000"] = "tree_VBFWp_mWp2000_v15_MC2018.root";
+        fileNames["VBFWp_2500"] = "tree_VBFWp_mWp2500_v15_MC2018.root";
+        fileNames["VBFWp_3000"] = "tree_VBFWp_mWp3000_v15_MC2018.root";
+        fileNames["VBFWp_3500"] = "tree_VBFWp_mWp3500_v15_MC2018.root";
+        fileNames["VBFWp_4000"] = "tree_VBFWp_mWp4000_v15_MC2018.root";
+        fileNames["VBFWp_4500"] = "tree_VBFWp_mWp4500_v15_MC2018.root";
+        fileNames["VBFWp_5000"] = "tree_VBFWp_mWp5000_v15_MC2018.root";
+        fileNames["VBFWp_5500"] = "tree_VBFWp_mWp5500_v15_MC2018.root";
+        fileNames["VBFWp_6000"] = "tree_VBFWp_mWp6000_v15_MC2018.root";
+        fileNames["VBFWp_6500"] = "tree_VBFWp_mWp6500_v15_MC2018.root";
+        fileNames["VBFWp_7000"] = "tree_VBFWp_mWp7000_v15_MC2018.root";
+        fileNames["VBFWp_7500"] = "tree_VBFWp_mWp7500_v15_MC2018.root";
+        fileNames["VBFWp_8000"] = "tree_VBFWp_mWp8000_v15_MC2018.root";
 
-        fileNames["ggFG_800_MC2018"] = "tree_ggFG_mG800_v14_MC2017.root";
-        fileNames["ggFG_1000_MC2018"] = "tree_ggFG_mG1000_v14_MC2017.root";
-        fileNames["ggFG_1200_MC2018"] = "tree_ggFG_mG1200_v14_MC2017.root";
-        fileNames["ggFG_1400_MC2018"] = "tree_ggFG_mG1400_v14_MC2017.root";
-        fileNames["ggFG_1600_MC2018"] = "tree_ggFG_mG1600_v14_MC2017.root";
-        fileNames["ggFG_1800_MC2018"] = "tree_ggFG_mG1800_v14_MC2017.root";
-        fileNames["ggFG_2000_MC2018"] = "tree_ggFG_mG2000_v14_MC2017.root";
-        fileNames["ggFG_2500_MC2018"] = "tree_ggFG_mG2500_v14_MC2017.root";
-        fileNames["ggFG_3000_MC2018"] = "tree_ggFG_mG3000_v14_MC2017.root";
-        fileNames["ggFG_3500_MC2018"] = "tree_ggFG_mG3500_v14_MC2017.root";
-        fileNames["ggFG_4000_MC2018"] = "tree_ggFG_mG4000_v14_MC2017.root";
-        fileNames["ggFG_4500_MC2018"] = "tree_ggFG_mG4500_v14_MC2017.root";
+        fileNames["ggFG_800"] = "tree_ggFG_mG800_v15_MC2018.root";
+        fileNames["ggFG_1000"] = "tree_ggFG_mG1000_v15_MC2018.root";
+        fileNames["ggFG_1200"] = "tree_ggFG_mG1200_v15_MC2018.root";
+        fileNames["ggFG_1400"] = "tree_ggFG_mG1400_v15_MC2018.root";
+        fileNames["ggFG_1600"] = "tree_ggFG_mG1600_v15_MC2018.root";
+        fileNames["ggFG_1800"] = "tree_ggFG_mG1800_v15_MC2018.root";
+        fileNames["ggFG_2000"] = "tree_ggFG_mG2000_v15_MC2018.root";
+        fileNames["ggFG_2500"] = "tree_ggFG_mG2500_v15_MC2018.root";
+        fileNames["ggFG_3000"] = "tree_ggFG_mG3000_v15_MC2018.root";
+        fileNames["ggFG_3500"] = "tree_ggFG_mG3500_v15_MC2018.root";
+        fileNames["ggFG_4000"] = "tree_ggFG_mG4000_v15_MC2018.root";
+        fileNames["ggFG_4500"] = "tree_ggFG_mG4500_v15_MC2018.root";
 
-        fileNames["ggFWp_800_MC2018"]  = "tree_ggFWp_mWp800_v3_MC2016.root";
-        fileNames["ggFWp_1000_MC2018"] = "tree_ggFWp_mWp1000_v3_MC2016.root";
-        fileNames["ggFWp_1200_MC2018"] = "tree_ggFWp_mWp1200_v3_MC2016.root";
-        fileNames["ggFWp_1400_MC2018"] = "tree_ggFWp_mWp1400_v3_MC2016.root";
-        fileNames["ggFWp_1600_MC2018"] = "tree_ggFWp_mWp1600_v3_MC2016.root";
-        //fileNames["ggFWp_1800_MC2018"] = "tree_ggFWp_mWp1800_v3_MC2016.root";
-        fileNames["ggFWp_2000_MC2018"] = "tree_ggFWp_mWp2000_v3_MC2016.root";
-        fileNames["ggFWp_2500_MC2018"] = "tree_ggFWp_mWp2500_v3_MC2016.root";
-        fileNames["ggFWp_3000_MC2018"] = "tree_ggFWp_mWp3000_v3_MC2016.root";
-        fileNames["ggFWp_3500_MC2018"] = "tree_ggFWp_mWp3500_v3_MC2016.root";
-        fileNames["ggFWp_4000_MC2018"] = "tree_ggFWp_mWp4000_v3_MC2016.root";
-        fileNames["ggFWp_4500_MC2018"] = "tree_ggFWp_mWp4500_v3_MC2016.root";
+        fileNames["ggFWp_800"]  = "tree_ggFWp_mWp800_v15_MC2018.root";
+        fileNames["ggFWp_1000"] = "tree_ggFWp_mWp1000_v15_MC2018.root";
+        fileNames["ggFWp_1200"] = "tree_ggFWp_mWp1200_v15_MC2018.root";
+        fileNames["ggFWp_1400"] = "tree_ggFWp_mWp1400_v15_MC2018.root";
+        fileNames["ggFWp_1600"] = "tree_ggFWp_mWp1600_v15_MC2018.root";
+        fileNames["ggFWp_1800"] = "tree_ggFWp_mWp1800_v15_MC2018.root";
+        fileNames["ggFWp_2000"] = "tree_ggFWp_mWp2000_v15_MC2018.root";
+        fileNames["ggFWp_2500"] = "tree_ggFWp_mWp2500_v15_MC2018.root";
+        fileNames["ggFWp_3000"] = "tree_ggFWp_mWp3000_v15_MC2018.root";
+        fileNames["ggFWp_3500"] = "tree_ggFWp_mWp3500_v15_MC2018.root";
+        fileNames["ggFWp_4000"] = "tree_ggFWp_mWp4000_v15_MC2018.root";
+        fileNames["ggFWp_4500"] = "tree_ggFWp_mWp4500_v15_MC2018.root";
         
-        //fileNames["ggFRad_1000_MC2018"] = "tree_ggFRad_mRad1000_v15_MC2018.root";
-        //fileNames["ggFRad_4500_MC2018"] = "tree_ggFRad_mRad4500_v15_MC2018.root";
-
-        fileNames["ggFRad_800_MC2018"]  = "tree_ggFRad_mRad800_v15_MC2018.root";
-        fileNames["ggFRad_1000_MC2018"] = "tree_ggFRad_mRad1000_v15_MC2018.root";
-        fileNames["ggFRad_1200_MC2018"] = "tree_ggFRad_mRad1200_v15_MC2018.root";
-        fileNames["ggFRad_1400_MC2018"] = "tree_ggFRad_mRad1400_v15_MC2018.root";
-        fileNames["ggFRad_1600_MC2018"] = "tree_ggFRad_mRad1600_v15_MC2018.root";
-        fileNames["ggFRad_1800_MC2018"] = "tree_ggFRad_mRad1800_v15_MC2018.root";
-        fileNames["ggFRad_2000_MC2018"] = "tree_ggFRad_mRad2000_v15_MC2018.root";
-        fileNames["ggFRad_2500_MC2018"] = "tree_ggFRad_mRad2500_v15_MC2018.root";
-        fileNames["ggFRad_3000_MC2018"] = "tree_ggFRad_mRad3000_v15_MC2018.root";
-        fileNames["ggFRad_3500_MC2018"] = "tree_ggFRad_mRad3500_v15_MC2018.root";
-        fileNames["ggFRad_4000_MC2018"] = "tree_ggFRad_mRad4000_v15_MC2018.root";
-        fileNames["ggFRad_4500_MC2018"] = "tree_ggFRad_mRad4500_v15_MC2018.root";
-        fileNames["ggFRad_5000_MC2018"] = "tree_ggFRad_mRad5000_v15_MC2018.root";
-        fileNames["ggFRad_5500_MC2018"] = "tree_ggFRad_mRad5500_v15_MC2018.root";
-        fileNames["ggFRad_6000_MC2018"] = "tree_ggFRad_mRad6000_v15_MC2018.root";
-        fileNames["ggFRad_6500_MC2018"] = "tree_ggFRad_mRad6500_v15_MC2018.root";
-        fileNames["ggFRad_7000_MC2018"] = "tree_ggFRad_mRad7000_v15_MC2018.root";
-        fileNames["ggFRad_7500_MC2018"] = "tree_ggFRad_mRad7500_v15_MC2018.root";
-        fileNames["ggFRad_8000_MC2018"] = "tree_ggFRad_mRad8000_v15_MC2018.root";
+        fileNames["ggFRad_800"]  = "tree_ggFRad_mRad800_v15_MC2018.root";
+        fileNames["ggFRad_1000"] = "tree_ggFRad_mRad1000_v15_MC2018.root";
+        fileNames["ggFRad_1200"] = "tree_ggFRad_mRad1200_v15_MC2018.root";
+        fileNames["ggFRad_1400"] = "tree_ggFRad_mRad1400_v15_MC2018.root";
+        fileNames["ggFRad_1600"] = "tree_ggFRad_mRad1600_v15_MC2018.root";
+        fileNames["ggFRad_1800"] = "tree_ggFRad_mRad1800_v15_MC2018.root";
+        fileNames["ggFRad_2000"] = "tree_ggFRad_mRad2000_v15_MC2018.root";
+        fileNames["ggFRad_2500"] = "tree_ggFRad_mRad2500_v15_MC2018.root";
+        fileNames["ggFRad_3000"] = "tree_ggFRad_mRad3000_v15_MC2018.root";
+        fileNames["ggFRad_3500"] = "tree_ggFRad_mRad3500_v15_MC2018.root";
+        fileNames["ggFRad_4000"] = "tree_ggFRad_mRad4000_v15_MC2018.root";
+        fileNames["ggFRad_4500"] = "tree_ggFRad_mRad4500_v15_MC2018.root";
+        fileNames["ggFRad_5000"] = "tree_ggFRad_mRad5000_v15_MC2018.root";
+        fileNames["ggFRad_5500"] = "tree_ggFRad_mRad5500_v15_MC2018.root";
+        fileNames["ggFRad_6000"] = "tree_ggFRad_mRad6000_v15_MC2018.root";
+        fileNames["ggFRad_6500"] = "tree_ggFRad_mRad6500_v15_MC2018.root";
+        fileNames["ggFRad_7000"] = "tree_ggFRad_mRad7000_v15_MC2018.root";
+        fileNames["ggFRad_7500"] = "tree_ggFRad_mRad7500_v15_MC2018.root";
+        fileNames["ggFRad_8000"] = "tree_ggFRad_mRad8000_v15_MC2018.root";
 
 
 	for( auto name : backgrounds ){
@@ -224,7 +222,6 @@ public :
 	  if( fileNames.find(name) != fileNames.end() ){
 	    TChain* temp = new TChain("tree");
 	    temp->Add(BASE_DIR+skimType+"/"+fileNames[name]);	  
-	    //temp->Add(BASE_DIR_DATA+skimType+"/"+fileNames[name]);	  
 	    ntuples.push_back(new RA2bTree(temp));
 	    sampleName.push_back(name);
 	  }
@@ -237,7 +234,6 @@ public :
 	    TChain* temp = new TChain("tree");
 	    //TChain* temp = new TChain("TreeMaker2/PreSelection");
 	    temp->Add(BASE_DIR_SIG+"/"+fileNames[name]);	  
-	    //temp->Add(BASE_DIR_DATA+skimType+"/"+fileNames[name]);	  
 	    signalNtuples.push_back(new RA2bTree(temp));
 	    signalSampleName.push_back(name);
 	  }
@@ -249,7 +245,6 @@ public :
 	  if( fileNames.find(name) != fileNames.end() ){
 	    TChain* temp = new TChain("tree");
 	    temp->Add(BASE_DIR+skimType+"/"+fileNames[name]);	  
-	    //temp->Add(BASE_DIR_DATA+skimType+"/"+fileNames[name]);	  
 	    dataNtuple.push_back(new RA2bTree(temp));
 	    dataSampleName.push_back(name);
 	  }

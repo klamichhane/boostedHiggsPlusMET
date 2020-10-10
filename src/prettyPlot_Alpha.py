@@ -17,17 +17,14 @@ cat = argv[2]
 #cat = "ZAlphaSBFPVBF"
 #cat = "ZAlphaSBFPVBFfail"
 
-#norm = "NoNorm"
-#norm = "Norm"
+location = "AN_ORv1_files/Systematics_LP"
 
-NLO = "nlo"
-if NLO=="nlo": location = "AN_v1_NLO_"
-elif NLO=="lo": location = "AN_v1_"
-
-
-plot_dir         = location+"Closure/plots/"
-input_file_name  = location+"files/{0}/{1}_AN_v1_{0}.root".format(year,cat)
-output_file_name = location+"Closure/{0}/{1}_AN_v1_{0}_Output.root".format(year,cat)
+plotlocation = "AN_ORv1_Closure/plots/"
+#infile = "AN_ORv1_files/{0}_ORv1/".format(year)
+input_file_name = location+"/{0}/{1}_AN_v1_{0}.root".format(year,cat)
+outfile= "AN_ORv1_Closure/{0}/".format(year)
+plot_dir         = plotlocation 
+output_file_name = outfile+"{1}_AN_v1_{0}_Output.root".format(year,cat)
 
 if year == "2016": lumi="35.8/fb"
 elif year == "2017": lumi="41.5/fb"
@@ -269,7 +266,7 @@ def plot(plot_var = "photonIsoChrgLowSieie_EB_photonLoose" ):
     l.Draw("same"); 
     
 
-    can.SaveAs(plot_dir+"/"+plot_var+".pdf")
+    #can.SaveAs(plot_dir+"/"+plot_var+".pdf")
     #can.SaveAs("Test_Files_Jul29/"+plot_dir+"/"+plot_var+".png")
     # for space between legend and plot 
     topPad.SetLogy()
@@ -278,7 +275,7 @@ def plot(plot_var = "photonIsoChrgLowSieie_EB_photonLoose" ):
     else :
         stack.SetMaximum(200.0*data_histo[0].GetMaximum())
     stack.SetMinimum(0.1)
-    can.SaveAs(plot_dir+"/"+plot_var+"_LogY.pdf")
+    #can.SaveAs(plot_dir+"/"+plot_var+"_LogY.pdf")
 
     output_file.cd()
     for h in samples_histo :

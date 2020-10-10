@@ -49,6 +49,12 @@ void process(string selection_label,
         selectionFunc = ZSRHPVBFCut;
     }else if( selection_label == "ZSRHPVBFfail"){
         selectionFunc = ZSRHPVBFfailCut;
+    }else if( selection_label == "ZSRLP"){
+        selectionFunc = ZSRLPCut;
+    }else if( selection_label == "ZSRLPVBF"){
+        selectionFunc = ZSRLPVBFCut;
+    }else if( selection_label == "ZSRLPVBFfail"){
+        selectionFunc = ZSRLPVBFfailCut;
     }else if( selection_label == "ZSRFP"){
         selectionFunc = ZSRFPCut;
     }else if( selection_label == "ZSRFPVBF"){
@@ -71,6 +77,12 @@ void process(string selection_label,
         selectionFunc = ZSBHPVBFCut;
     }else if( selection_label == "ZSBHPVBFfail"){
         selectionFunc = ZSBHPVBFfailCut;
+    }else if( selection_label == "ZSBLP"){
+        selectionFunc = ZSBLPCut;
+    }else if( selection_label == "ZSBLPVBF"){
+        selectionFunc = ZSBLPVBFCut;
+    }else if( selection_label == "ZSBLPVBFfail"){
+        selectionFunc = ZSBLPVBFfailCut;
     }else if( selection_label == "ZSBFP"){
         selectionFunc = ZSBFPCut;
     }else if( selection_label == "ZSBFPVBF"){
@@ -86,7 +98,6 @@ void process(string selection_label,
     }else if( selection_label == "ZSBFPLooseVBFfail" ){
         selectionFunc = ZSBFPLooseVBFfailCut;
 
-
     }else if( selection_label == "ZAlphaSBHPVBF" ){
         selectionFunc = ZAlphaSBHPVBFCut;
     }else if( selection_label == "ZAlphaSRHPVBF" ){
@@ -95,6 +106,15 @@ void process(string selection_label,
         selectionFunc = ZAlphaSBHPVBFfailCut;
     }else if( selection_label == "ZAlphaSRHPVBFfail" ){
         selectionFunc = ZAlphaSRHPVBFfailCut;
+
+    }else if( selection_label == "ZAlphaSBLPVBF" ){
+        selectionFunc = ZAlphaSBLPVBFCut;
+    }else if( selection_label == "ZAlphaSRLPVBF" ){
+        selectionFunc = ZAlphaSRLPVBFCut;
+    }else if( selection_label == "ZAlphaSBLPVBFfail" ){
+        selectionFunc = ZAlphaSBLPVBFfailCut;
+    }else if( selection_label == "ZAlphaSRLPVBFfail" ){
+        selectionFunc = ZAlphaSRLPVBFfailCut;
 
     }else if( selection_label == "ZAlphaSBFPVBF" ){
         selectionFunc = ZAlphaSBFPVBFCut;
@@ -113,6 +133,8 @@ void process(string selection_label,
         selectionFunc = ZAlphaSBHPLooseVBFfailCut;
     }else if( selection_label == "ZAlphaSRHPLooseVBFfail" ){
         selectionFunc = ZAlphaSRHPLooseVBFfailCut;
+    }else if( selection_label == "NoSelection" ){
+        selectionFunc = acceptanceCut;
 
     }else{
         assert(0);
@@ -193,6 +215,13 @@ void process(string selection_label,
   plot AK4j2Phi_plot(*fillJetPhi2<RA2bTree>,"AK4j2Phi_"+selection_label,"#phi_{j2}^{AK4}",40,-3.1415,3.1415);
   plot AK4j3Phi_plot(*fillJetPhi3<RA2bTree>,"AK4j3Phi_"+selection_label,"#phi_{j3}^{AK4}",40,-3.1415,3.1415);
   plot AK4j4Phi_plot(*fillJetPhi4<RA2bTree>,"AK4j4Phi_"+selection_label,"#phi_{j4}^{AK4}",40,-3.1415,3.1415);
+
+  plot VBFgendR1vsdR2plot(*VBF_gendR1<RA2bTree>,*VBF_gendR2<RA2bTree>,"VBFgendR1vsdR2_"+selection_label,"dR(genj,j1^{VBF})","dR(genj,j2^{VBF})",10,0.,1.,10,0.,1.);
+  plot VBFgendR1vsdR21plot(*VBF_gendR1<RA2bTree>,*VBF_gendR2<RA2bTree>,"VBFgendR1vsdR21_"+selection_label,"dR(genj,j1^{VBF})","dR(genj,j2^{VBF})",100,0.,10.,100,0.,10.);
+  plot VBFgendR1plot(*VBF_gendR1<RA2bTree>,"VBFgendR1_"+selection_label,"dR(genj,j1^{VBF})",10,0.,1.);
+  plot VBFgendR11plot(*VBF_gendR1<RA2bTree>,"VBFgendR11_"+selection_label,"dR(genj,j1^{VBF})",100,0.,10.);
+  plot VBFgendR2plot(*VBF_gendR2<RA2bTree>,"VBFgendR2_"+selection_label,"dR(genj,j2^{VBF})",10,0.,1.);
+  plot VBFgendR21plot(*VBF_gendR2<RA2bTree>,"VBFgendR21_"+selection_label,"dR(genj,j2^{VBF})",100,0.,10.);
 
   plot VBFj1NEMF_plot(*fillVBF_j1NEMF<RA2bTree>,"VBFj1NEMF_"+selection_label,"NEMF_{j1}^{VBF}",100,0.,1.); // 0.1
   plot VBFj2NEMF_plot(*fillVBF_j2NEMF<RA2bTree>,"VBFj2NEMF_"+selection_label,"NEMF_{j2}^{VBF}",100,0.,1.); // 0.1
@@ -320,8 +349,8 @@ void process(string selection_label,
   plot ZMT314plot(*fillZMT<RA2bTree>,"ZMT314_"+selection_label,"MT [GeV]",62,400.,3500.); // 50 GeV bin ZSBFPVBFfail
   plot ZMT4plot(*fillZMT<RA2bTree>,"ZMT4_"+selection_label,"MT [GeV]",24,400.,1000.); // 25 GeV bin
   plot ZMT7plot(*fillZMT<RA2bTree>,"ZMT7_"+selection_label,"MT [GeV]",65,0.,6500.); // 100 GeV bin
-  plot ZMT8plot(*fillZMT<RA2bTree>,"ZMT8_"+selection_label,"MT [GeV]",60,500.,6500.); // 100 GeV bin
-  plot ZMT9plot(*fillZMT<RA2bTree>,"ZMT9_"+selection_label,"MT [GeV]",45,500.,5000.); // 100 GeV bin
+  plot ZMT8plot(*fillZMT<RA2bTree>,"ZMT8_"+selection_label,"MT [GeV]",61,400.,6500.); // 100 GeV bin
+  plot ZMT9plot(*fillZMT<RA2bTree>,"ZMT9_"+selection_label,"MT [GeV]",46,400.,5000.); // 100 GeV bin
   plot ZMT10plot(*fillZMT<RA2bTree>,"ZMT10_"+selection_label,"MT [GeV]",90,0.,9000.); // 100 GeV bin
   plot MTpTRatioplot(*fillMTpTRatio<RA2bTree>,"MTpTRatio_"+selection_label,"MT/pT",100,0.,3.); //0.04
   plot pTMTRatioplot(*fillpTMTRatio<RA2bTree>,"pTMTRatio_"+selection_label,"pT/MT",100,0.,1.); //0.04
@@ -329,13 +358,31 @@ void process(string selection_label,
   double edges_ggf[23]={400,500,600,700,800,900,1000,1100,1200,1300,1400,1500,1600,1700,1800,1900,2000,2100,2250,2400,2550,2700,2900};  
   double edges_vbf[16]={400,500,600,700,800,900,1000,1100,1200,1300,1400,1500,1600,1700,1850,2100};
   double edges_vbfhp137[20]={400,500,600,700,800,900,1000,1100,1200,1300,1400,1500,1600,1700,1800,1900,2000,2100,2250,2400};
+  double edges_vbfhp1371[15]={400,500,600,700,800,900,1000,1100,1200,1300,1400,1500,1600,1750,2100};
+  double edges_vbfhp1373[15]={400,500,600,700,800,900,1000,1100,1200,1300,1400,1500,1600,1700,2100};
+  double edges_vbfhp1372[15]={400,500,600,700,800,900,1000,1100,1200,1300,1400,1500,1600,1750,2075};
+  double edges_vbfhp1374[12]={700,800,900,1000,1100,1200,1300,1400,1500,1600,1750,2075};
   double edges_vbffailhp137[23]={400,500,600,700,800,900,1000,1100,1200,1300,1400,1500,1600,1700,1800,1900,2000,2100,2200,2350,2550,2750,3000};
+  double edges_vbffailhp1374[20]={700,800,900,1000,1100,1200,1300,1400,1500,1600,1700,1800,1900,2000,2100,2200,2350,2550,2750,3000};
+  double edges_vbflp137[22]={400,500,600,700,800,900,1000,1100,1200,1300,1400,1500,1600,1700,1800,1900,2000,2100,2200,2300,2500,2700};
+  double edges_vbflp1374[19]={700,800,900,1000,1100,1200,1300,1400,1500,1600,1700,1800,1900,2000,2100,2200,2300,2500,2700};
+  double edges_vbffaillp137[29]={400,500,600,700,800,900,1000,1100,1200,1300,1400,1500,1600,1700,1800,1900,2000,2100,2200,2300,2400,2500,2600,2700,2800,2900,3100,3300,3500};
+  double edges_vbffaillp1374[26]={700,800,900,1000,1100,1200,1300,1400,1500,1600,1700,1800,1900,2000,2100,2200,2300,2400,2500,2600,2700,2800,2900,3100,3300,3500};
   double edges_ggf50[39]={400,450,500,550,600,650,700,750,800,850,900,950,1000,1050,1100,1150,1200,1250,1300,1350,1400,1450,1500,1550,1600,1650,1700,1750,1800,1850,1900,1950,2000,2050,2100,2200,2400,2600,2900};  
   double edges_vbf50[29]={400,450,500,550,600,650,700,750,800,850,900,950,1000,1050,1100,1150,1200,1250,1300,1350,1400,1450,1500,1550,1600,1650,1700,1850,2100};
   plot ZMT_ggFplot(*fillZMT<RA2bTree>,"ZMT_ggF_"+selection_label,"MT [GeV]",22,edges_ggf); 
   plot ZMT_vbFplot(*fillZMT<RA2bTree>,"ZMT_VBF_"+selection_label,"MT [GeV]",15,edges_vbf); 
   plot ZMT_vbFhpplot(*fillZMT<RA2bTree>,"ZMT_VBF137_"+selection_label,"MT [GeV]",19,edges_vbfhp137); 
+  plot ZMT_vbFhp1plot(*fillZMT<RA2bTree>,"ZMT_VBF1371_"+selection_label,"MT [GeV]",14,edges_vbfhp1371); 
+  plot ZMT_vbFhp3plot(*fillZMT<RA2bTree>,"ZMT_VBF1373_"+selection_label,"MT [GeV]",14,edges_vbfhp1373); 
+  plot ZMT_vbFhp2plot(*fillZMT<RA2bTree>,"ZMT_VBF1372_"+selection_label,"MT [GeV]",14,edges_vbfhp1372); 
+  plot ZMT_vbFhp4plot(*fillZMT<RA2bTree>,"ZMT_VBF1374_"+selection_label,"MT [GeV]",11,edges_vbfhp1374); 
   plot ZMT_vbFfailhpplot(*fillZMT<RA2bTree>,"ZMT_VBFfail137_"+selection_label,"MT [GeV]",22,edges_vbffailhp137); 
+  plot ZMT_vbFfailhp4plot(*fillZMT<RA2bTree>,"ZMT_VBFfail1374_"+selection_label,"MT [GeV]",19,edges_vbffailhp1374); 
+  plot ZMT_vbFlpplot(*fillZMT<RA2bTree>,"ZMT_VBFlp137_"+selection_label,"MT [GeV]",21,edges_vbflp137); 
+  plot ZMT_vbFlp4plot(*fillZMT<RA2bTree>,"ZMT_VBFlp1374_"+selection_label,"MT [GeV]",18,edges_vbflp1374); 
+  plot ZMT_vbFfaillpplot(*fillZMT<RA2bTree>,"ZMT_VBFfaillp137_"+selection_label,"MT [GeV]",28,edges_vbffaillp137); 
+  plot ZMT_vbFfaillp4plot(*fillZMT<RA2bTree>,"ZMT_VBFfaillp1374_"+selection_label,"MT [GeV]",25,edges_vbffaillp1374); 
   plot ZMT_ggF50plot(*fillZMT<RA2bTree>,"ZMT_ggF50_"+selection_label,"MT [GeV]",38,edges_ggf50); 
   plot ZMT_vbF50plot(*fillZMT<RA2bTree>,"ZMT_VBF50_"+selection_label,"MT [GeV]",28,edges_vbf50); 
 
@@ -430,6 +477,14 @@ void process(string selection_label,
   plots.push_back(AK4j3Phi_plot);
   plots.push_back(AK4j4Phi_plot);
 
+  //
+  plots.push_back(VBFgendR1vsdR2plot);
+  plots.push_back(VBFgendR1vsdR21plot);
+  plots.push_back(VBFgendR1plot);
+  plots.push_back(VBFgendR11plot);
+  plots.push_back(VBFgendR2plot);
+  plots.push_back(VBFgendR21plot);
+  //
   plots.push_back(VBFj1NEMF_plot);
   plots.push_back(VBFj2NEMF_plot);
   plots.push_back(VBFj1NHEF_plot);
@@ -561,13 +616,22 @@ void process(string selection_label,
   plots.push_back(ZMT8plot); 
   plots.push_back(ZMT9plot); 
   plots.push_back(ZMT10plot); 
-  plots.push_back(MTpTRatioplot); 
+/*  plots.push_back(MTpTRatioplot); 
   plots.push_back(pTMTRatioplot); 
-    
+*/    
   plots.push_back(ZMT_ggFplot);  
   plots.push_back(ZMT_vbFplot);  
   plots.push_back(ZMT_vbFhpplot);  
+  plots.push_back(ZMT_vbFhp1plot);  
+  plots.push_back(ZMT_vbFhp2plot);  
+  plots.push_back(ZMT_vbFhp3plot);  
+  plots.push_back(ZMT_vbFhp4plot);  
   plots.push_back(ZMT_vbFfailhpplot);  
+  plots.push_back(ZMT_vbFfailhp4plot);  
+  plots.push_back(ZMT_vbFlpplot);  
+  plots.push_back(ZMT_vbFlp4plot);  
+  plots.push_back(ZMT_vbFfaillpplot);  
+  plots.push_back(ZMT_vbFfaillp4plot);  
   plots.push_back(ZMT_ggF50plot);  
   plots.push_back(ZMT_vbF50plot);  
 
@@ -608,7 +672,8 @@ void process(string selection_label,
   for( int iSample = 0 ; iSample < skims.ntuples.size() ; iSample++){
     RA2bTree* ntuple = skims.ntuples[iSample];
      isMC_ = true;
-    TFile* outputFile = new TFile("AN_v1_NLO_files/"+year+"/plotObs_"+selection_label+"_"+skims.sampleName[iSample]+".root","RECREATE");
+    //TFile* outputFile = new TFile("AN_ORv1_files/"+year+"_ORv1/plotObs_"+selection_label+"_"+skims.sampleName[iSample]+".root","RECREATE");
+    TFile* outputFile = new TFile("AN_ORv1_files/Systematics_LP/"+year+"/plotObs_"+selection_label+"_"+skims.sampleName[iSample]+".root","RECREATE");
     
     for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
         plots[iPlot].addNtuple(ntuple,skims.sampleName[iSample]);
@@ -616,22 +681,34 @@ void process(string selection_label,
     int numEvents = ntuple->fChain->GetEntries();
     ntupleBranchStatus<RA2bTree>(ntuple);
     TString filename;
-    TString bkg_sample = skims.sampleName[iSample];    
-
-    std::cout<<endl;
-    std::cout<<"bkg sample name: "<<bkg_sample<<endl;    
-    std::cout<<endl;
+    //TString bkg_sample = skims.sampleName[iSample];    
 
     double weight = 0.;
-    //BTagCorrector btagcorr; // for btag scale factor systematics.    
-    //TFile *currFile;
+    BTagCorrector btagcorr; // for btag scale factor systematics.    
+    TFile *currFile;
     double  deepCSVvalue = 0.0;
+
+    currFile = ntuple->fChain->GetFile();
+        //btagcorr.SetBtagSFunc(1); // for up variation; turn this on in addition to SetEffs(currFile) line.
+        //btagcorr.SetMistagSFunc(1); // for Mistag up variation
+    btagcorr.SetEffs(currFile);
+    if(year == "2016") {
+        btagcorr.SetCalib("btag/DeepCSV_Moriond17_B_H_mod.csv");
+        deepCSVvalue = 0.6321;
+    }
+	if(year == "2017"){
+        btagcorr.SetCalib("btag/DeepCSV_94XSF_V3_B_F_mod.csv");
+        deepCSVvalue = 0.4941;
+    }
+	if(year == "2018"){
+        btagcorr.SetCalib("btag/DeepCSV_102XSF_V1_mod.csv");
+        deepCSVvalue = 0.4184;
+    }
 
     for( int iEvt = 0 ; iEvt < min(MAX_EVENTS,numEvents) ; iEvt++ ){
     //for( int iEvt = 0 ; iEvt < min(100,numEvents) ; iEvt++ ){
         ntuple->GetEntry(iEvt);
         if( iEvt % 100000 == 0 ) cout << skims.sampleName[iSample] << ": " << iEvt << "/" << numEvents << endl;
-        //if( iEvt % 10000 == 0 ) cout << skims.sampleName[iSample] << ": " << iEvt << "/" << numEvents << endl;
         filename = ntuple->fChain->GetFile()->GetName();
         if( ( filename.Contains("SingleLept") || filename.Contains("DiLept") ) && ntuple->madHT>600. )continue;
     
@@ -650,9 +727,15 @@ void process(string selection_label,
         weight = ntuple->Weight * lum * customTrigWeights(ntuple) * customPUweights(ntuple);
         
         // tau21 sf
-        //if ( bkg_sample.Contains("TT")  || bkg_sample.Contains("Other") || bkg_sample.Contains("ST") ){        
-        //     weight *= tau21ScaleFactor(ntuple);
-        //}
+        double tau21 = 1.0; 
+        if (purity == "HP"){tau21 = tau21HPScaleFactor(ntuple);} 
+        if (purity == "LP"){tau21 = tau21LPScaleFactor(ntuple);} 
+        if ( ! ( filename.Contains("_ZJetsTo")  || filename.Contains("_WJetsTo")) ){ weight *= tau21; }
+
+        // tau21 pt Extrapolation systematics:
+         /*   double tauwt = customTau21pTExtrapUp(ntuple);
+              double tauwt = customTau21pTExtrapDown(ntuple);
+              weight *= tauwt; // with tau21 pT Extrapolation */
 
         // Prefiring wt for 2016 & 2017 only
         if (filename.Contains("MC2016") || filename.Contains("MC2017")){
@@ -676,33 +759,15 @@ void process(string selection_label,
              weight *= WJetsNLOWeightsQCD1718(ntuple);
              weight *= WJetsNLOWeightsEwk1718(ntuple);
         }
-      // ------------ end weights -------------
-        // btag -sf stuffs....
-        /*
-        currFile = ntuple->fChain->GetFile();
-        //btagcorr.SetBtagSFunc(1); // for up variation
-        //btagcorr.SetMistagSFunc(1); // for Mistag up variation
-
-        btagcorr.SetEffs(currFile);
-        if(year == "2016") {
-            btagcorr.SetCalib("btag/DeepCSV_Moriond17_B_H_mod.csv");
-            deepCSVvalue = 0.6321;
-        }
-	    if(year == "2017"){
-            btagcorr.SetCalib("btag/DeepCSV_94XSF_V3_B_F_mod.csv");
-            deepCSVvalue = 0.4941;
-        }
-	    if(year == "2018"){
-            btagcorr.SetCalib("btag/DeepCSV_102XSF_V1_mod.csv");
-            deepCSVvalue = 0.4184;
-        }
+      // ------------ b-tag sf weights -------------
         double corrbtag = 1.0;
         corrbtag = btagcorr.GetSimpleCorrection(ntuple->Jets,ntuple->Jets_hadronFlavor,ntuple->Jets_HTMask,ntuple->Jets_bJetTagDeepCSVBvsAll,deepCSVvalue);
 
-        weight = weight * corrbtag;
-        */
+       weight = weight * corrbtag;
+      // ------------ end b-tag weights -------------
       // end of btag-sf for MC bkgs
-  
+      // ------------ end weights -------------
+   
       //cout << "event passed all selections" << endl;
         for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++ ){
 	        plots[iPlot].fill(ntuple,weight);
@@ -720,8 +785,8 @@ void process(string selection_label,
   for( int iSample = 0 ; iSample < skims.signalNtuples.size() ; iSample++){
     RA2bTree* ntuple = skims.signalNtuples[iSample];
     isMC_ = true;
-    //TFile* outputFile = new TFile("plotObs_"+selection_label+"_baseline_"+skims.signalSampleName[iSample]+".root","RECREATE");
-    TFile* outputFile = new TFile("AN_v1_NLO_files/"+year+"/plotObs_"+selection_label+"_"+skims.signalSampleName[iSample]+".root","RECREATE");
+    //TFile* outputFile = new TFile("AN_ORv1_files/"+year+"_ORv1/plotObs_"+selection_label+"_"+skims.signalSampleName[iSample]+".root","RECREATE");
+    TFile* outputFile = new TFile("AN_ORv1_files/Systematics_LP/"+year+"/plotObs_"+selection_label+"_"+skims.signalSampleName[iSample]+".root","RECREATE");
 
     sigSamples.push_back(ntuple);
     for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
@@ -732,23 +797,40 @@ void process(string selection_label,
     ntupleBranchStatus<RA2bTree>(ntuple);
     TString filename;
     double weight = 0.;
-    //BTagCorrector btagcorr; // for btag scale factor systematics.    
-    //TFile *currFile;
-    //double deepCSVvalue = 0.0;
-
-    //TFile *Evtprocfile = (TFile*)ntuple->fChain->GetFile();
-    //TH1F *hEvtProc = (TH1F*)Evtprocfile->Get("nEventProc");
-    //double EvtProcessed = hEvtProc->Integral();
-    //delete Evtprocfile;
-    //std::cout<< "processed evt for signal: "<< EvtProcessed << endl;
+    ///*
+    BTagCorrector btagcorr; // for btag scale factor systematics.    
+    TFile *currFile;
+    double deepCSVvalue = 0.0;
+        // Signal sample btag -sf stuffs....
+    currFile = ntuple->fChain->GetFile();
+        //btagcorr.SetBtagSFunc(1); // for up variation
+        //btagcorr.SetMistagSFunc(1); // for Mistag up variation
+    
+    btagcorr.SetEffs(currFile);
+    if(year == "2016") { 
+        btagcorr.SetCalib("btag/DeepCSV_Moriond17_B_H_mod.csv");
+        deepCSVvalue = 0.6321;
+    }
+    if(year == "2017"){
+        btagcorr.SetCalib("btag/DeepCSV_94XSF_V3_B_F_mod.csv");
+        deepCSVvalue = 0.4941;
+    }
+    if(year == "2018"){
+        btagcorr.SetCalib("btag/DeepCSV_102XSF_V1_mod.csv");
+        deepCSVvalue = 0.4184;
+    }
+        
+    TFile *Evtprocfile = (TFile*)ntuple->fChain->GetFile();
+    TH1F *hEvtProc = (TH1F*)Evtprocfile->Get("nEventProc");
+    double EvtProcessed = hEvtProc->GetBinContent(1);
+    delete Evtprocfile;
+   //*/    
 
     filename = ntuple->fChain->GetFile()->GetName();
     TString sig_sample = skims.signalSampleName[iSample];    
-    double sigxsecwt;    
-    
-    Sig_Xsec_wt(sig_sample, sigxsecwt);
+    //double sigxsecwt;    
+    //Sig_Xsec_wt(sig_sample, sigxsecwt);
     //std::cout<<"sig sample: "<< sig_sample<<" filename: "<<filename<<"       wt: "<<sigxsecwt<<endl;
-    std::cout<<"sig sample: "<< sig_sample<<"       wt: "<<sigxsecwt<<endl;
 
     for( int iEvt = 0 ; iEvt < min(MAX_EVENTS,numEvents) ; iEvt++ ){
     //for( int iEvt = 0 ; iEvt < min(100,numEvents) ; iEvt++ ){
@@ -758,48 +840,42 @@ void process(string selection_label,
       
       if(! selectionFunc(ntuple) ) continue;
 
-      //if (filename.Contains("VBFG") || filename.Contains("ggFG") || filename.Contains("VBFRad") || filename.Contains("ggFRad")) {if(!genZmatched(ntuple)) continue; }
-      //if (filename.Contains("VBFWp") || filename.Contains("ggFWp")) {if(!genWpmatched(ntuple)) continue; }
+        //if (filename.Contains("VBFG") || filename.Contains("ggFG") || filename.Contains("VBFRad") || filename.Contains("ggFRad")) {if(!genZmatched(ntuple)) continue; }
+        //if (filename.Contains("VBFWp") || filename.Contains("ggFWp")) {if(!genWpmatched(ntuple)) continue; }
 
       // HEM Veto  
       if(year=="2018"){ if((ntuple->EvtNum % 1000 > 1000*21.0/59.6) && (! passHEMjetVeto(ntuple, 30)))continue;}          
 
-      //weight = lum * sigxsecwt * trigwt * PUwt * tau21SF;  
-      //weight = lum * sigxsecwt * customTrigWeights(ntuple) * customPUweights(ntuple) * tau21ScaleFactor(ntuple);  
-      weight = lum * sigxsecwt * customTrigWeights(ntuple) * customPUweights(ntuple);  
+      double tau21 = 1.0; 
+      if (purity == "HP"){tau21 = tau21HPScaleFactor(ntuple);} 
+      if (purity == "LP"){tau21 = tau21LPScaleFactor(ntuple);} 
+      //weight = lum * sigxsecwt * customTrigWeights(ntuple) * customPUweights(ntuple) * tau21ScaleFactor(ntuple); 
+      weight = lum * (1/EvtProcessed) * customTrigWeights(ntuple) * customPUweights(ntuple) *  tau21; 
+      //weight = lum * (1/double(numEvents)) * customPUweights(ntuple) *  tau21; 
+
+        // tau21 pt Extrapolation systematics:
+         /*   double tauwt = customTau21pTExtrapUp(ntuple);
+              double tauwt = customTau21pTExtrapDown(ntuple);
+              weight *= tauwt; // with tau21 pT Extrapolation  */
 
       //Pre-firing weights
       if (year=="2016" || year=="2017"){ weight *= ntuple->NonPrefiringProb;}
+       //std::cout<<"wt2: "<<weight<<endl; 
         
         // Signal sample btag -sf stuffs....
-       /* 
-        currFile = ntuple->fChain->GetFile();
-        //btagcorr.SetBtagSFunc(1); // for up variation
-        btagcorr.SetMistagSFunc(1); // for Mistag up variation
-
-        btagcorr.SetEffs(currFile);
-        if(year == "2016") {
-            btagcorr.SetCalib("btag/DeepCSV_Moriond17_B_H_mod.csv");
-            deepCSVvalue = 0.6321;
-        }
-        if(year == "2017"){
-            btagcorr.SetCalib("btag/DeepCSV_94XSF_V3_B_F_mod.csv");
-            deepCSVvalue = 0.4941;
-        }
-        if(year == "2018"){
-            btagcorr.SetCalib("btag/DeepCSV_102XSF_V1_mod.csv");
-            deepCSVvalue = 0.4184;
-        }
         double corrbtag = 1.0;
         corrbtag = btagcorr.GetSimpleCorrection(ntuple->Jets,ntuple->Jets_hadronFlavor,ntuple->Jets_HTMask,ntuple->Jets_bJetTagDeepCSVBvsAll,deepCSVvalue);
-
         weight = weight * corrbtag;
-        */
       // end of btag-sf for MC bkgs
+
+      if (year=="2016" && filename.Contains("ggFG")){ weight *= 0.279644;} // 2016 ggFG is excl. sample so applied BR to make it inclusive. 
+      //if (year=="2016" && filename.Contains("ggFWp")){ weight *= 0.13482;} // 2016 ggFWp is excl. sample so applied BR to make it inclusive. 
+      if (filename.Contains("ggFWp")){ weight *= 0.13482;} // 2016 ggFWp is excl. sample so applied BR to make it inclusive. 
+       // W to had BR (67.41 +/- 0.27) % Z to had BR (69.911 +/- 0.056) %; to nunu (20.00 +/- 0.055) %       
 
       for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
         if (filename.Contains("VBF") || filename.Contains("ggF") ) plots[iPlot].fillSignal(ntuple,weight); 
-	    //if ((sig_sample=="ggFWp_1000") ) plots[iPlot].fillSignal(ntuple,lum*1*1e-05*trigwt); 
+        //if (filename.Contains("VBF") || filename.Contains("ggF") ) plots[iPlot].fillSignal(ntuple,1); 
         }
     }
 
@@ -815,8 +891,8 @@ void process(string selection_label,
   for( int iSample = 0 ; iSample < skims.dataNtuple.size() ; iSample++){
     isMC_ = false;
     RA2bTree* ntuple = skims.dataNtuple[iSample];
-    //TFile* outputFile = new TFile("plotObs_"+selection_label+"_baseline_"+skims.dataSampleName[iSample]+".root","RECREATE");
-    TFile* outputFile = new TFile("AN_v1_NLO_files/"+year+"/plotObs_"+selection_label+"_"+skims.dataSampleName[iSample]+".root","RECREATE");
+    //TFile* outputFile = new TFile("AN_ORv1_files/"+year+"_ORv1/plotObs_"+selection_label+"_"+skims.dataSampleName[iSample]+".root","RECREATE");
+    TFile* outputFile = new TFile("AN_ORv1_files/Systematics_LP/"+year+"/plotObs_"+selection_label+"_"+skims.dataSampleName[iSample]+".root","RECREATE");
 	TString filename;  
     for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
         plots[iPlot].addDataNtuple(ntuple,skims.dataSampleName[iSample]);

@@ -17,6 +17,7 @@ void Sig_Xsec_wt(TString & sig_samp, double& sig_xsec_wt){
      if (sig_samp == "VBFG_1600_MC2016")   sig_xsec_wt = 1/50000.0;
      if (sig_samp == "VBFG_1800_MC2016")   sig_xsec_wt = 1/50000.0;
      if (sig_samp == "VBFG_2000_MC2016")   sig_xsec_wt = 1/50000.0;
+     if (sig_samp == "VBFG_2500_MC2016")   sig_xsec_wt = 1/50000.0;
      if (sig_samp == "VBFG_3000_MC2016")   sig_xsec_wt = 1/48500.0;
      if (sig_samp == "VBFG_3500_MC2016")   sig_xsec_wt = 1/50000.0;
      if (sig_samp == "VBFG_4000_MC2016")   sig_xsec_wt = 1/48800.0;
@@ -223,6 +224,7 @@ void Sig_Xsec_wt(TString & sig_samp, double& sig_xsec_wt){
 
     
     //2017: ggFG
+    if (sig_samp == "ggFG_800_MC2017")   sig_xsec_wt = 1/50000.0;
     if (sig_samp == "ggFG_1000_MC2017")   sig_xsec_wt = 1/50000.0;
     if (sig_samp == "ggFG_1200_MC2017")   sig_xsec_wt = 1/50000.0;
     if (sig_samp == "ggFG_1400_MC2017")   sig_xsec_wt = 1/50000.0;
@@ -236,6 +238,7 @@ void Sig_Xsec_wt(TString & sig_samp, double& sig_xsec_wt){
     if (sig_samp == "ggFG_4500_MC2017")   sig_xsec_wt = 1/50000.0;
     
     //2018: ggFG //Samples not available Currently using 2017 samples
+    if (sig_samp == "ggFG_800_MC2018")   sig_xsec_wt = 1/50000.0;
     if (sig_samp == "ggFG_1000_MC2018")   sig_xsec_wt = 1/50000.0;
     if (sig_samp == "ggFG_1200_MC2018")   sig_xsec_wt = 1/50000.0;
     if (sig_samp == "ggFG_1400_MC2018")   sig_xsec_wt = 1/50000.0;

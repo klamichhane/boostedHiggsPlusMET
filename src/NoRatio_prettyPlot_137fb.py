@@ -9,16 +9,17 @@ r.gROOT.ProcessLine("setTDRStyle()")
 year = argv[1]
 cat = argv[2]
 
-norm = "NoNorm"
-test = "-PUwt"
+#norm = "NoNorm"
+#test = "-PUwt"
 
-NLO = "nlo"
-if NLO=="nlo": location = "AN_v1_NLO_"
-elif NLO=="lo": location = "AN_v1_"
+location = "AN_ORv1_files"
+plotloc = "AN_ORv1_plots"
 
-plot_dir         = location+"plots/{2}{3}/{0}/{1}".format(cat,year,norm,test)
-input_file_name  = location+"files/{0}{2}/{1}_AN_v1_{0}.root".format(year,cat,test)
-output_file_name = location+"files/{0}{3}/Output_{2}/{1}_AN_v1_{0}_Output_{2}.root".format(year,cat,norm,test)
+plot_dir         = plotloc+"/{0}/{1}/".format(cat,year)
+#input_file_name  = location+"/{0}_ORv1/{1}_AN_v1_{0}.root".format(year,cat)
+#output_file_name = location+"/{0}_ORv1/Output_NoNorm/{1}_AN_v1_{0}_Output_NoNorm.root".format(year,cat)
+input_file_name = location+"/Systematics_LP/{0}/{1}_AN_v1_{0}.root".format(year,cat)
+output_file_name= location+"/Systematics_LP/{0}/Output_NoNorm/{1}_AN_v1_{0}_Output_NoNorm.root".format(year,cat)
 
 if year == "2016": lumi="35.8/fb"
 elif year == "2017": lumi="41.5/fb"
@@ -48,8 +49,9 @@ def plot(plot_var = "photonIsoChrgLowSieie_EB_photonLoose" ):
               "TT_2L"],
              ["Other_WWTo1L1Nu2Q",
               "Other_WWZ",
-              "Other_WZTo1L1Nu2Q",
-              "Other_WZTo1L3Nu",
+              #"Other_WZTo1L1Nu2Q",
+              #"Other_WZTo1L3Nu",
+              "Other_WZ",
               "Other_WZZ",
               "Other_ZZTo2L2Q",
               "Other_ZZTo2Q2Nu",
@@ -75,9 +77,12 @@ def plot(plot_var = "photonIsoChrgLowSieie_EB_photonLoose" ):
               "ZJets_1200to2500",
               "ZJets_2500toInf"]
              ]
-
-    if "VBFfail" in cat: signal_samples=["ggFG_1000"];signal_labels = ["ggFG 1000 (1 pb)"]
-    else: signal_samples=["VBFG_1000"];signal_labels = ["VBFG 1000 (1 pb)"]
+    #if year == "137fb": signal_samples=["VBFG_1000_MC2016", "VBFG_1000_MC2017","VBFG_1000_MC2018"]   
+        #if "VBFfail" in cat: signal_samples = ["ggFG_1000_MC2016"];
+    #else: signal_samples=["VBFG_1000_MC{0}".format(year)];
+    signal_samples=["VBFG_1000"];
+    signal_labels = ["VBFG 1000 (1 pb)"] #if "VBFG" in signal_samples else ["ggFG 1000 (1 pb)"]
+    #signal_labels1 = ["VBFG_1000_MC{0}".format(year)] #if "VBFG" in signal_samples else ["ggFG 1000 (1 pb)"]
 
     data_samples=["MET_2016H",#]
                 "MET_2016G",
@@ -113,13 +118,39 @@ def plot(plot_var = "photonIsoChrgLowSieie_EB_photonLoose" ):
             else : 
                 samples_histo[-1].Add(input_file.Get(plot_var+"_"+sample_name))
 
- ## for signal sample
+# ## for signal sample
+#    signal_histo=[]
+#    for i,sig_names in enumerate(signal_samples) :   
+#        #for j,sig_name in enumerate(sig_names): 
+#        if len(signal_histo) <= i : 
+#            signal_histo.append(input_file.Get(plot_var+"_"+sig_names))
+#            if signal_histo[-1]==None :
+#                print "looking for:",plot_var+"_"+sig_names
+#                print input_file.ls(plot_var+"_"+sig_names)
+#                assert(signal_histo[-1]!=None)
+#            elif signal_histo[-1].Integral() < 0.0001 :
+#                print "oops.",plot_var+"_"+sig_names,"is empty"
+#            signal_histo[-1].SetLineColor(signal_line_color[0])
+#            signal_histo[-1].SetLineWidth(2)
+#            signal_histo[-1].SetName(plot_var+"_"+signal_labels1[0])
+#        else : 
+#            signal_histo[-1].Add(input_file.Get(plot_var+"_"+sig_names))
+#
+#    if year == "137fb":
+#        total_sig = None
+#        for i,h in enumerate(signal_histo) : 
+#            if h==None: continue
+#            if total_sig==None: total_sig = r.TH1F(h)
+#                #total_sig.SetName(plot_var+"_sum")
+#            else : total_sig.Add(h)
+
     signal_histo=[]
     for i,signal_sample_names in enumerate(signal_samples) :
         if i<len(signal_samples): 
         #if i<2:
             signal_histo.append(input_file.Get(plot_var+"_"+signal_sample_names))
-            signal_histo[-1].SetLineColor(signal_line_color[i])
+            #signal_histo[-1].SetLineColor(signal_line_color[i])
+            signal_histo[-1].SetLineColor(signal_line_color[0])
             signal_histo[-1].SetLineWidth(2)
             #signal_histo[-1].SetName(plot_var+"_"+signal_samples_labels[i])
             if signal_histo[-1]==None :
@@ -159,13 +190,11 @@ def plot(plot_var = "photonIsoChrgLowSieie_EB_photonLoose" ):
     leg.SetFillColor(0)
     leg.SetLineColor(r.kWhite)
 
-    #if data_histo:
-    #   leg.AddEntry(data_histo[-1],"MET 2018","p") 
     for i in range(len(samples_histo)):
         leg.AddEntry(samples_histo[i],samples_labels[i],"f")
-    for i in range(len(signal_histo)):
-        #leg.AddEntry(signal_histo[i],"VBFG 1200","f")
-        leg.AddEntry(signal_histo[i],signal_labels[i],"f")
+    leg.AddEntry(signal_histo[-1],signal_labels[0],"f")
+    #for i in range(len(signal_histo)):
+    #    leg.AddEntry(signal_histo[i],signal_labels[0],"f")
 
 
     can = r.TCanvas("can","can",500,500)
@@ -173,9 +202,10 @@ def plot(plot_var = "photonIsoChrgLowSieie_EB_photonLoose" ):
     can.SetBottomMargin(0.15);
     
     stack.Draw("histo")    
-    for i in range(len(signal_histo)):
-        signal_histo[i].Draw("histo SAME")
-    #signal_histo[0].Draw("histo SAME")
+    #if year == "137fb": total_sig.Draw("histo SAME")
+    #else: 
+    #    for i in range(len(signal_histo)): signal_histo[i].Draw("histo SAME")
+    signal_histo[0].Draw("histo SAME")
     leg.Draw()
 
     if total!=None:
@@ -230,12 +260,10 @@ def plot(plot_var = "photonIsoChrgLowSieie_EB_photonLoose" ):
     LUMItext.SetTextSize(0.04) # was 0.08
     LUMItext.Draw()
 
-    #can.SaveAs("../plots_NewSkim_v1/"+plot_dir+"/"+plot_var+".png")
     can.SaveAs(plot_dir+"/"+plot_var+".pdf")
     # for space between legend and plot 
     can.SetLogy()
     if total!=None:
-        #stack.SetMaximum(20.0*max(total.GetMaximum(),samples_histo[0].GetMaximum()))
         stack.SetMaximum(200.0*max(total.GetMaximum(),signal_histo[0].GetMaximum()))
     else :
         stack.SetMaximum(200.0*samples_histo[0].GetMaximum())
@@ -243,12 +271,12 @@ def plot(plot_var = "photonIsoChrgLowSieie_EB_photonLoose" ):
     can.SaveAs(plot_dir+"/"+plot_var+"_LogY.pdf")
 
     output_file.cd()
-    for h in samples_histo :
-        r.TH1F(h).Write()
+    for h in samples_histo : r.TH1F(h).Write()
     #data_histo[0].Write()
     total.Write()
-    for i in signal_histo :
-        r.TH1F(i).Write()
+    #if year == "137fb": total_sig.Write()
+    #else:
+    for i in signal_histo :r.TH1F(i).Write()
 
 
 output_file = r.TFile(output_file_name,"RECREATE")

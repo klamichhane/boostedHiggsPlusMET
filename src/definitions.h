@@ -142,6 +142,7 @@ template<typename ntupleType>void ntupleBranchStatus(ntupleType* ntuple){
   ntuple->fChain->SetBranchStatus("madMinPhotonDeltaR",1);
   ntuple->fChain->SetBranchStatus("ZCandidates",1);
   ntuple->fChain->SetBranchStatus("GenParticles*",1);
+  ntuple->fChain->SetBranchStatus("GenJets",1);
   ntuple->fChain->SetBranchStatus("NonPrefiringProb",1);
   ntuple->fChain->SetBranchStatus("NonPrefiringProbUp",1);
   ntuple->fChain->SetBranchStatus("NonPrefiringProbDown",1);
@@ -409,39 +410,62 @@ template<typename ntupleType> double WJetsNLOWeightsEwk1718(ntupleType* ntuple){
         return (WJets_Ewk->GetBinContent(1));
 }
 
+template<typename ntupleType> double JetMassScale(ntupleType* ntuple){
+    TString fname = ntuple->fChain->GetFile()->GetName();
+  if (fname.Contains("_MET_") ||fname.Contains("_ZJetsToNuNu_") || fname.Contains("_WJetsToLNu_")) return 1.0; 
+  double sf = 1.0;
+  if (year == "2016") sf = 1.0;
+  if (year == "2017") sf = 1.014;
+  if (year == "2018") sf = 0.999;
+  return sf;
+}
+
+template<typename ntupleType> double JetMassScaleUp(ntupleType* ntuple){
+    TString fname = ntuple->fChain->GetFile()->GetName();
+  if (fname.Contains("_MET_") ||fname.Contains("_ZJetsToNuNu_") || fname.Contains("_WJetsToLNu_")) return 1.0; 
+  double scalevar;
+  if (year == "2016") scalevar = 1.0 * 1.0094;
+  if (year == "2017") scalevar = 1.014 * 1.0044; 
+  if (year == "2018") scalevar = 0.999 * 1.0037;
+  return scalevar;
+}
+
+template<typename ntupleType> double JetMassScaleDown(ntupleType* ntuple){
+    TString fname = ntuple->fChain->GetFile()->GetName();
+  if (fname.Contains("_MET_") ||fname.Contains("_ZJetsToNuNu_") || fname.Contains("_WJetsToLNu_")) return 1.0; 
+  double scalevar;
+  if (year == "2016") scalevar = 1.0   * 0.9906;
+  if (year == "2017") scalevar = 1.014 * 0.9956; 
+  if (year == "2018") scalevar = 0.999 * 0.9963;
+  return scalevar;
+}
+
+
+TRandom3 rndm(1); //settting the seed = 1. 
 // Jet Mass Resolution smearing factor
 template<typename ntupleType> double JetMassResolution(ntupleType* ntuple){
     if (ntuple->smearmJ >= 0) return ntuple->smearmJ;
+
+    TString fname = ntuple->fChain->GetFile()->GetName();
+    if (fname.Contains("_MET_") ||fname.Contains("_ZJetsToNuNu_") || fname.Contains("_WJetsToLNu_")) return 1.0; 
+
     double sf = 1.0; //resolution SF
     double sigmaJMR = 0.0;
-    //double mass = 0.0;
-    //double mass = 90.87;
-    double mass = 80.81;
+    double mass = 1.0;
 
-    //TString fname;
-    //fname = ntuple->fChain->GetFile()->GetName();
-    //if (fname.Contains("ggFWp") || fname.Contains("VBFWp")) mass = 80.81; // mean from baselineHP VBFWp 2 TeV
-    //if (fname.Contains("ggFG") || fname.Contains("VBFG") || fname.Contains("ggFRad") || fname.Contains("VBFRad")) mass = 90.87; // mean from baselineHP VBFG 2 TeV
-    TRandom3 rand(0); //settting the seed = 0. 
-      
-    if (year == "2016") {
-        sf = 1.0; 
-        //sf = 1.2; // up variation 
-        sigmaJMR = 10.1/mass; 
-        //sigmaJMR = (10.131 - 1.0)/90.87; // used from avg rms/mean of mJ from VBFG 2 TeV sample. 
-    };
-    if (year == "2017") {
-        sf = 1.0376; //0.99 + 0.0476; 
-        //sf = 0.99; 
-        sigmaJMR = 9.935/mass; 
-    };
-    if (year == "2018") {
-        sf = 1.1487; // 1.108+0.0407
-        //sf = 1.108; 
-        sigmaJMR = 8.221/mass; 
-    };
-    double gausSmear = 1 + ( (rand.Gaus(0, sigmaJMR)) * sqrt( std::max((sf * sf -1.0),0.0)));
-    //std::cout<< "file name: "<<fname<<" mass: "<<mass<<" smear factor: "<< gausSmear<<endl;        
+    if (fname.Contains("ggFWp") || fname.Contains("VBFWp")) mass = 80.81; // mean from baselineHP VBFWp 2 TeV
+    else mass = 90.87; // mean from baselineHP VBFG 2 TeV
+
+    if (year == "2016") { sf = 1.0;   sigmaJMR = 10.1/mass;   }
+    if (year == "2017") { sf = 0.99;  sigmaJMR = 9.935/mass;  }
+    if (year == "2018") { sf = 1.108; sigmaJMR = 8.221/mass;  }
+
+    // for JMR up variations
+    //if (year == "2016") { sf = 1.2;    sigmaJMR = 10.1/mass;   }
+    //if (year == "2017") { sf = 1.0376; sigmaJMR = 9.935/mass;  } // 0.99+0.0476
+    //if (year == "2018") { sf = 1.1487; sigmaJMR = 8.221/mass;  } // 1.108+0.0407
+
+    double gausSmear = 1 + ( (rndm.Gaus(0, sigmaJMR)) * sqrt( std::max((sf * sf -1.0),0.0)));
     ntuple->smearmJ = gausSmear;
     return gausSmear;
 }
@@ -471,7 +495,7 @@ float getPUPPIwt2016(float puppipt, float puppieta){
     return totalWeight;
 }
 
-template<typename ntupleType> double AK8PUPPISoftdropCorrMass(ntupleType* ntuple){
+template<typename ntupleType> double AK8PUPPISoftdropCorr(ntupleType* ntuple){
     if(ntuple->JetsAK8->size()==0 || (ntuple->JetsAK8_subjets->at(0)).size()==0) return -99999.;
 
     TLorentzVector puppi_softdrop, subjet1, subjet2;
@@ -487,28 +511,22 @@ template<typename ntupleType> double AK8PUPPISoftdropCorrMass(ntupleType* ntuple
     float puppiCorr = getPUPPIwt2016(AK8jetPt, AK8jetEta);
     double Corrected_Mass = puppi_softdrop.M() * puppiCorr;
 
-    // with JMS
-    //if (year == "2016") Corrected_Mass *= 1.0;
-    //if (year == "2017") Corrected_Mass *= 1.014;
-    //if (year == "2018") Corrected_Mass *= 0.999;
-
-    // with JMS Up
-    //if (year == "2016") Corrected_Mass *= 1.0   * 1.0094; // JMS SF * unc
-    //if (year == "2017") Corrected_Mass *= 1.014 * 1.0044;
-    //if (year == "2018") Corrected_Mass *= 0.999 * 1.0037;
-
-    // with JMS Down
-    //if (year == "2016") Corrected_Mass *= 1.0   * (1 - 0.0094); // JMS SF * unc
-    //if (year == "2017") Corrected_Mass *= 1.014 * (1 - 0.0044);
-    //if (year == "2018") Corrected_Mass *= 0.999 * (1 - 0.0037);
-
-    // with JMR
-    //std::cout<< "mJ before JMR: "<<Corrected_Mass<<endl;        
-    //Corrected_Mass *= JetMassResolution(ntuple);
-    //std::cout<< "mJ after JMR: "<<Corrected_Mass<<endl;        
-    //std::cout<< endl;        
-
     return Corrected_Mass;
+}
+
+template<typename ntupleType> double AK8PUPPISoftdropCorrMass(ntupleType* ntuple){
+    double Mass = AK8PUPPISoftdropCorr(ntuple);
+    //double Mass = fillLeadingJetSDMass(ntuple); 
+
+    TString fname = ntuple->fChain->GetFile()->GetName();
+    if (fname.Contains("_MET_") ||fname.Contains("_ZJetsToNuNu_") || fname.Contains("_WJetsToLNu_")) return Mass; 
+
+    // with JMR smearing and JMS scale factors.
+    Mass = Mass * JetMassResolution(ntuple) * JetMassScale(ntuple); 
+    //Mass = Mass * 1.0; 
+
+
+    return Mass;
 }
 
 template<typename ntupleType> double AK8PUPPISoftdropCorrMassCent(ntupleType* ntuple){
@@ -525,26 +543,6 @@ template<typename ntupleType> double AK8PUPPISoftdropCorrMassFwd(ntupleType* ntu
        return AK8PUPPISoftdropCorrMass(ntuple);
    else
        return -999.; 
-}
-
-template<typename ntupleType> double JetMassScale(ntupleType* ntuple){
-  if (ntuple->JetsAK8->size()==0) return -99999.;
-  double mJ = AK8PUPPISoftdropCorrMass(ntuple);
-  double scale;
-  if (year == "2016") scale = mJ * 1.0;
-  if (year == "2017") scale = mJ * 1.014;
-  if (year == "2018") scale = mJ * 0.999;
-  return scale;
-}
-
-template<typename ntupleType> double JetMassScaleUp(ntupleType* ntuple){
-  if (ntuple->JetsAK8->size()==0) return -99999.;
-  double mJ = JetMassScale(ntuple);
-  double scalevar;
-  if (year == "2016") scalevar = mJ * 1.0 * 1.0094;
-  if (year == "2017") scalevar = mJ * 1.014 * 1.0044; 
-  if (year == "2018") scalevar = mJ * 0.999 * 1.0037;
-  return scalevar;
 }
 
 template<typename ntupleType> double fillLeadingJetPtCent(ntupleType* ntuple){
@@ -618,7 +616,8 @@ template<typename ntupleType> double tau21pTExtrapolation(ntupleType* ntuple){
     if(ntuple->JetsAK8->size()==0) return 1.0;
     double factor;
     double pt = (ntuple->JetsAK8->at(0).Pt()) / 200.0;
-    factor = 1 + (0.085 * log(pt));
+    if (purity == "HP"){factor = (1 + (0.085 * log(pt)));}
+    if (purity == "LP"){factor = (1 + (0.039 * log(pt)));}
     return factor ;
 }
 
@@ -631,12 +630,19 @@ template<typename ntupleType> double customTau21pTExtrapDown(ntupleType* ntuple)
 }
 
 //https://twiki.cern.ch/twiki/bin/viewauth/CMS/JetWtagging#tau21_0_35_HP_0_35_tau21_0_75_LP
-template<typename ntupleType> double tau21ScaleFactor(ntupleType* ntuple){
+template<typename ntupleType> double tau21HPScaleFactor(ntupleType* ntuple){
     double sf; // for HP working points of 0.35
     if(year=="2016") {sf = 0.99;}
     if(year=="2017") {sf = 0.957;}
     if(year=="2018") {sf = 0.964;}
+    return sf;
+}
 
+template<typename ntupleType> double tau21LPScaleFactor(ntupleType* ntuple){
+    double sf; // for LP working points of 0.35 to 0.75
+    if(year=="2016") {sf = 1.030;}
+    if(year=="2017") {sf = 1.118;}
+    if(year=="2018") {sf = 1.118;}
     return sf;
 }
 
@@ -1297,8 +1303,6 @@ template<typename ntupleType> bool FiltersCut(ntupleType* ntuple){
             ntuple->EcalDeadCellTriggerPrimitiveFilter == 1 && 
             ntuple->NVtx>0 && 
             ntuple->MET/ntuple->CaloMET < 5. &&
-            //ntuple->METUp->at(5)/ntuple->CaloMET < 5. &&
-            //ntuple->PFCaloMETRatio < 5. &&
             ntuple->BadPFMuonFilter == 1 &&
             ntuple->BadChargedCandidateFilter == 1 &&
             ntuple->globalSuperTightHalo2016Filter==1 &&
@@ -1366,6 +1370,22 @@ template<typename ntupleType> bool HEMRunFilterCut(ntupleType* ntuple, bool MC_H
    for (int p = 0; p < ntuple->Jets->size(); p++){
        JetPhi = ntuple->Jets->at(p).Phi();
        DeltaPhi = CalcdPhi(JetPhi,METPhi);
+       if (-3.2 <= ntuple->Jets->at(p).Eta() && ntuple->Jets->at(p).Eta() <= -1.2 &&
+           -1.77 <= ntuple->Jets->at(p).Phi() && ntuple->Jets->at(p).Phi() <= -0.67 &&
+           ntuple->Jets->at(p).Pt() > ptThresh && abs(DeltaPhi) < 0.5)
+            return false;
+    }
+    return true;
+};
+
+ bool passHEMjetVetoMonojet(RA2bTree* ntuple, double ptThresh = 30) {
+    if (!isMC_ && ntuple->RunNum < StartHEM) return true;
+    METPhi = ntuple->METPhi;
+
+   for (int p = 0; p < ntuple->Jets->size(); p++){
+       //JetPhi = ntuple->Jets->at(p).Phi();
+       //DeltaPhi = CalcdPhi(JetPhi,METPhi);
+       // reject event with -1.62 < METPhi < -0.62 if MET < 470 GeV 
        if (-3.2 <= ntuple->Jets->at(p).Eta() && ntuple->Jets->at(p).Eta() <= -1.2 &&
            -1.77 <= ntuple->Jets->at(p).Phi() && ntuple->Jets->at(p).Phi() <= -0.67 &&
            ntuple->Jets->at(p).Pt() > ptThresh && abs(DeltaPhi) < 0.5)
@@ -1579,6 +1599,28 @@ template<typename ntupleType> vector<int> VBF_ak4indx(ntupleType* ntuple){
    return (indx);
 }
 
+
+// for vbf j matched to gen jets
+template<typename ntupleType> double VBF_gendR1(ntupleType* ntuple){
+    vector<TLorentzVector> vbf_jets = cleanedVBFjets(ntuple,0);
+    double dRgenvbf1 = 999999.;
+    for( unsigned int nj = 0; nj < ntuple->GenJets->size(); nj++ ){
+        double dR = ntuple->GenJets->at(nj).DeltaR(vbf_jets[0]);
+        if (dRgenvbf1>dR) { dRgenvbf1=dR; }
+    }
+   return (dRgenvbf1);
+}
+
+template<typename ntupleType> double VBF_gendR2(ntupleType* ntuple){
+    vector<TLorentzVector> vbf_jets = cleanedVBFjets(ntuple,0);
+    double dRgenvbf2 = 999999.;
+    for( unsigned int nj = 0; nj < ntuple->GenJets->size(); nj++ ){
+        double dR = ntuple->GenJets->at(nj).DeltaR(vbf_jets[1]);
+        if (dRgenvbf2>dR) { dRgenvbf2=dR; }
+    }
+   return (dRgenvbf2);
+}
+
 template<typename ntupleType> double fillVBF_j1NEMF(ntupleType* ntuple){
     vector<int> i = VBF_ak4indx(ntuple);
     if (i[0]>=0 && ntuple->Jets->at(i[0]).Pt() >30.0) 
@@ -1715,12 +1757,32 @@ template<typename ntupleType> double fillVBF_j2Pt(ntupleType* ntuple){
         return -999.;
 }
 
+template<typename ntupleType> bool VBFj1EcalCut(ntupleType* ntuple){
+    vector<TLorentzVector> vbf_jets = cleanedVBFjets(ntuple,0);
+    double eta = vbf_jets[0].Eta();
+    double pt = vbf_jets[0].Pt();
+    if ((pt<50.0) && ((fabs(eta)>=2.6) && fabs(eta)<=3.0)) return false;
+    return true;
+}             
+template<typename ntupleType> bool VBFj2EcalCut(ntupleType* ntuple){
+    vector<TLorentzVector> vbf_jets = cleanedVBFjets(ntuple,0);
+    double eta = vbf_jets[1].Eta();
+    double pt = vbf_jets[1].Pt();
+    if ((pt<50.0) && ((fabs(eta)>=2.6) && fabs(eta)<=3.0)) return false;
+    return true;
+}             
+
+template<typename ntupleType> bool VBFEcalCut(ntupleType* ntuple){
+    return (VBFj1EcalCut(ntuple) && VBFj2EcalCut(ntuple));
+}
+
 template<typename ntupleType> bool VBFCut(ntupleType* ntuple){
     vector<TLorentzVector> vbf_jets = cleanedVBFjets(ntuple,0);
     return ( fillVBF_dEta(ntuple)>4.0 &&
              fillVBF_Mjj(ntuple)>500.0 &&
              fillVBF_j1j2Eta(ntuple)<0 &&
-             vbf_jets[0].Pt()>30.0 && vbf_jets[1].Pt()>30.0);
+             vbf_jets[0].Pt()>30.0 && vbf_jets[1].Pt()>30.0
+           );
 }             
 
 template<typename ntupleType> bool LooseVBFCut(ntupleType* ntuple){
@@ -1807,8 +1869,7 @@ template<typename ntupleType> bool HighPurityCut(ntupleType* ntuple){
 template<typename ntupleType> bool LowPurityCut(ntupleType* ntuple){
     if(ntuple->JetsAK8->size()==0) return false;
     double tau21 = (ntuple->JetsAK8_NsubjettinessTau2->at(0))/(ntuple->JetsAK8_NsubjettinessTau1->at(0));
-    if (year == "2017") return (tau21 > 0.45 && tau21 < 0.75);
-    else return (tau21 > 0.35 && tau21 < 0.75);
+    return (tau21 > 0.35 && tau21 < 0.75);
 }
 
 /*
@@ -1822,12 +1883,18 @@ template<typename ntupleType> bool LowPurityCut(ntupleType* ntuple){
 // Extra selection for debugging
   
 template<typename ntupleType> bool DebugCut(ntupleType* ntuple ){
-  return (   genWpmatched(ntuple) //for Wp signal
+  return (   //genWpmatched(ntuple) //for Wp signal
              //genZmatched(ntuple) // for G and Rad to ZZ signal
              //ZMTCut(ntuple)
              //VBFdEtaDebugCuts(ntuple)
+              VBFEcalCut(ntuple)
              //EcalNEMFCut(ntuple)
          ); 
+}
+
+// No Selection for Acceptance calculation  
+template<typename ntupleType> bool acceptanceCut(ntupleType* ntuple ){
+  return (ntuple->NVtx >= 0); 
 }
 
 // 1) Baseline selection without VBF cut
@@ -1842,6 +1909,7 @@ template<typename ntupleType> bool baselineCut(ntupleType* ntuple){
             &&  ntuple->isoElectronTracks==0 && ntuple->isoMuonTracks==0 && ntuple->isoPionTracks==0 
             &&  HTRatioCut(ntuple)
 	        &&  FiltersCut(ntuple)
+            //&&  VBFEcalCut(ntuple)
             //&&  DebugCut(ntuple) //for Wp signal
          );
 }
@@ -1875,6 +1943,24 @@ template<typename ntupleType> bool ZSRHPVBFfailCut(ntupleType* ntuple){
   return ( ZSRHPCut(ntuple) && 
            VBFFailCut(ntuple));
 }
+
+template<typename ntupleType> bool ZSRLPCut(ntupleType* ntuple){
+  return ( ZSRCut(ntuple) && 
+           LowPurityCut(ntuple));
+}
+
+template<typename ntupleType> bool ZSRLPVBFCut(ntupleType* ntuple){
+  return ( ZSRCut(ntuple) && 
+           LowPurityCut(ntuple) &&
+           VBFCut(ntuple));
+}
+
+template<typename ntupleType> bool ZSRLPVBFfailCut(ntupleType* ntuple){
+  return ( ZSRCut(ntuple) && 
+           LowPurityCut(ntuple) &&
+           VBFFailCut(ntuple));
+}
+
 
 // 7) Baseline + Z SR+ FP 
 template<typename ntupleType> bool ZSRFPCut(ntupleType* ntuple){
@@ -1947,6 +2033,22 @@ template<typename ntupleType> bool ZSBHPVBFfailCut(ntupleType* ntuple){
            VBFFailCut(ntuple));
 }
 
+template<typename ntupleType> bool ZSBLPCut(ntupleType* ntuple){
+  return ( ZSBCut(ntuple) && 
+           LowPurityCut(ntuple));
+}
+
+template<typename ntupleType> bool ZSBLPVBFCut(ntupleType* ntuple){
+  return ( ZSBCut(ntuple) && 
+           LowPurityCut(ntuple) &&
+           VBFCut(ntuple));
+}
+
+template<typename ntupleType> bool ZSBLPVBFfailCut(ntupleType* ntuple){
+  return ( ZSBCut(ntuple) && 
+           LowPurityCut(ntuple) &&
+           VBFFailCut(ntuple));
+}
 // 14) Baseline + Z SB+ FP 
 template<typename ntupleType> bool ZSBFPCut(ntupleType* ntuple){
   return (  ZSBCut(ntuple) && 
@@ -2016,6 +2118,18 @@ template<typename ntupleType> bool ZAlphaSBHPVBFfailCut(ntupleType* ntuple){
           VBFFailCut(ntuple));            
 }
 
+template<typename ntupleType> bool ZAlphaSBLPVBFCut(ntupleType* ntuple){
+  return ( ZAlphaSBCut(ntuple) &&
+          LowPurityCut(ntuple) &&
+          VBFCut(ntuple));            
+}
+
+template<typename ntupleType> bool ZAlphaSBLPVBFfailCut(ntupleType* ntuple){
+  return ( ZAlphaSBCut(ntuple) &&
+          LowPurityCut(ntuple) &&
+          VBFFailCut(ntuple));            
+}
+
 template<typename ntupleType> bool ZAlphaSBFPVBFCut(ntupleType* ntuple){
   return ( ZAlphaSBCut(ntuple) &&
           FullPurityCut(ntuple) &&
@@ -2049,6 +2163,18 @@ template<typename ntupleType> bool ZAlphaSRHPVBFCut(ntupleType* ntuple){
 template<typename ntupleType> bool ZAlphaSRHPVBFfailCut(ntupleType* ntuple){
   return ( ZAlphaSRCut(ntuple) &&
           HighPurityCut(ntuple) &&
+          VBFFailCut(ntuple));
+}
+
+template<typename ntupleType> bool ZAlphaSRLPVBFCut(ntupleType* ntuple){
+  return ( ZAlphaSRCut(ntuple) &&
+          LowPurityCut(ntuple) &&
+          VBFCut(ntuple));
+}
+
+template<typename ntupleType> bool ZAlphaSRLPVBFfailCut(ntupleType* ntuple){
+  return ( ZAlphaSRCut(ntuple) &&
+          LowPurityCut(ntuple) &&
           VBFFailCut(ntuple));
 }
 

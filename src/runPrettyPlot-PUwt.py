@@ -16,7 +16,7 @@ filetorun = ""
 #    filetorun = "NoNorm_prettyPlot_137fb-PUtest.py"
 
 filetorun = "NoRatio_prettyPlot_137fb-PUtest.py"
-cat = ["ZSBHPVBF","ZSBHPVBFfail","ZSRHPVBF","ZSRHPVBFfail"] 
+cat = ["ZSBLPVBF","ZSBLPVBFfail","ZSRLPVBF","ZSRLPVBFfail"] 
 
 for i in range(len(cat)):
     print" "
