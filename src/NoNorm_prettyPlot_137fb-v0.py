@@ -9,12 +9,8 @@ r.gROOT.ProcessLine("setTDRStyle()")
 year = argv[1]
 cat = argv[2]
 
-#norm = "NoNorm"
-#test = "-MjCorr"
-
 location = "AN_ORv1_files"
 plotloc  = "AN_ORv1_plots"
-#closure_plot = "AN_ORv1_Closure/plots"
 
 plot_dir        = plotloc+"/{0}/{1}/".format(cat,year)
 input_file_name = location+"/{0}_ORv1/{1}_AN_v1_{0}.root".format(year,cat)
@@ -47,9 +43,9 @@ def plot(plot_var = "photonIsoChrgLowSieie_EB_photonLoose" ):
               "TT_2L"],
              ["Other_WWTo1L1Nu2Q",
               "Other_WWZ",
-              #"Other_WZTo1L1Nu2Q",
-              #"Other_WZTo1L3Nu",
-              "Other_WZ",
+              "Other_WZTo1L1Nu2Q",
+              "Other_WZTo1L3Nu",
+              #"Other_WZ",
               "Other_WZZ",
               "Other_ZZTo2L2Q",
               "Other_ZZTo2Q2Nu",
@@ -77,7 +73,8 @@ def plot(plot_var = "photonIsoChrgLowSieie_EB_photonLoose" ):
              ]
 
     if year == "137fb": signal_samples=["VBFG_1000_MC2016", "VBFG_1000_MC2017","VBFG_1000_MC2018"]
-    signal_samples=["VBFG_1000"];
+    else:
+        signal_samples=["VBFG_1000"];
     signal_labels = ["VBFG 1000 (1 pb)"]
     signal_labels1 = ["VBFG_1000_MC{0}".format(year)]
 
@@ -116,44 +113,44 @@ def plot(plot_var = "photonIsoChrgLowSieie_EB_photonLoose" ):
                 samples_histo[-1].Add(input_file.Get(plot_var+"_"+sample_name))
  ## for signal sample
 
-#    signal_histo=[]
-#    for i,sig_names in enumerate(signal_samples) :
-#        #for j,sig_name in enumerate(sig_names):
-#        if len(signal_histo) <= i :
-#            signal_histo.append(input_file.Get(plot_var+"_"+sig_names))
-#            if signal_histo[-1]==None :
-#                print "looking for:",plot_var+"_"+sig_names
-#                print input_file.ls(plot_var+"_"+sig_names)
-#                assert(signal_histo[-1]!=None)
-#            elif signal_histo[-1].Integral() < 0.0001 :
-#                print "oops.",plot_var+"_"+sig_names,"is empty"
-#            signal_histo[-1].SetLineColor(signal_line_color[0])
-#            signal_histo[-1].SetLineWidth(2)
-#            signal_histo[-1].SetName(plot_var+"_"+signal_labels1[0])
-#        else :
-#            signal_histo[-1].Add(input_file.Get(plot_var+"_"+sig_names))
-#
-#    if year == "137fb":
-#        total_sig = None
-#        for i,h in enumerate(signal_histo) :
-#            if h==None: continue
-#            if total_sig==None: total_sig = r.TH1F(h)
-#                #total_sig.SetName(plot_var+"_sum")
-#            else : total_sig.Add(h)
-
-
     signal_histo=[]
-    for i,signal_sample_names in enumerate(signal_samples) :
-        #if i<len(signal_samples):
-        if i==0:
-            signal_histo.append(input_file.Get(plot_var+"_"+signal_sample_names))
-            signal_histo[-1].SetLineColor(r.kRed)
-            signal_histo[-1].SetLineWidth(2)
+    for i,sig_names in enumerate(signal_samples) :
+        #for j,sig_name in enumerate(sig_names):
+        if len(signal_histo) <= i :
+            signal_histo.append(input_file.Get(plot_var+"_"+sig_names))
             if signal_histo[-1]==None :
-                print "looking for:",plot_var+"_"+sample_name
+                print "looking for:",plot_var+"_"+sig_names
+                print input_file.ls(plot_var+"_"+sig_names)
                 assert(signal_histo[-1]!=None)
+            elif signal_histo[-1].Integral() < 0.0001 :
+                print "oops.",plot_var+"_"+sig_names,"is empty"
+            signal_histo[-1].SetLineColor(signal_line_color[0])
+            signal_histo[-1].SetLineWidth(2)
+            signal_histo[-1].SetName(plot_var+"_"+signal_labels1[0])
         else :
-            signal_histo[-1].Add(input_file.Get(plot_var+"_"+signal_sample_names))
+            signal_histo[-1].Add(input_file.Get(plot_var+"_"+sig_names))
+
+    if year == "137fb":
+        total_sig = None
+        for i,h in enumerate(signal_histo) :
+            if h==None: continue
+            if total_sig==None: total_sig = r.TH1F(h)
+                #total_sig.SetName(plot_var+"_sum")
+            else : total_sig.Add(h)
+
+
+#    signal_histo=[]
+#    for i,signal_sample_names in enumerate(signal_samples) :
+#        #if i<len(signal_samples):
+#        if i==0:
+#            signal_histo.append(input_file.Get(plot_var+"_"+signal_sample_names))
+#            signal_histo[-1].SetLineColor(r.kRed)
+#            signal_histo[-1].SetLineWidth(2)
+#            if signal_histo[-1]==None :
+#                print "looking for:",plot_var+"_"+sample_name
+#                assert(signal_histo[-1]!=None)
+#        else :
+#            signal_histo[-1].Add(input_file.Get(plot_var+"_"+signal_sample_names))
 
  ## end of signal sample
 
@@ -204,9 +201,9 @@ def plot(plot_var = "photonIsoChrgLowSieie_EB_photonLoose" ):
     topPad.cd();
     
     stack.Draw("histo")    
-    #if year == "137fb": total_sig.Draw("histo SAME")
+    if year == "137fb": total_sig.Draw("histo SAME")
     #else: 
-    for i in range(len(signal_histo)): signal_histo[0].Draw("histo SAME")
+    #for i in range(len(signal_histo)): signal_histo[0].Draw("histo SAME")
     data_histo[0].Draw("SAME,e1p") 
     leg.Draw()
 
@@ -288,6 +285,7 @@ def plot(plot_var = "photonIsoChrgLowSieie_EB_photonLoose" ):
     
 
     can.SaveAs(plot_dir+"/"+plot_var+".pdf")
+
     # for space between legend and plot 
     topPad.SetLogy()
     if total!=None:

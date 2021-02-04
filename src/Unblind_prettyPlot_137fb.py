@@ -9,18 +9,12 @@ r.gROOT.ProcessLine("setTDRStyle()")
 year = argv[1]
 cat = argv[2]
 
-#norm = "NoNorm"
-#test = "-MjCorr"
-
-location = "AN_ORv1_files"
-plotloc  = "AN_ORv1_plots"
-#closure_plot = "AN_ORv1_Closure/plots"
+location = "AN_Unblind_v1_files"
+plotloc  = "AN_Unblind_v1_plots"
 
 plot_dir        = plotloc+"/{0}/{1}/".format(cat,year)
-input_file_name = location+"/{0}_ORv1/{1}_AN_v1_{0}.root".format(year,cat)
-output_file_name= location+"/{0}_ORv1/Output_NoNorm/{1}_AN_v1_{0}_Output_NoNorm.root".format(year,cat)
-#input_file_name = location+"/Systematics_LP/{0}/{1}_AN_v1_{0}.root".format(year,cat)
-#output_file_name= location+"/Systematics_LP/{0}/Output_NoNorm/{1}_AN_v1_{0}_Output_NoNorm.root".format(year,cat)
+input_file_name = location+"/{0}_UB_v1/{1}_AN_v1_{0}.root".format(year,cat)
+output_file_name= location+"/{0}_UB_v1/Output_NoNorm/{1}_AN_v1_{0}_Output_NoNorm.root".format(year,cat)
 
 if year == "2016": lumi="35.8/fb"
 elif year == "2017": lumi="41.5/fb"
@@ -76,7 +70,7 @@ def plot(plot_var = "photonIsoChrgLowSieie_EB_photonLoose" ):
               "ZJets_2500toInf"]
              ]
 
-    if year == "137fb": signal_samples=["VBFG_1000_MC2016", "VBFG_1000_MC2017","VBFG_1000_MC2018"]
+    #if year == "137fb": signal_samples=["VBFG_1000_MC2016", "VBFG_1000_MC2017","VBFG_1000_MC2018"]
     signal_samples=["VBFG_1000"];
     signal_labels = ["VBFG 1000 (1 pb)"]
     signal_labels1 = ["VBFG_1000_MC{0}".format(year)]
@@ -241,8 +235,8 @@ def plot(plot_var = "photonIsoChrgLowSieie_EB_photonLoose" ):
     CMStext.SetTextSize(0.08)
     CMStext.Draw()
     
-    #SIMtext = r.TText(.28,.95,"preliminary")
-    SIMtext = r.TText(.28,.95,"Work in Progress")
+    SIMtext = r.TText(.28,.95,"preliminary")
+    #SIMtext = r.TText(.28,.95,"Work in Progress")
     SIMtext.SetNDC()
     SIMtext.SetTextFont(52)
     #SIMtext.SetTextSize(0.08)

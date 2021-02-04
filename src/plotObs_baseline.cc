@@ -176,7 +176,15 @@ void process(string selection_label,
   plot MET1plot(*fillMET<RA2bTree>,"MET1_"+selection_label,"MET [GeV]",20,200.,1200.);//50 GeV bin
   plot MET2plot(*fillMET<RA2bTree>,"MET2_"+selection_label,"MET [GeV]",24,200.,800.);//25 GeV bin
   plot HTplot(*fillHT<RA2bTree>,"HT_"+selection_label,"H_{T} [GeV]",75,300,3300.); // 100 GeV bin
-  //plot NgenZsplot(*getNumGenZs<RA2bTree>,"NgenZs_"+selection_label,"n_{genZs}",5,-0.5,4.5); // N genZs from tree
+//
+/*  plot NgenZsplot(*getNumGenZs<RA2bTree>,"NgenZs_"+selection_label,"n_{genZs}",5,-0.5,4.5); // N genZs from tree
+  plot genZpTplot(*FillGenZPt<RA2bTree>,"genZpT_"+selection_label,"gen Z p_{T} [GeV]",100,0.,3000.);
+  plot genWpTplot(*FillGenWPt<RA2bTree>,"genWpT_"+selection_label,"gen W p_{T} [GeV]",100,0.,3000.);
+  plot genZEtaplot(*FillGenZEta<RA2bTree>,"genZEta_"+selection_label,"gen Z #eta ",100,-5.,5.);
+  plot genWEtaplot(*FillGenWEta<RA2bTree>,"genWEta_"+selection_label,"gen W #eta ",100,-5.,5.);
+  plot genZMTplot(*FillGenZMT<RA2bTree>,"genZMT_"+selection_label,"gen MT [GeV]",100,0.,5000.);
+  plot genWpMTplot(*FillGenWpMT<RA2bTree>,"genWpMT_"+selection_label,"gen MT [GeV]",100,0.,5000.);
+*///
   plot NJetsplot(*fillNJets<RA2bTree>,"NJets_"+selection_label,"n_{jets}",10,0.5,10.5); // Nj from tree
   plot NJets1plot(*fillNJets1<RA2bTree>,"NJets1_"+selection_label,"n_{jets}",10,0.5,10.5); // cent Nj(from tree) w/ pt > 30
   plot NJets3plot(*fillCentralNJets<RA2bTree>,"NJetsCent_"+selection_label,"n_{jets}",10,0.5,10.5); // cent jsize w/ pt>30
@@ -439,7 +447,16 @@ void process(string selection_label,
   plots.push_back(MET1plot);
   plots.push_back(MET2plot);
   plots.push_back(HTplot);
-  //plots.push_back(NgenZsplot);
+//
+/*  plots.push_back(NgenZsplot);
+  plots.push_back(genZpTplot);
+  plots.push_back(genWpTplot);
+  plots.push_back(genZEtaplot);
+  plots.push_back(genWEtaplot);
+  plots.push_back(genZMTplot);
+  plots.push_back(genWpMTplot);
+*///
+
   plots.push_back(NJetsplot);
   plots.push_back(NJets1plot);
   plots.push_back(NJets3plot);
@@ -478,12 +495,12 @@ void process(string selection_label,
   plots.push_back(AK4j4Phi_plot);
 
   //
-  plots.push_back(VBFgendR1vsdR2plot);
-  plots.push_back(VBFgendR1vsdR21plot);
-  plots.push_back(VBFgendR1plot);
-  plots.push_back(VBFgendR11plot);
-  plots.push_back(VBFgendR2plot);
-  plots.push_back(VBFgendR21plot);
+  //plots.push_back(VBFgendR1vsdR2plot);
+  //plots.push_back(VBFgendR1vsdR21plot);
+  //plots.push_back(VBFgendR1plot);
+  //plots.push_back(VBFgendR11plot);
+  //plots.push_back(VBFgendR2plot);
+  //plots.push_back(VBFgendR21plot);
   //
   plots.push_back(VBFj1NEMF_plot);
   plots.push_back(VBFj2NEMF_plot);
@@ -673,7 +690,8 @@ void process(string selection_label,
     RA2bTree* ntuple = skims.ntuples[iSample];
      isMC_ = true;
     //TFile* outputFile = new TFile("AN_ORv1_files/"+year+"_ORv1/plotObs_"+selection_label+"_"+skims.sampleName[iSample]+".root","RECREATE");
-    TFile* outputFile = new TFile("AN_ORv1_files/Systematics_LP/"+year+"/plotObs_"+selection_label+"_"+skims.sampleName[iSample]+".root","RECREATE");
+    //TFile* outputFile = new TFile("AN_ORv1_files/Systematics_LP/"+year+"/plotObs_"+selection_label+"_"+skims.sampleName[iSample]+".root","RECREATE");
+    TFile* outputFile = new TFile("AN_Unblind_v1_files/"+year+"_UB_v1/plotObs_"+selection_label+"_"+skims.sampleName[iSample]+".root","RECREATE");
     
     for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
         plots[iPlot].addNtuple(ntuple,skims.sampleName[iSample]);
@@ -728,8 +746,14 @@ void process(string selection_label,
         
         // tau21 sf
         double tau21 = 1.0; 
-        if (purity == "HP"){tau21 = tau21HPScaleFactor(ntuple);} 
-        if (purity == "LP"){tau21 = tau21LPScaleFactor(ntuple);} 
+        //if (purity == "HP"){tau21 = tau21HPScaleFactor(ntuple);} 
+        //else if (purity == "LP"){tau21 = tau21LPScaleFactor(ntuple);} 
+        //else tau21 = 1.0;
+
+        if ((selection_label == "ZSBHP") || (selection_label == "ZSBHPVBF") || (selection_label == "ZSBHPVBFfail") || (selection_label == "ZSRHP") || (selection_label == "ZSRHPVBF") || (selection_label == "ZSRHPVBFfail")) {tau21 = tau21HPScaleFactor(ntuple);}
+        else if ((selection_label == "ZSBLP") || (selection_label == "ZSBLPVBF") || (selection_label == "ZSBLPVBFfail") || (selection_label == "ZSRLP") || (selection_label == "ZSRLPVBF") || (selection_label == "ZSRLPVBFfail")) {tau21 = tau21LPScaleFactor(ntuple);}
+        else tau21 = 1.0;
+
         if ( ! ( filename.Contains("_ZJetsTo")  || filename.Contains("_WJetsTo")) ){ weight *= tau21; }
 
         // tau21 pt Extrapolation systematics:
@@ -786,7 +810,8 @@ void process(string selection_label,
     RA2bTree* ntuple = skims.signalNtuples[iSample];
     isMC_ = true;
     //TFile* outputFile = new TFile("AN_ORv1_files/"+year+"_ORv1/plotObs_"+selection_label+"_"+skims.signalSampleName[iSample]+".root","RECREATE");
-    TFile* outputFile = new TFile("AN_ORv1_files/Systematics_LP/"+year+"/plotObs_"+selection_label+"_"+skims.signalSampleName[iSample]+".root","RECREATE");
+    //TFile* outputFile = new TFile("AN_ORv1_files/Systematics_LP/"+year+"/plotObs_"+selection_label+"_"+skims.signalSampleName[iSample]+".root","RECREATE");
+    TFile* outputFile = new TFile("AN_Unblind_v1_files/"+year+"_UB_v1/plotObs_"+selection_label+"_"+skims.signalSampleName[iSample]+".root","RECREATE");
 
     sigSamples.push_back(ntuple);
     for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
@@ -847,8 +872,12 @@ void process(string selection_label,
       if(year=="2018"){ if((ntuple->EvtNum % 1000 > 1000*21.0/59.6) && (! passHEMjetVeto(ntuple, 30)))continue;}          
 
       double tau21 = 1.0; 
-      if (purity == "HP"){tau21 = tau21HPScaleFactor(ntuple);} 
-      if (purity == "LP"){tau21 = tau21LPScaleFactor(ntuple);} 
+      //if (purity == "HP"){tau21 = tau21HPScaleFactor(ntuple);} 
+      //if (purity == "LP"){tau21 = tau21LPScaleFactor(ntuple);} 
+      if ((selection_label == "ZSBHP") || (selection_label == "ZSBHPVBF") || (selection_label == "ZSBHPVBFfail") || (selection_label == "ZSRHP") || (selection_label == "ZSRHPVBF") || (selection_label == "ZSRHPVBFfail")) {tau21 = tau21HPScaleFactor(ntuple);}
+      else if ((selection_label == "ZSBLP") || (selection_label == "ZSBLPVBF") || (selection_label == "ZSBLPVBFfail") || (selection_label == "ZSRLP") || (selection_label == "ZSRLPVBF") || (selection_label == "ZSRLPVBFfail")) {tau21 = tau21LPScaleFactor(ntuple);}
+      else tau21 = 1.0;
+      //std::cout<<"tau21sf: "<<tau21<<endl; 
       //weight = lum * sigxsecwt * customTrigWeights(ntuple) * customPUweights(ntuple) * tau21ScaleFactor(ntuple); 
       weight = lum * (1/EvtProcessed) * customTrigWeights(ntuple) * customPUweights(ntuple) *  tau21; 
       //weight = lum * (1/double(numEvents)) * customPUweights(ntuple) *  tau21; 
@@ -892,7 +921,9 @@ void process(string selection_label,
     isMC_ = false;
     RA2bTree* ntuple = skims.dataNtuple[iSample];
     //TFile* outputFile = new TFile("AN_ORv1_files/"+year+"_ORv1/plotObs_"+selection_label+"_"+skims.dataSampleName[iSample]+".root","RECREATE");
-    TFile* outputFile = new TFile("AN_ORv1_files/Systematics_LP/"+year+"/plotObs_"+selection_label+"_"+skims.dataSampleName[iSample]+".root","RECREATE");
+    //TFile* outputFile = new TFile("AN_ORv1_files/Systematics_LP/"+year+"/plotObs_"+selection_label+"_"+skims.dataSampleName[iSample]+".root","RECREATE");
+    //TFile* outputFile = new TFile("AN_Unblind_v1_files/"+year+"_UB_v1/plotObs_"+selection_label+"_"+skims.dataSampleName[iSample]+".root","RECREATE");
+    TFile* outputFile = new TFile("AN_Unblind_v1_files/"+year+"_UB_v1/plotObs_"+selection_label+"_VBFdEta5p0"+skims.dataSampleName[iSample]+".root","RECREATE");
 	TString filename;  
     for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
         plots[iPlot].addDataNtuple(ntuple,skims.dataSampleName[iSample]);
@@ -914,6 +945,21 @@ void process(string selection_label,
         filename = ntuple->fChain->GetFile()->GetName();
         if(filename.Contains("MET_2018")){if(!passHEMjetVeto(ntuple,30)) continue;}
       
+        // print info for events with hight MT in HP VBF regions
+       if (fillZMT(ntuple) > 1000.0){ 
+            cout<<" "<<endl;
+            cout<<"{\"filename\": \""<<filename<<"\","<<endl;
+            cout<<"\"year\": "<<year<<","<<endl;
+            cout<<"\"Run\": "<<ntuple->RunNum<<", \"Evt\": "<<ntuple->EvtNum<<", \"LumiBlock\": "<<ntuple->LumiBlockNum<<","<<endl;
+            cout<<"\"MT\": "<<fillZMT(ntuple)<<", \"MET\": "<<ntuple->MET<<", \"METPhi\": "<<ntuple->METPhi<<","<<endl; 
+            cout<<"\"AK8J1Mass\": "<<AK8PUPPISoftdropCorrMass(ntuple)<<", \"AK8J1pT\": "<<fillLeadingJetPt(ntuple)<<", \"Eta\": "<<fillLeadingJetEta(ntuple)<<", \"AK8J1Phi\": "<<fillLeadingJetPhi(ntuple)<<","<<endl; 
+            cout<<"\"AK8J1tau21\": "<<fillLeadingTau21(ntuple)<<", \"VBFfwdmjj\": "<<fillVBF_Mjj(ntuple)<<", \"VBFdEta\": "<<fillVBF_dEta(ntuple)<<","<<endl; 
+            cout<<"\"VBFj1pt\": "<<fillVBF_j1Pt(ntuple)<<", \"VBFj1eta\": "<<fillVBF_j1Eta(ntuple)<<", \"VBFj1phi\": "<<fillVBF_j1Phi(ntuple)<<","<<endl; 
+            cout<<"\"VBFj2pt\": "<<fillVBF_j2Pt(ntuple)<<", \"VBFj2eta\": "<<fillVBF_j2Eta(ntuple)<<", \"VBFj2phi\": "<<fillVBF_j2Phi(ntuple)<<","<<endl; 
+            cout<<"}, "<<endl;
+            cout<<" "<<endl;
+       }
+ 
         for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
 	        plots[iPlot].fillData(ntuple);
         }

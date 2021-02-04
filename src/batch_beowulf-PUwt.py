@@ -8,7 +8,13 @@ year = sys.argv[1]
 #que = ["ZSBLPVBF","ZSBLPVBFfail","ZSRLPVBF","ZSRLPVBFfail"]
 #que = ["ZSBHPVBF","ZSBHPVBFfail","ZSRHPVBF","ZSRHPVBFfail"]
 #que = ["ZSBHPVBF","ZSRHPVBF"]
-que = ["ZAlphaSBHPVBF","ZAlphaSRHPVBF","ZAlphaSBHPVBFfail","ZAlphaSRHPVBFfail"]
+#que = ["ZAlphaSBHPVBF","ZAlphaSRHPVBF","ZAlphaSBHPVBFfail","ZAlphaSRHPVBFfail"]
+if year == "2016" or year=="2017":
+    #que = ["ZSR", "ZSRHP","ZSRHPVBF", "ZSRHPVBFfail"]
+    que = ["ZSB","ZSRLP","ZSRLPVBF","ZSRLPVBFfail"]
+if year=="2018":
+    que = ["Baseline","ZSR","ZSRHP","ZSRHPVBF", "ZSRHPVBFfail", "ZSB","ZSRLP","ZSRLPVBF","ZSRLPVBFfail"]
+    #que = ["ZSB","ZSRLP","ZSRLPVBF","ZSRLPVBFfail"]
 
 for i in range(len(que)):
     print "running {}".format(i)

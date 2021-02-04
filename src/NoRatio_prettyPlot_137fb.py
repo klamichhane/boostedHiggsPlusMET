@@ -16,10 +16,10 @@ location = "AN_ORv1_files"
 plotloc = "AN_ORv1_plots"
 
 plot_dir         = plotloc+"/{0}/{1}/".format(cat,year)
-#input_file_name  = location+"/{0}_ORv1/{1}_AN_v1_{0}.root".format(year,cat)
-#output_file_name = location+"/{0}_ORv1/Output_NoNorm/{1}_AN_v1_{0}_Output_NoNorm.root".format(year,cat)
-input_file_name = location+"/Systematics_LP/{0}/{1}_AN_v1_{0}.root".format(year,cat)
-output_file_name= location+"/Systematics_LP/{0}/Output_NoNorm/{1}_AN_v1_{0}_Output_NoNorm.root".format(year,cat)
+input_file_name  = location+"/{0}_ORv1/{1}_AN_v1_{0}.root".format(year,cat)
+output_file_name = location+"/{0}_ORv1/Output_NoNorm/{1}_AN_v1_{0}_Output_NoNorm.root".format(year,cat)
+#input_file_name = location+"/Systematics_LP/{0}/{1}_AN_v1_{0}.root".format(year,cat)
+#output_file_name= location+"/Systematics_LP/{0}/Output_NoNorm/{1}_AN_v1_{0}_Output_NoNorm.root".format(year,cat)
 
 if year == "2016": lumi="35.8/fb"
 elif year == "2017": lumi="41.5/fb"
@@ -78,19 +78,13 @@ def plot(plot_var = "photonIsoChrgLowSieie_EB_photonLoose" ):
               "ZJets_2500toInf"]
              ]
     #if year == "137fb": signal_samples=["VBFG_1000_MC2016", "VBFG_1000_MC2017","VBFG_1000_MC2018"]   
-        #if "VBFfail" in cat: signal_samples = ["ggFG_1000_MC2016"];
+    #    #if "VBFfail" in cat: signal_samples = ["ggFG_1000_MC2016"];
     #else: signal_samples=["VBFG_1000_MC{0}".format(year)];
+    #signal_labels1 = ["VBFG_1000_MC{0}".format(year)] #if "VBFG" in signal_samples else ["ggFG 1000 (1 pb)"]
     signal_samples=["VBFG_1000"];
     signal_labels = ["VBFG 1000 (1 pb)"] #if "VBFG" in signal_samples else ["ggFG 1000 (1 pb)"]
-    #signal_labels1 = ["VBFG_1000_MC{0}".format(year)] #if "VBFG" in signal_samples else ["ggFG 1000 (1 pb)"]
 
-    data_samples=["MET_2016H",#]
-                "MET_2016G",
-                "MET_2016F",
-                "MET_2016E",
-                "MET_2016D",
-                "MET_2016C",
-                "MET_2016B"]
+    data_samples=["MET_2016H", "MET_2016G", "MET_2016F", "MET_2016E", "MET_2016D", "MET_2016C", "MET_2016B"]
 
     samples_labels = ["SnglT","TT","Other","WJets","ZJets"]
     signal_line_color = [2]
@@ -118,7 +112,7 @@ def plot(plot_var = "photonIsoChrgLowSieie_EB_photonLoose" ):
             else : 
                 samples_histo[-1].Add(input_file.Get(plot_var+"_"+sample_name))
 
-# ## for signal sample
+ ## for signal sample
 #    signal_histo=[]
 #    for i,sig_names in enumerate(signal_samples) :   
 #        #for j,sig_name in enumerate(sig_names): 
@@ -247,7 +241,8 @@ def plot(plot_var = "photonIsoChrgLowSieie_EB_photonLoose" ):
     CMStext.SetTextSize(0.04)
     CMStext.Draw()
     
-    SIMtext = r.TText(.28,.95,"preliminary")
+    #SIMtext = r.TText(.28,.95,"preliminary")
+    SIMtext = r.TText(.28,.95,"Work in Progress")
     SIMtext.SetNDC()
     SIMtext.SetTextFont(52)
     SIMtext.SetTextSize(0.04)
@@ -260,7 +255,7 @@ def plot(plot_var = "photonIsoChrgLowSieie_EB_photonLoose" ):
     LUMItext.SetTextSize(0.04) # was 0.08
     LUMItext.Draw()
 
-    can.SaveAs(plot_dir+"/"+plot_var+".pdf")
+    #can.SaveAs(plot_dir+"/"+plot_var+".pdf")
     # for space between legend and plot 
     can.SetLogy()
     if total!=None:
@@ -268,7 +263,7 @@ def plot(plot_var = "photonIsoChrgLowSieie_EB_photonLoose" ):
     else :
         stack.SetMaximum(200.0*samples_histo[0].GetMaximum())
     stack.SetMinimum(0.1)
-    can.SaveAs(plot_dir+"/"+plot_var+"_LogY.pdf")
+    #can.SaveAs(plot_dir+"/"+plot_var+"_LogY.pdf")
 
     output_file.cd()
     for h in samples_histo : r.TH1F(h).Write()

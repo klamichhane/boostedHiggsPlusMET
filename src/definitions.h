@@ -86,6 +86,7 @@ template<typename ntupleType>void ntupleBranchStatus(ntupleType* ntuple){
   ntuple->fChain->SetBranchStatus("*",0);
   ntuple->fChain->SetBranchStatus("RunNum",1);
   ntuple->fChain->SetBranchStatus("EvtNum",1);
+  ntuple->fChain->SetBranchStatus("LumiBlockNum",1);
   ntuple->fChain->SetBranchStatus("Muons",1);
   ntuple->fChain->SetBranchStatus("NMuons",1);
   ntuple->fChain->SetBranchStatus("Electrons",1);
@@ -142,7 +143,7 @@ template<typename ntupleType>void ntupleBranchStatus(ntupleType* ntuple){
   ntuple->fChain->SetBranchStatus("madMinPhotonDeltaR",1);
   ntuple->fChain->SetBranchStatus("ZCandidates",1);
   ntuple->fChain->SetBranchStatus("GenParticles*",1);
-  ntuple->fChain->SetBranchStatus("GenJets",1);
+  ntuple->fChain->SetBranchStatus("GenJets*",1);
   ntuple->fChain->SetBranchStatus("NonPrefiringProb",1);
   ntuple->fChain->SetBranchStatus("NonPrefiringProbUp",1);
   ntuple->fChain->SetBranchStatus("NonPrefiringProbDown",1);
@@ -179,6 +180,67 @@ template<typename ntupleType> double FillGenZPt(ntupleType* ntuple){
         }
     }
     return pt; 
+}
+
+template<typename ntupleType> double FillGenZEta(ntupleType* ntuple){
+    //cout << "FillGenZPt:" << endl;
+    if( ntuple->GenParticles == NULL ) return -999.;
+    double eta = -999.;
+    for( unsigned int p = 0 ; p < ntuple->GenParticles->size() ; p++ ){
+        if( abs(ntuple->GenParticles_PdgId->at(p)) == 23 ){
+            //std::cout << "pt: " << ntuple->GenParticles->at(p).Pt() << std::endl;
+            eta = ntuple->GenParticles->at(p).Eta();
+        }
+    }
+    return eta; 
+}
+
+template<typename ntupleType> double FillGenWEta(ntupleType* ntuple){
+    //cout << "FillGenZPt:" << endl;
+    if( ntuple->GenParticles == NULL ) return -999.;
+    double eta = -999.;
+    for( unsigned int p = 0 ; p < ntuple->GenParticles->size() ; p++ ){
+        if( abs(ntuple->GenParticles_PdgId->at(p)) == 24 ){
+            eta = ntuple->GenParticles->at(p).Eta();
+        }
+    }
+    return eta; 
+}
+
+template<typename ntupleType> double FillGenZMT(ntupleType* ntuple){
+    if(ntuple->GenJetsAK8->size()==0) return -99999.;
+    double Z1pt = -99.00, Z1Phi = -99.00, Z2pt = -99.00, Z2Phi = -99.00;
+    for (int i=0; i<(ntuple->GenParticles->size()); i++){    
+        int pid = abs(ntuple->GenParticles_PdgId->at(i));
+        int parent = abs(ntuple->GenParticles_ParentId->at(i));
+        if( (pid == 12 || pid ==14 || pid == 16) && parent == 23){ 
+            int j = abs(ntuple->GenParticles_ParentIdx->at(i));
+            Z1pt  = ntuple->GenParticles->at(j).Pt();
+            Z1Phi = ntuple->GenParticles->at(j).Phi();
+        }
+        if( (pid == 1 || pid ==2 || pid == 3 || pid ==4 || pid ==5) && parent == 23){ 
+            int k = abs(ntuple->GenParticles_ParentIdx->at(i));
+            Z2pt  = ntuple->GenParticles->at(k).Pt();
+            Z2Phi = ntuple->GenParticles->at(k).Phi();
+        }
+    }
+     return ZMT(Z2pt, Z2Phi, Z1pt, Z1Phi);
+}
+
+template<typename ntupleType> double FillGenWpMT(ntupleType* ntuple){
+    if (ntuple->GenParticles->size()==0) return 0.;
+    double Wpt = 0.00, WPhi = 0.00, Zpt = 0.00, ZPhi = 0.00;
+    for (int i=0; i<(ntuple->GenParticles->size()); i++){    
+        if(abs(ntuple->GenParticles_PdgId->at(i)) == 24){ 
+            Wpt   = ntuple->GenParticles->at(i).Pt();
+            WPhi  = ntuple->GenParticles->at(i).Phi();
+        }
+        if(abs(ntuple->GenParticles_PdgId->at(i)) == 23){
+            Zpt   = ntuple->GenParticles->at(i).Pt();
+            ZPhi  = ntuple->GenParticles->at(i).Phi();
+        }
+    }
+    return ZMT(Wpt,WPhi,Zpt,ZPhi); 
 }
 
 template<typename ntupleType> bool genWmatched(ntupleType* ntuple){
@@ -245,7 +307,8 @@ template<typename ntupleType> double dPhigenZinv(ntupleType* ntuple){
 template<typename ntupleType> double getNumGenZs(ntupleType* ntuple){
     int numZs=0;
     for( int i=0 ; i < ntuple->GenParticles->size() ; i++ ){
-        if( (ntuple->GenParticles_PdgId->at(i) == 23) && (ntuple->GenParticles_Status->at(i) == 62)){ 
+        //if( (ntuple->GenParticles_PdgId->at(i) == 23) && (ntuple->GenParticles_Status->at(i) == 62)){ 
+        if( (ntuple->GenParticles_PdgId->at(i) == 23) && (ntuple->GenParticles_Status->at(i) == 22)){ 
             numZs++;
         }    
     }
@@ -612,6 +675,7 @@ template<typename ntupleType> double customTrigWeightsDown(ntupleType* ntuple){
     else return 1.0;
 }
 
+/*
 template<typename ntupleType> double tau21pTExtrapolation(ntupleType* ntuple){
     if(ntuple->JetsAK8->size()==0) return 1.0;
     double factor;
@@ -628,6 +692,7 @@ template<typename ntupleType> double customTau21pTExtrapUp(ntupleType* ntuple){
 template<typename ntupleType> double customTau21pTExtrapDown(ntupleType* ntuple){
     return (1/tau21pTExtrapolation(ntuple));
 }
+*/
 
 //https://twiki.cern.ch/twiki/bin/viewauth/CMS/JetWtagging#tau21_0_35_HP_0_35_tau21_0_75_LP
 template<typename ntupleType> double tau21HPScaleFactor(ntupleType* ntuple){
@@ -1778,7 +1843,8 @@ template<typename ntupleType> bool VBFEcalCut(ntupleType* ntuple){
 
 template<typename ntupleType> bool VBFCut(ntupleType* ntuple){
     vector<TLorentzVector> vbf_jets = cleanedVBFjets(ntuple,0);
-    return ( fillVBF_dEta(ntuple)>4.0 &&
+    //return ( fillVBF_dEta(ntuple)>4.0 &&
+    return ( fillVBF_dEta(ntuple)>5.0 &&
              fillVBF_Mjj(ntuple)>500.0 &&
              fillVBF_j1j2Eta(ntuple)<0 &&
              vbf_jets[0].Pt()>30.0 && vbf_jets[1].Pt()>30.0
