@@ -135,6 +135,8 @@ void process(string selection_label,
         selectionFunc = ZAlphaSRHPLooseVBFfailCut;
     }else if( selection_label == "NoSelection" ){
         selectionFunc = acceptanceCut;
+    }else if( selection_label == "VBS" ){
+        selectionFunc = VBSCut;
 
     }else{
         assert(0);
@@ -186,6 +188,9 @@ void process(string selection_label,
   plot genWpMTplot(*FillGenWpMT<RA2bTree>,"genWpMT_"+selection_label,"gen MT [GeV]",100,0.,5000.);
 *///
   plot NJetsplot(*fillNJets<RA2bTree>,"NJets_"+selection_label,"n_{jets}",10,0.5,10.5); // Nj from tree
+  plot NbJetsplot(*fillNbJets<RA2bTree>,"NbJets_"+selection_label,"n_{b-jets}",6,-0.5,5.5); // Nj from tree
+  //plot NgenZhadpidplot(*fillZdecay<RA2bTree>,"ZdaughterPID_"+selection_label,"pid_{Z-had}",6,0.5,6.5); // Nj from tree
+  //plot NgenZhadpid1plot(*fillZdecayMatched<RA2bTree>,"ZdaughAK8PIDMatch_"+selection_label,"pid_{AK8-gen}",6,0.5,6.5); // Nj from tree
   plot NJets1plot(*fillNJets1<RA2bTree>,"NJets1_"+selection_label,"n_{jets}",10,0.5,10.5); // cent Nj(from tree) w/ pt > 30
   plot NJets3plot(*fillCentralNJets<RA2bTree>,"NJetsCent_"+selection_label,"n_{jets}",10,0.5,10.5); // cent jsize w/ pt>30
   plot NAK8Jetsplot(*fillNAK8Jets<RA2bTree>,"NAK8Jets_"+selection_label,"nAK8_{jets}",10,0.5,10.5);
@@ -224,12 +229,12 @@ void process(string selection_label,
   plot AK4j3Phi_plot(*fillJetPhi3<RA2bTree>,"AK4j3Phi_"+selection_label,"#phi_{j3}^{AK4}",40,-3.1415,3.1415);
   plot AK4j4Phi_plot(*fillJetPhi4<RA2bTree>,"AK4j4Phi_"+selection_label,"#phi_{j4}^{AK4}",40,-3.1415,3.1415);
 
-  plot VBFgendR1vsdR2plot(*VBF_gendR1<RA2bTree>,*VBF_gendR2<RA2bTree>,"VBFgendR1vsdR2_"+selection_label,"dR(genj,j1^{VBF})","dR(genj,j2^{VBF})",10,0.,1.,10,0.,1.);
-  plot VBFgendR1vsdR21plot(*VBF_gendR1<RA2bTree>,*VBF_gendR2<RA2bTree>,"VBFgendR1vsdR21_"+selection_label,"dR(genj,j1^{VBF})","dR(genj,j2^{VBF})",100,0.,10.,100,0.,10.);
-  plot VBFgendR1plot(*VBF_gendR1<RA2bTree>,"VBFgendR1_"+selection_label,"dR(genj,j1^{VBF})",10,0.,1.);
-  plot VBFgendR11plot(*VBF_gendR1<RA2bTree>,"VBFgendR11_"+selection_label,"dR(genj,j1^{VBF})",100,0.,10.);
-  plot VBFgendR2plot(*VBF_gendR2<RA2bTree>,"VBFgendR2_"+selection_label,"dR(genj,j2^{VBF})",10,0.,1.);
-  plot VBFgendR21plot(*VBF_gendR2<RA2bTree>,"VBFgendR21_"+selection_label,"dR(genj,j2^{VBF})",100,0.,10.);
+ // plot VBFgendR1vsdR2plot(*VBF_gendR1<RA2bTree>,*VBF_gendR2<RA2bTree>,"VBFgendR1vsdR2_"+selection_label,"dR(genj,j1^{VBF})","dR(genj,j2^{VBF})",10,0.,1.,10,0.,1.);
+ // plot VBFgendR1vsdR21plot(*VBF_gendR1<RA2bTree>,*VBF_gendR2<RA2bTree>,"VBFgendR1vsdR21_"+selection_label,"dR(genj,j1^{VBF})","dR(genj,j2^{VBF})",100,0.,10.,100,0.,10.);
+ // plot VBFgendR1plot(*VBF_gendR1<RA2bTree>,"VBFgendR1_"+selection_label,"dR(genj,j1^{VBF})",10,0.,1.);
+ // plot VBFgendR11plot(*VBF_gendR1<RA2bTree>,"VBFgendR11_"+selection_label,"dR(genj,j1^{VBF})",100,0.,10.);
+ // plot VBFgendR2plot(*VBF_gendR2<RA2bTree>,"VBFgendR2_"+selection_label,"dR(genj,j2^{VBF})",10,0.,1.);
+ // plot VBFgendR21plot(*VBF_gendR2<RA2bTree>,"VBFgendR21_"+selection_label,"dR(genj,j2^{VBF})",100,0.,10.);
 
   plot VBFj1NEMF_plot(*fillVBF_j1NEMF<RA2bTree>,"VBFj1NEMF_"+selection_label,"NEMF_{j1}^{VBF}",100,0.,1.); // 0.1
   plot VBFj2NEMF_plot(*fillVBF_j2NEMF<RA2bTree>,"VBFj2NEMF_"+selection_label,"NEMF_{j2}^{VBF}",100,0.,1.); // 0.1
@@ -458,6 +463,9 @@ void process(string selection_label,
 *///
 
   plots.push_back(NJetsplot);
+  plots.push_back(NbJetsplot);
+  //plots.push_back(NgenZhadpidplot);
+  //plots.push_back(NgenZhadpid1plot);
   plots.push_back(NJets1plot);
   plots.push_back(NJets3plot);
   plots.push_back(NAK8Jetsplot); 
@@ -636,6 +644,7 @@ void process(string selection_label,
 /*  plots.push_back(MTpTRatioplot); 
   plots.push_back(pTMTRatioplot); 
 */    
+// kl add
   plots.push_back(ZMT_ggFplot);  
   plots.push_back(ZMT_vbFplot);  
   plots.push_back(ZMT_vbFhpplot);  
@@ -691,7 +700,8 @@ void process(string selection_label,
      isMC_ = true;
     //TFile* outputFile = new TFile("AN_ORv1_files/"+year+"_ORv1/plotObs_"+selection_label+"_"+skims.sampleName[iSample]+".root","RECREATE");
     //TFile* outputFile = new TFile("AN_ORv1_files/Systematics_LP/"+year+"/plotObs_"+selection_label+"_"+skims.sampleName[iSample]+".root","RECREATE");
-    TFile* outputFile = new TFile("AN_Unblind_v1_files/"+year+"_UB_v1/plotObs_"+selection_label+"_"+skims.sampleName[iSample]+".root","RECREATE");
+    //TFile* outputFile = new TFile("AN_Unblind_v1_files/"+year+"_UB_v1/plotObs_"+selection_label+"_"+skims.sampleName[iSample]+".root","RECREATE");
+    TFile* outputFile = new TFile("AN_ARC_v1_files/"+year+"_ARC_v1/plotObs_"+selection_label+"_"+skims.sampleName[iSample]+".root","RECREATE");
     
     for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
         plots[iPlot].addNtuple(ntuple,skims.sampleName[iSample]);
@@ -811,7 +821,8 @@ void process(string selection_label,
     isMC_ = true;
     //TFile* outputFile = new TFile("AN_ORv1_files/"+year+"_ORv1/plotObs_"+selection_label+"_"+skims.signalSampleName[iSample]+".root","RECREATE");
     //TFile* outputFile = new TFile("AN_ORv1_files/Systematics_LP/"+year+"/plotObs_"+selection_label+"_"+skims.signalSampleName[iSample]+".root","RECREATE");
-    TFile* outputFile = new TFile("AN_Unblind_v1_files/"+year+"_UB_v1/plotObs_"+selection_label+"_"+skims.signalSampleName[iSample]+".root","RECREATE");
+    //TFile* outputFile = new TFile("AN_Unblind_v1_files/"+year+"_UB_v1/plotObs_"+selection_label+"_"+skims.signalSampleName[iSample]+".root","RECREATE");
+    TFile* outputFile = new TFile("AN_ARC_v1_files/"+year+"_ARC_v1/plotObs_"+selection_label+"_"+skims.signalSampleName[iSample]+".root","RECREATE");
 
     sigSamples.push_back(ntuple);
     for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
@@ -923,7 +934,8 @@ void process(string selection_label,
     //TFile* outputFile = new TFile("AN_ORv1_files/"+year+"_ORv1/plotObs_"+selection_label+"_"+skims.dataSampleName[iSample]+".root","RECREATE");
     //TFile* outputFile = new TFile("AN_ORv1_files/Systematics_LP/"+year+"/plotObs_"+selection_label+"_"+skims.dataSampleName[iSample]+".root","RECREATE");
     //TFile* outputFile = new TFile("AN_Unblind_v1_files/"+year+"_UB_v1/plotObs_"+selection_label+"_"+skims.dataSampleName[iSample]+".root","RECREATE");
-    TFile* outputFile = new TFile("AN_Unblind_v1_files/"+year+"_UB_v1/plotObs_"+selection_label+"_VBFdEta5p0"+skims.dataSampleName[iSample]+".root","RECREATE");
+    //TFile* outputFile = new TFile("AN_Unblind_v1_files/"+year+"_UB_v1/plotObs_"+selection_label+"_VBFdEta5p0"+skims.dataSampleName[iSample]+".root","RECREATE");
+    TFile* outputFile = new TFile("AN_ARC_v1_files/"+year+"_ARC_v1/plotObs_"+selection_label+"_VBFdEta5p0"+skims.dataSampleName[iSample]+".root","RECREATE");
 	TString filename;  
     for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
         plots[iPlot].addDataNtuple(ntuple,skims.dataSampleName[iSample]);
@@ -946,6 +958,7 @@ void process(string selection_label,
         if(filename.Contains("MET_2018")){if(!passHEMjetVeto(ntuple,30)) continue;}
       
         // print info for events with hight MT in HP VBF regions
+       /* 
        if (fillZMT(ntuple) > 1000.0){ 
             cout<<" "<<endl;
             cout<<"{\"filename\": \""<<filename<<"\","<<endl;
@@ -959,6 +972,7 @@ void process(string selection_label,
             cout<<"}, "<<endl;
             cout<<" "<<endl;
        }
+      */  
  
         for( int iPlot = 0 ; iPlot < plots.size() ; iPlot++){
 	        plots[iPlot].fillData(ntuple);

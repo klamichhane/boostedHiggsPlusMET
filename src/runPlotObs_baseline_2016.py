@@ -19,12 +19,12 @@ backgroundSamples=[
 #                   "ZJets_800to1200", "ZJets_1200to2500", "ZJets_2500toInf",
 #                   "WJets_100to200", "WJets_200to400", "WJets_400to600", "WJets_600to800",
 #                   "WJets_800to1200", "WJets_1200to2500", "WJets_2500toInf",
-
+#
 #                   "TT_600to800", "TT_800to1200", "TT_1200to2500", "TT_2500toInf",
 #                   "TT_1LFromT", "TT_1LFromTbar", "TT_2L",   #KL
 #                   "ST_s-channel", "ST_t-channel_antitop", "ST_t-channel_top", # remove for 2018
 #                   "ST_tW_antitop", "ST_tW_top",
-
+#
 #                   #"Other_WWTo2L2Nu", #remove for all years
 #                   "Other_WWTo1L1Nu2Q", "Other_ZZTo2L2Q",
 #                   "Other_WWZ", "Other_ZZTo2Q2Nu", #remove for 2017 n 18
@@ -40,7 +40,8 @@ signalSamples=[
 #               "VBFG_1000", 
 #               "VBFG_2000", 
 #               "VBFG_4500", 
-#               #"VBFWp_4500", 
+                "VBFWp_1000", 
+                "VBFWp_4500", 
 #               #"VBFRad_4500", 
 #               "ggFG_2000", 
 #               "ggFG_4500", 
@@ -74,8 +75,8 @@ signalSamples=[
 
 #if "ZSR" in cat or cat=="Baseline": dataSamples=[]
 #else: dataSamples=["MET_2016B","MET_2016C","MET_2016D","MET_2016E","MET_2016F","MET_2016G","MET_2016H"]
-dataSamples=["MET_2016B","MET_2016C","MET_2016D","MET_2016E","MET_2016F","MET_2016G","MET_2016H"]
-#dataSamples=[]
+#dataSamples=["MET_2016B","MET_2016C","MET_2016D","MET_2016E","MET_2016F","MET_2016G","MET_2016H"]
+dataSamples=[]
 
 def runPlotObsBaseline(sel,bkg,sig,data):
     print '../bin/plotObs_baseline "{0}" "{1}" "{2}" "{3}"'.format(sel,bkg,sig,data)
@@ -107,7 +108,7 @@ end = datetime.now()
 
 print""
 ##time.sleep(20)
-#print "hadding "+cat
+print "hadding "+cat
 ##os.system("hadd -f AN_ORv1_files/{1}_ORv1/{0}_AN_v1_{1}.root AN_ORv1_files/{1}_ORv1/plotObs_{0}_*.root".format(cat,year))
 #os.system("hadd -f AN_ORv1_files/Systematics_LP/{1}/{0}_AN_v1_{1}.root AN_ORv1_files/Systematics_LP/{1}/plotObs_{0}_*.root".format(cat,year))
 #print "removing files for "+cat
@@ -115,8 +116,10 @@ print""
 ##os.system("rm AN_ORv1_files/{1}_ORv1/plotObs_{0}_*.root".format(cat,year))
 
 #os.system("hadd -f AN_Unblind_v1_files/{1}_UB_v1/{0}_AN_v1_{1}.root AN_Unblind_v1_files/{1}_UB_v1/plotObs_{0}_*.root".format(cat,year))
+#os.system("hadd -f AN_ARC_v1_files/{1}_ARC_v1/{0}_ARC_v1_{1}.root AN_ARC_v1_files/{1}_ARC_v1/plotObs_{0}_*.root".format(cat,year))
 #print "removing files for "+cat
 #os.system("rm AN_Unblind_v1_files/{1}_UB_v1/plotObs_{0}_*.root".format(cat,year))
+#os.system("rm AN_ARC_v1_files/{1}_ARC_v1/plotObs_{0}_*.root".format(cat,year))
 
 print""
 print "started {0} {2} at: {1}".format(cat,start,year)
@@ -129,7 +132,9 @@ print""
 ##os.system("hadd -f AN_ORv1_files/{1}_ORv1/Sig_{0}_{1}.root AN_ORv1_files/{1}_ORv1/plotObs_{0}_*.root".format(cat,year))
 #os.system("hadd -f AN_ORv1_files/Systematics_LP/{1}/Sig_{0}_{1}.root AN_ORv1_files/Systematics_LP/{1}/plotObs_{0}_*.root".format(cat,year))
 #os.system("hadd -f AN_Unblind_v1_files/{1}_UB_v1/Sig_{0}_{1}.root AN_Unblind_v1_files/{1}_UB_v1/plotObs_{0}_*.root".format(cat,year))
+#os.system("hadd -f AN_ARC_v1_files/{1}_ARC_v1/Sig_{0}_{1}.root AN_ARC_v1_files/{1}_ARC_v1/plotObs_{0}_*.root".format(cat,year))
 #print "removing files for "+cat
+#os.system("rm AN_ARC_v1_files/{1}_ARC_v1/plotObs_{0}_*.root".format(cat,year))
 #os.system("rm AN_Unblind_v1_files/{1}_UB_v1/plotObs_{0}_*.root".format(cat,year))
 #os.system("rm AN_ORv1_files/Systematics_LP/{1}/plotObs_{0}_*.root".format(cat,year))
 ##os.system("rm AN_ORv1_files/{1}_ORv1/plotObs_{0}_*.root".format(cat,year))

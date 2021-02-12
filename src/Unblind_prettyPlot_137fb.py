@@ -9,12 +9,16 @@ r.gROOT.ProcessLine("setTDRStyle()")
 year = argv[1]
 cat = argv[2]
 
-location = "AN_Unblind_v1_files"
-plotloc  = "AN_Unblind_v1_plots"
+#location = "AN_Unblind_v1_files"
+#plotloc  = "AN_Unblind_v1_plots"
+location = "AN_ARC_v1_files"
+plotloc  = "AN_ARC_v1_plots/Debug-bVeto"
 
 plot_dir        = plotloc+"/{0}/{1}/".format(cat,year)
-input_file_name = location+"/{0}_UB_v1/{1}_AN_v1_{0}.root".format(year,cat)
-output_file_name= location+"/{0}_UB_v1/Output_NoNorm/{1}_AN_v1_{0}_Output_NoNorm.root".format(year,cat)
+#input_file_name = location+"/{0}_UB_v1/{1}_AN_v1_{0}.root".format(year,cat)
+#output_file_name= location+"/{0}_UB_v1/Output_NoNorm/{1}_AN_v1_{0}_Output_NoNorm.root".format(year,cat)
+input_file_name = location+"/{0}_ARC_v1/{1}_ARC_v1_{0}.root".format(year,cat)
+output_file_name= location+"/{0}_ARC_v1/Output_NoNorm/{1}_ARC_v1_{0}_Output_NoNorm.root".format(year,cat)
 
 if year == "2016": lumi="35.8/fb"
 elif year == "2017": lumi="41.5/fb"

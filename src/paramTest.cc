@@ -2,10 +2,10 @@
 #include <vector>
 #include <map>
 
-#include "skimSamples_2018.cc"
-string year = "2018";
+#include "skimSamples_2016.cc"
+string year = "2016";
 
-//string purity = "HP";
+// string purity = "HP"; // not needed anymore...
 
 
 
