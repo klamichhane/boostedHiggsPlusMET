@@ -29,6 +29,7 @@ backgroundSamples=[
 #                   "Other_WWTo1L1Nu2Q", "Other_ZZTo2L2Q",
 #                   "Other_WWZ", "Other_ZZTo2Q2Nu", #remove for 2017 n 18
 #                   "Other_WZ", 
+                   "Other_WZJJ", 
 #                   "Other_WZTo1L1Nu2Q", "Other_WZTo1L3Nu", 
 #                   "Other_WZZ", "Other_ZZZ", "Other_TTTT", #remove for 2018
 #                   "Other_TTWJetsToLNu", "Other_TTWJetsToQQ", "Other_TTGJets", "Other_TTZToLLNuNu",
@@ -40,8 +41,8 @@ signalSamples=[
 #               "VBFG_1000", 
 #               "VBFG_2000", 
 #               "VBFG_4500", 
-                "VBFWp_1000", 
-                "VBFWp_4500", 
+#                "VBFWp_1000", 
+#                "VBFWp_4500", 
 #               #"VBFRad_4500", 
 #               "ggFG_2000", 
 #               "ggFG_4500", 

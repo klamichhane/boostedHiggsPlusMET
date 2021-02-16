@@ -7,7 +7,8 @@
 #include <map>
 
 static const TString BASE_DIR_DATA = "/home/whitbeck/raid/temp/SusyRA2Analysis2015/Skims/Run2ProductionV17/";
-static const TString BASE_DIR = "/home/whitbeck/raid/temp/SusyRA2Analysis2015/Skims_TTU_Jul19/Run2ProductionV17/";
+//static const TString BASE_DIR = "/home/whitbeck/raid/temp/SusyRA2Analysis2015/Skims_TTU_Jul19/Run2ProductionV17/";
+static const TString BASE_DIR = "/home/whitbeck/raid/temp/SusyRA2Analysis2015/Skims_TTU_Jul19/Run2ProductionV17/UnSkim_VBS/";
 static const TString BASE_DIR_SIG = "/home/whitbeck/raid/temp/SusyRA2Analysis2015/Skims_TTU_Jul19/Run2ProductionV17/Sig_Samples/";
 //static const TString BASE_DIR_SIG = "/home/whitbeck/raid/temp/SusyRA2Analysis2015/Skims_TTU_Jul19/Run2ProductionV17/UnSkim_Sig/2016/";
 static const bool RE_MINIAOD = false;
@@ -102,6 +103,9 @@ public :
         fileNames["Other_TTGJets"] = "tree_TTGJets_MC2016.root";
         fileNames["Other_TTZToLLNuNu"] = "tree_TTZToLLNuNu_MC2016.root";
         fileNames["Other_TTZToQQ"] = "tree_TTZToQQ_MC2016.root";
+        
+        // for VBS Unskim sample
+        fileNames["Other_WZJJ"] = "tree_WZJJ_MC2016.root";
       
         fileNames["MET_2016B"] = "tree_MET_2016B.root";
         fileNames["MET_2016C"] = "tree_MET_2016C.root";
@@ -228,8 +232,10 @@ public :
 	for( auto name : backgrounds ){
 
 	  if( fileNames.find(name) != fileNames.end() ){
-	    TChain* temp = new TChain("tree");
-	    temp->Add(BASE_DIR+skimType+"/"+fileNames[name]);	  
+	    //TChain* temp = new TChain("tree");
+	    //temp->Add(BASE_DIR+skimType+"/"+fileNames[name]);	  
+	    TChain* temp = new TChain("TreeMaker2/PreSelection");
+	    temp->Add(BASE_DIR+"/"+fileNames[name]);	  
 	    ntuples.push_back(new RA2bTree(temp));
 	    sampleName.push_back(name);
 	  }

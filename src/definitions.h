@@ -144,6 +144,8 @@ template<typename ntupleType>void ntupleBranchStatus(ntupleType* ntuple){
   ntuple->fChain->SetBranchStatus("ZCandidates",1);
   ntuple->fChain->SetBranchStatus("GenParticles*",1);
   ntuple->fChain->SetBranchStatus("GenJets*",1);
+  ntuple->fChain->SetBranchStatus("GenMuons*",1);
+  ntuple->fChain->SetBranchStatus("GenElectrons*",1);
   ntuple->fChain->SetBranchStatus("NonPrefiringProb",1);
   ntuple->fChain->SetBranchStatus("NonPrefiringProbUp",1);
   ntuple->fChain->SetBranchStatus("NonPrefiringProbDown",1);
@@ -173,7 +175,25 @@ template<typename ntupleType> double FillGenZPt(ntupleType* ntuple){
     //cout << "FillGenZPt:" << endl;
     if( ntuple->GenParticles == NULL ) return -999.;
     double pt = -999.;
+    
+    //std::cout<<"new evt:"<<ntuple->EvtNum<<std::endl;
     for( unsigned int p = 0 ; p < ntuple->GenParticles->size() ; p++ ){
+        int parent = abs(ntuple->GenParticles_ParentId->at(p));
+        int pid = abs(ntuple->GenParticles_PdgId->at(p));
+        int status = ntuple->GenParticles_Status->at(p);
+         //std::cout<<"p: "<<p;
+         //std::cout << "pid: " << pid << "   parent: "<< parent<< "   parentIdx: "<< ntuple->GenParticles_ParentIdx->at(p) <<"      status: "<< status<<" pt: "<< ntuple->GenParticles->at(p).Pt()<<std::endl;
+/*
+       if ((parent == 23 || parent == 24) && pid < 6 && status == 24){ 
+            std::cout << "pid: " << pid << "   parent: "<< parent<<"      status: "<< status<<std::endl;
+        }
+       if (parent != 23  && pid < 6 && status == 24){ 
+            std::cout << "VBS noW pid: " << pid << "   parent: "<< parent<<"      status: "<< status<<std::endl;
+        }
+       if (parent != 24  && pid < 6 && status == 24){ 
+            std::cout << "VBS noZ pid: " << pid << "   parent: "<< parent<<"      status: "<< status<<std::endl;
+        }
+*/
         if( abs(ntuple->GenParticles_PdgId->at(p)) == 23 ){
             //std::cout << "pt: " << ntuple->GenParticles->at(p).Pt() << std::endl;
             pt = ntuple->GenParticles->at(p).Pt();
@@ -251,7 +271,7 @@ template<typename ntupleType> bool genjetLepMatch(ntupleType* ntuple){
         for (int m=0; m < ntuple->GenMuons->size(); m++){
             if( ntuple->GenJets->at(i).DeltaR(ntuple->GenMuons->at(m))<=0.4) return true;
         }
-        for (int e=0; e < ntuple->GenMuons->size(); e++){
+        for (int e=0; e < ntuple->GenElectrons->size(); e++){
             if( ntuple->GenJets->at(i).DeltaR(ntuple->GenElectrons->at(e))<=0.4) return true;
         }
     }
@@ -1871,8 +1891,8 @@ template<typename ntupleType> double fillVBF_j2CHEF(ntupleType* ntuple){
 }
 
 template<typename ntupleType> double fillVBF_Mjj(ntupleType* ntuple){
-    vector<TLorentzVector> vbf_jets = cleanedVBFjets(ntuple,0);
-    //vector<TLorentzVector> vbf_jets = cleanedVBSGenjets(ntuple);
+    //vector<TLorentzVector> vbf_jets = cleanedVBFjets(ntuple,0);
+    vector<TLorentzVector> vbf_jets = cleanedVBSGenjets(ntuple);
         TLorentzVector temp(vbf_jets[0]);
         temp+=vbf_jets[1];
     if (vbf_jets[0].Pt()>30.0 && vbf_jets[1].Pt()>30.0) 
@@ -1892,8 +1912,8 @@ template<typename ntupleType> double fillVBF_Ptjj(ntupleType* ntuple){
 }
 
 template<typename ntupleType> double fillVBF_dEta(ntupleType* ntuple){
-    vector<TLorentzVector> vbf_jets = cleanedVBFjets(ntuple,0);
-    //vector<TLorentzVector> vbf_jets = cleanedVBSGenjets(ntuple);
+    //vector<TLorentzVector> vbf_jets = cleanedVBFjets(ntuple,0);
+    vector<TLorentzVector> vbf_jets = cleanedVBSGenjets(ntuple);
     if (vbf_jets[0].Pt()>30.0 && vbf_jets[1].Pt()>30.0) 
         return  fabs(vbf_jets[0].Eta()-vbf_jets[1].Eta());
     else
@@ -1901,8 +1921,8 @@ template<typename ntupleType> double fillVBF_dEta(ntupleType* ntuple){
 }
 
 template<typename ntupleType> double fillVBF_dPhi(ntupleType* ntuple){
-    vector<TLorentzVector> vbf_jets = cleanedVBFjets(ntuple,0);
-    //vector<TLorentzVector> vbf_jets = cleanedVBSGenjets(ntuple);
+    //vector<TLorentzVector> vbf_jets = cleanedVBFjets(ntuple,0);
+    vector<TLorentzVector> vbf_jets = cleanedVBSGenjets(ntuple);
     if (vbf_jets[0].Pt()>30.0 && vbf_jets[1].Pt()>30.0) 
         return CalcdPhi(vbf_jets[0].Phi(), vbf_jets[1].Phi());
     else
@@ -1910,8 +1930,8 @@ template<typename ntupleType> double fillVBF_dPhi(ntupleType* ntuple){
 }
 
 template<typename ntupleType> double fillVBF_j1Eta(ntupleType* ntuple){
-    vector<TLorentzVector> vbf_jets = cleanedVBFjets(ntuple,0);
-    //vector<TLorentzVector> vbf_jets = cleanedVBSGenjets(ntuple);
+    //vector<TLorentzVector> vbf_jets = cleanedVBFjets(ntuple,0);
+    vector<TLorentzVector> vbf_jets = cleanedVBSGenjets(ntuple);
     if (vbf_jets[0].Pt()>30.0) 
         return  vbf_jets[0].Eta();
     else
@@ -1919,8 +1939,8 @@ template<typename ntupleType> double fillVBF_j1Eta(ntupleType* ntuple){
 }
 
 template<typename ntupleType> double fillVBF_j2Eta(ntupleType* ntuple){
-    vector<TLorentzVector> vbf_jets = cleanedVBFjets(ntuple,0);
-    //vector<TLorentzVector> vbf_jets = cleanedVBSGenjets(ntuple);
+    //vector<TLorentzVector> vbf_jets = cleanedVBFjets(ntuple,0);
+    vector<TLorentzVector> vbf_jets = cleanedVBSGenjets(ntuple);
     if (vbf_jets[1].Pt()>30.0) 
         return  vbf_jets[1].Eta();
     else
@@ -1928,8 +1948,8 @@ template<typename ntupleType> double fillVBF_j2Eta(ntupleType* ntuple){
 }
 
 template<typename ntupleType> double fillVBF_j1Phi(ntupleType* ntuple){
-    vector<TLorentzVector> vbf_jets = cleanedVBFjets(ntuple,0);
-    //vector<TLorentzVector> vbf_jets = cleanedVBSGenjets(ntuple);
+    //vector<TLorentzVector> vbf_jets = cleanedVBFjets(ntuple,0);
+    vector<TLorentzVector> vbf_jets = cleanedVBSGenjets(ntuple);
     if (vbf_jets[0].Pt()>30.0) 
         return  vbf_jets[0].Phi();
     else
@@ -1937,16 +1957,16 @@ template<typename ntupleType> double fillVBF_j1Phi(ntupleType* ntuple){
 }
 
 template<typename ntupleType> double fillVBF_j2Phi(ntupleType* ntuple){
-    vector<TLorentzVector> vbf_jets = cleanedVBFjets(ntuple,0);
-    //vector<TLorentzVector> vbf_jets = cleanedVBSGenjets(ntuple);
+    //vector<TLorentzVector> vbf_jets = cleanedVBFjets(ntuple,0);
+    vector<TLorentzVector> vbf_jets = cleanedVBSGenjets(ntuple);
     if (vbf_jets[1].Pt()>30.0) 
         return  vbf_jets[1].Phi();
     else
         return -999.;
 }
 template<typename ntupleType> double fillVBF_j1j2Eta(ntupleType* ntuple){
-    vector<TLorentzVector> vbf_jets = cleanedVBFjets(ntuple,0);
-    //vector<TLorentzVector> vbf_jets = cleanedVBSGenjets(ntuple);
+    //vector<TLorentzVector> vbf_jets = cleanedVBFjets(ntuple,0);
+    vector<TLorentzVector> vbf_jets = cleanedVBSGenjets(ntuple);
     if (vbf_jets[0].Pt()>30.0 && vbf_jets[1].Pt()>30.0) 
         return (vbf_jets[0].Eta()*vbf_jets[1].Eta());
     else
@@ -1954,8 +1974,8 @@ template<typename ntupleType> double fillVBF_j1j2Eta(ntupleType* ntuple){
 }
 
 template<typename ntupleType> double fillVBF_j1Pt(ntupleType* ntuple){
-    vector<TLorentzVector> vbf_jets = cleanedVBFjets(ntuple,0);
-    //vector<TLorentzVector> vbf_jets = cleanedVBSGenjets(ntuple);
+    //vector<TLorentzVector> vbf_jets = cleanedVBFjets(ntuple,0);
+    vector<TLorentzVector> vbf_jets = cleanedVBSGenjets(ntuple);
     if (vbf_jets[0].Pt()>30.0) 
         return  vbf_jets[0].Pt();
     else
@@ -1963,8 +1983,8 @@ template<typename ntupleType> double fillVBF_j1Pt(ntupleType* ntuple){
 }
 
 template<typename ntupleType> double fillVBF_j2Pt(ntupleType* ntuple){
-    vector<TLorentzVector> vbf_jets = cleanedVBFjets(ntuple,0);
-    //vector<TLorentzVector> vbf_jets = cleanedVBSGenjets(ntuple);
+    //vector<TLorentzVector> vbf_jets = cleanedVBFjets(ntuple,0);
+    vector<TLorentzVector> vbf_jets = cleanedVBSGenjets(ntuple);
     if (vbf_jets[1].Pt()>30.0) 
         return  vbf_jets[1].Pt();
     else
@@ -1991,7 +2011,8 @@ template<typename ntupleType> bool VBFEcalCut(ntupleType* ntuple){
 }
 
 template<typename ntupleType> bool VBFCut(ntupleType* ntuple){
-    vector<TLorentzVector> vbf_jets = cleanedVBFjets(ntuple,0);
+    //vector<TLorentzVector> vbf_jets = cleanedVBFjets(ntuple,0);
+    vector<TLorentzVector> vbf_jets = cleanedVBSGenjets(ntuple);
     return ( fillVBF_dEta(ntuple)>4.0 &&
     //return ( fillVBF_dEta(ntuple)>5.0 &&
              fillVBF_Mjj(ntuple)>500.0 &&
@@ -2108,9 +2129,17 @@ template<typename ntupleType> bool DebugCut(ntupleType* ntuple ){
          ); 
 }
 // VBS Selection on leptonic WZjj sample using gen info only....  
-template<typename ntupleType> bool VBSCut(ntupleType* ntuple ){
+template<typename ntupleType> bool VBSBaselineCut(ntupleType* ntuple ){
   return (   FillGenZPt(ntuple)>200 
-          && FillGenWPt(ntuple)>200); 
+          && FillGenWPt(ntuple)>200
+         ); 
+}
+
+template<typename ntupleType> bool VBSVBFCut(ntupleType* ntuple ){
+  return (   FillGenZPt(ntuple)>200 
+          && FillGenWPt(ntuple)>200
+          && VBFCut(ntuple)  
+         ); 
 }
 
 // No Selection for Acceptance calculation  
